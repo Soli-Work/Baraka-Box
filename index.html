@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baraka Box – Share the Good Stuff!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#FFF8F0;
+  --warm:#FFF3E0;
+  --coral:#F4645C;
+  --coral-lt:#FF8A84;
+  --coral-dk:#D94840;
+  --sunshine:#FFD166;
+  --sunshine-dk:#F0BC4A;
+  --mint:#A8E6CF;
+  --sky:#B8DFFE;
+  --lilac:#D4AEED;
+  --peach:#FFB997;
+  --charcoal:#2C1810;
+  --brown:#6B3F2A;
+  --text:#3D2314;
+  --muted:#8C6B5A;
+  --white:#FFFFFF;
+  --r:20px;
+  --r-lg:32px;
+}
+html{scroll-behavior:auto;overflow-x:hidden}
+body{font-family:'Nunito',sans-serif;background:var(--cream);overflow-x:hidden;-webkit-font-smoothing:antialiased;color:var(--text)}
+
+/* ═══ LOADER ═══ */
+#loader{position:fixed;inset:0;background:var(--coral);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .9s ease,visibility .9s ease}
+#loader.out{opacity:0;visibility:hidden}
+.ld-brand{font-family:'Fredoka One',cursive;font-size:3.5rem;color:#fff;letter-spacing:.02em;margin-bottom:8px}
+.ld-sub{font-family:'Caveat',cursive;font-size:1.4rem;color:rgba(255,255,255,.8);margin-bottom:48px}
+.ld-track{width:220px;height:6px;background:rgba(255,255,255,.2);border-radius:99px;overflow:hidden}
+.ld-fill{height:100%;background:#fff;border-radius:99px;width:0;transition:width .3s ease}
+/* floaty baby silhouettes */
+.ld-star{position:absolute;font-size:2rem;animation:spin 6s linear infinite;opacity:.35}
+
+/* ═══ NAV ═══ */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,248,240,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(244,100,92,.12)}
+.nav-brand{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--coral);letter-spacing:.03em}
+.nav-brand span{color:var(--charcoal)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .25s}
+.nav-links a:hover{color:var(--coral)}
+.nav-donate{background:var(--coral);color:#fff;padding:10px 22px;border-radius:99px;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:background .25s,transform .2s;white-space:nowrap}
+.nav-donate:hover{background:var(--coral-dk);transform:scale(1.03)}
+
+/* ═══ FIXED CANVAS ═══ */
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+/* ═══ SCROLL CONTAINER ═══ */
+#scroll-container{position:relative;z-index:1;height:450vh}
+
+/* ═══ FLOATING OVERLAYS ═══ */
+.overlay{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:center;pointer-events:none;opacity:0;will-change:opacity,transform}
+.ov-inner{padding:0 8%;max-width:640px}
+.overlay.right{align-items:flex-end}
+.overlay.right .ov-inner{text-align:right;padding:0 8%}
+.overlay.center{align-items:center}
+.overlay.center .ov-inner{text-align:center;max-width:700px}
+.ov-tag{display:inline-block;background:var(--sunshine);color:var(--charcoal);font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding:6px 16px;border-radius:99px;margin-bottom:20px}
+.ov-h{font-family:'Fredoka One',cursive;font-size:clamp(3rem,6vw,6rem);line-height:1.05;color:var(--charcoal);margin-bottom:20px}
+.ov-h em{color:var(--coral);font-style:normal}
+.ov-p{font-size:clamp(.9rem,1.2vw,1.1rem);line-height:1.85;color:var(--muted);max-width:420px;font-weight:600}
+.overlay.right .ov-p{margin-left:auto}
+.overlay.center .ov-p{margin:0 auto;text-align:center}
+.ov-cta{display:inline-block;margin-top:36px;background:var(--coral);color:#fff;padding:14px 32px;border-radius:99px;font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;pointer-events:all;transition:transform .2s,background .2s}
+.ov-cta:hover{background:var(--coral-dk);transform:translateY(-2px)}
+
+/* ═══ PROGRESS DOTS ═══ */
+#pdots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:12px}
+.pd{width:8px;height:8px;border-radius:50%;background:var(--coral);opacity:.2;transition:all .4s cubic-bezier(.22,1,.36,1);cursor:pointer}
+.pd.on{opacity:1;height:28px;border-radius:4px}
+
+/* ═══ SCROLL HINT ═══ */
+#sh{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;align-items:center;gap:8px}
+.sh-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--coral),transparent);opacity:.35;animation:sh-pulse 2s ease-in-out infinite}
+@keyframes sh-pulse{0%,100%{opacity:.2}50%{opacity:.5}}
+.sh-txt{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);opacity:.6;font-weight:700}
+
+/* ═══ CONTENT SECTIONS (below the 3D area) ═══ */
+main{position:relative;z-index:5;background:var(--cream)}
+
+/* ─── MISSION STRIP ─── */
+.mission{background:var(--coral);padding:100px 60px;text-align:center;position:relative;overflow:hidden}
+.mission::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M30 0C13.4 0 0 13.4 0 30s13.4 30 30 30 30-13.4 30-30S46.6 0 30 0zm0 54C16.8 54 6 43.2 6 30S16.8 6 30 6s24 10.8 24 24-10.8 24-24 24z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.mission-tag{display:inline-block;background:rgba(255,255,255,.2);color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding:8px 20px;border-radius:99px;margin-bottom:24px}
+.mission h2{font-family:'Fredoka One',cursive;font-size:clamp(2.5rem,5vw,4.5rem);color:#fff;margin-bottom:24px;line-height:1.1}
+.mission p{font-size:1.05rem;line-height:1.9;color:rgba(255,255,255,.85);max-width:680px;margin:0 auto;font-weight:600}
+.mission-floats{position:absolute;pointer-events:none;top:0;left:0;right:0;bottom:0}
+.mf{position:absolute;font-size:2rem;opacity:.15;animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(8deg)}}
+
+/* ─── GOOD STUFF STATS ─── */
+.stats{padding:100px 60px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px;background:var(--warm)}
+.stat-card{background:#fff;border-radius:var(--r-lg);padding:40px 32px;text-align:center;box-shadow:0 4px 24px rgba(244,100,92,.08);transition:transform .3s}
+.stat-card:hover{transform:translateY(-6px)}
+.stat-num{font-family:'Fredoka One',cursive;font-size:3.5rem;color:var(--coral);line-height:1}
+.stat-label{font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:12px}
+.stat-icon{font-size:2rem;margin-bottom:16px}
+
+/* ─── ITEMS IN STOCK (ORYZO HORIZONTAL SCROLL) ─── */
+.stock-section{padding:100px 0;background:var(--cream);overflow:hidden}
+.stock-header{padding:0 60px;margin-bottom:60px}
+.stock-header .tag{display:inline-block;background:var(--sunshine);color:var(--charcoal);font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding:8px 20px;border-radius:99px;margin-bottom:20px}
+.stock-header h2{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,4vw,3.8rem);color:var(--charcoal);margin-bottom:12px}
+.stock-header p{font-size:1rem;color:var(--muted);font-weight:600;max-width:500px}
+
+/* The pinned horizontal scroll wrapper */
+.stock-pin-outer{height:400vh;position:relative}
+.stock-sticky{position:sticky;top:80px;height:calc(100vh - 80px);overflow:hidden;display:flex;align-items:center}
+.stock-track{display:flex;gap:28px;padding:0 60px;will-change:transform}
+.item-card{flex:0 0 300px;background:#fff;border-radius:var(--r-lg);padding:36px 28px;text-align:center;box-shadow:0 8px 32px rgba(44,24,16,.07);border:2px solid transparent;transition:border-color .3s,transform .4s}
+.item-card:hover{border-color:var(--coral-lt);transform:scale(1.03)}
+.item-card.featured{flex:0 0 360px;background:var(--coral);color:#fff}
+.item-card.featured .ic-label,.item-card.featured .ic-qty{color:rgba(255,255,255,.75)}
+.item-card.featured .ic-name{color:#fff}
+.ic-emoji{font-size:3.5rem;margin-bottom:20px;display:block;line-height:1}
+.ic-name{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--charcoal);margin-bottom:8px}
+.ic-label{font-size:.65rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.ic-qty{font-size:2rem;font-weight:900;color:var(--coral);font-family:'Fredoka One',cursive}
+.item-card.featured .ic-qty{color:var(--sunshine)}
+.ic-tag{display:inline-block;background:var(--sunshine);color:var(--charcoal);font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:99px;margin-top:12px}
+.item-card.featured .ic-tag{background:rgba(255,255,255,.25);color:#fff}
+
+/* ─── WHAT YOU CAN DONATE ─── */
+.donate-info{padding:100px 60px;background:var(--warm);display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.di-col h3{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:28px}
+.di-col.can h3{color:var(--coral)}
+.di-col.cant h3{color:var(--brown)}
+.di-box{background:#fff;border-radius:var(--r);padding:32px;box-shadow:0 4px 16px rgba(44,24,16,.06)}
+.di-box ul{list-style:none;display:flex;flex-direction:column;gap:14px}
+.di-box li{display:flex;align-items:flex-start;gap:12px;font-size:.95rem;font-weight:600;color:var(--text);line-height:1.5}
+.di-box li::before{content:'✓';background:var(--mint);color:var(--brown);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:900;flex-shrink:0;margin-top:1px}
+.di-col.cant .di-box li::before{content:'✕';background:#FFE0DD;color:var(--coral-dk)}
+
+/* ─── TESTIMONIALS ─── */
+.testi{padding:100px 60px;background:var(--cream)}
+.testi-header{text-align:center;margin-bottom:64px}
+.testi-header .tag{display:inline-block;background:var(--lilac);color:var(--charcoal);font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding:8px 20px;border-radius:99px;margin-bottom:20px}
+.testi-header h2{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,4vw,3.5rem);color:var(--charcoal)}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:28px}
+.tq{background:#fff;border-radius:var(--r-lg);padding:40px;box-shadow:0 4px 24px rgba(44,24,16,.06);position:relative;overflow:hidden}
+.tq::before{content:'"';font-family:'Fredoka One',cursive;font-size:8rem;color:var(--sunshine);opacity:.3;position:absolute;top:-10px;left:16px;line-height:1}
+.tq-text{font-size:1rem;line-height:1.85;color:var(--text);font-weight:600;font-family:'Caveat',cursive;font-size:1.15rem;position:relative;z-index:1}
+.tq-author{margin-top:24px;font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* ═══ FORMS SECTION ═══ */
+.forms-section{padding:100px 60px;background:var(--warm)}
+.forms-header{text-align:center;margin-bottom:72px}
+.forms-header .tag{display:inline-block;background:var(--coral);color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding:8px 20px;border-radius:99px;margin-bottom:20px}
+.forms-header h2{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,4vw,3.5rem);color:var(--charcoal);margin-bottom:16px}
+.forms-header p{font-size:1rem;color:var(--muted);font-weight:600;max-width:500px;margin:0 auto}
+
+/* Form tabs */
+.ftabs{display:flex;justify-content:center;gap:12px;margin-bottom:48px;flex-wrap:wrap}
+.ftab{padding:12px 28px;border-radius:99px;border:2px solid rgba(244,100,92,.3);background:transparent;color:var(--muted);font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .25s;font-family:'Nunito',sans-serif}
+.ftab:hover,.ftab.active{background:var(--coral);border-color:var(--coral);color:#fff}
+
+/* Form panels */
+.fpanel{display:none;max-width:680px;margin:0 auto;animation:fadein .35s ease}
+.fpanel.show{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.form-card{background:#fff;border-radius:var(--r-lg);padding:52px;box-shadow:0 8px 40px rgba(44,24,16,.1)}
+.form-title{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--charcoal);margin-bottom:8px}
+.form-sub{font-size:.9rem;color:var(--muted);font-weight:600;margin-bottom:40px;line-height:1.6}
+
+/* Fields */
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.frow.full{grid-template-columns:1fr}
+.fgroup{display:flex;flex-direction:column;gap:8px}
+.fgroup label{font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--brown)}
+.fgroup input,.fgroup select,.fgroup textarea{padding:14px 18px;border:2px solid rgba(244,100,92,.15);border-radius:var(--r);background:var(--cream);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:600;color:var(--text);outline:none;transition:border-color .25s;-webkit-appearance:none;appearance: none;}
+.fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus{border-color:var(--coral)}
+.fgroup textarea{resize:vertical;min-height:100px;line-height:1.6}
+.fgroup select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238C6B5A' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
+
+/* Checkbox group */
+.check-group{display:flex;flex-direction:column;gap:12px}
+.check-item{display:flex;align-items:center;gap:12px;cursor:pointer}
+.check-item input[type=checkbox]{width:20px;height:20px;border:2px solid rgba(244,100,92,.3);border-radius:6px;accent-color:var(--coral);cursor:pointer}
+.check-item span{font-size:.92rem;font-weight:600;color:var(--text)}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;gap:16px;padding:16px 0;border-top:1px solid rgba(244,100,92,.1)}
+.toggle-row span{font-size:.9rem;font-weight:700;color:var(--text);flex:1}
+.toggle{position:relative;width:48px;height:26px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:rgba(244,100,92,.2);border-radius:99px;cursor:pointer;transition:.3s}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:4px;bottom:4px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.toggle input:checked+.toggle-slider{background:var(--coral)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(22px)}
+
+/* Submit btn */
+.fsubmit{width:100%;padding:18px;background:var(--coral);color:#fff;border:none;border-radius:99px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:32px;transition:background .25s,transform .2s}
+.fsubmit:hover{background:var(--coral-dk);transform:translateY(-2px)}
+
+/* Success message */
+.fsuccess{display:none;text-align:center;padding:40px;background:var(--mint);border-radius:var(--r);margin-top:20px}
+.fsuccess.show{display:block}
+.fsuccess h3{font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--brown);margin-bottom:10px}
+.fsuccess p{font-size:.95rem;font-weight:600;color:var(--muted)}
+
+/* Item tag chips in Return form */
+.chip-group{display:flex;flex-wrap:wrap;gap:10px;padding:12px 0}
+.chip{padding:8px 18px;border-radius:99px;border:2px solid rgba(244,100,92,.25);background:var(--cream);font-size:.8rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif}
+.chip.selected{background:var(--coral);border-color:var(--coral);color:#fff}
+
+/* ─── FOOTER ─── */
+footer{background:var(--charcoal);padding:80px 60px 40px;color:rgba(255,255,255,.7)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:60px;margin-bottom:60px}
+.f-brand{font-family:'Fredoka One',cursive;font-size:2.2rem;color:var(--coral);margin-bottom:14px}
+.f-tagline{font-family:'Caveat',cursive;font-size:1.2rem;color:rgba(255,255,255,.6);margin-bottom:24px}
+.f-contact a{color:var(--sunshine);text-decoration:none;font-weight:700;font-size:.95rem}
+.f-col h4{font-size:.68rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:20px}
+.f-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.f-col li a{text-decoration:none;color:rgba(255,255,255,.6);font-size:.88rem;font-weight:600;transition:color .25s}
+.f-col li a:hover{color:var(--coral-lt)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.fb-left{font-size:.78rem;color:rgba(255,255,255,.3);font-weight:600}
+.fb-church{font-family:'Caveat',cursive;font-size:1rem;color:rgba(255,255,255,.4)}
+
+/* Decorative floaters */
+.floater{position:absolute;pointer-events:none;animation:float 4s ease-in-out infinite;font-size:2rem;opacity:.22}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─── REVEAL ANIMATIONS ─── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  nav{padding:16px 24px}
+  .nav-links{display:none}
+  .donate-info{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr;gap:36px}
+  .forms-section,.testi,.stats,.mission,.stock-header,.donate-info{padding-left:24px;padding-right:24px}
+  .form-card{padding:32px 24px}
+  .frow{grid-template-columns:1fr}
+  #pdots{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div style="position:relative">
+    <div class="ld-brand">Baraka Box</div>
+    <div class="ld-sub">share the good stuff! 🎀</div>
+  </div>
+  <div class="ld-track"><div class="ld-fill" id="ld-fill"></div></div>
+  <div style="position:fixed;inset:0;pointer-events:none">
+    <span class="ld-star" style="top:10%;left:8%;animation-delay:0s">⭐</span>
+    <span class="ld-star" style="top:70%;left:12%;animation-delay:1s">🌟</span>
+    <span class="ld-star" style="top:20%;right:10%;animation-delay:.5s">✨</span>
+    <span class="ld-star" style="top:75%;right:15%;animation-delay:1.5s">🎀</span>
+  </div>
+</div>
+
+<!-- FIXED 3D CANVAS -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">Baraka <span>Box</span></div>
+  <ul class="nav-links">
+    <li><a href="#stock">Items</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#forms">Get Involved</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#forms" class="nav-donate">Donate / Get Items ♥</a>
+</nav>
+
+<!-- ═══ 3D SCROLL ZONE ═══ -->
+<div id="scroll-container"></div>
+
+<!-- Overlay 1: Hero -->
+<div class="overlay" id="ov1">
+  <div class="ov-inner">
+    <div class="ov-tag">Emmanuel Baptist Church</div>
+    <h1 class="ov-h">Share the<br><em>Good Stuff!</em></h1>
+    <p class="ov-p">Babies grow fast. The things you once needed can be just what another family needs right now. Baraka Box is a shared space where mom and baby items find new homes.</p>
+    <a class="ov-cta" href="#forms">Donate or Receive →</a>
+  </div>
+</div>
+
+<!-- Overlay 2: Items Detail -->
+<div class="overlay right" id="ov2">
+  <div class="ov-inner">
+    <div class="ov-tag">Items in Stock</div>
+    <h2 class="ov-h">Clothes,<br><em>Gear</em> &<br>So Much More</h2>
+    <p class="ov-p">From tiny onesies to car seats, nursing bras to baby carriers — every item donated with love, passed on with care.</p>
+  </div>
+</div>
+
+<!-- Overlay 3: Community -->
+<div class="overlay center" id="ov3">
+  <div class="ov-inner">
+    <div class="ov-tag">Community</div>
+    <h2 class="ov-h">7 families<br>blessed this<br><em>quarter</em></h2>
+    <p class="ov-p">And we're just getting started. Nominate a family, return items you've used, donate what you no longer need.</p>
+    <a class="ov-cta" href="#forms">Join the Circle →</a>
+  </div>
+</div>
+
+<!-- Scroll hint -->
+<div id="sh"><div class="sh-line"></div><span class="sh-txt">Scroll</span></div>
+
+<!-- Progress dots -->
+<div id="pdots">
+  <div class="pd on"></div>
+  <div class="pd"></div>
+  <div class="pd"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MAIN CONTENT (below scroll zone)               -->
+<!-- ═══════════════════════════════════════════════ -->
+<main>
+
+  <!-- MISSION -->
+  <section class="mission" id="about">
+    <div class="mission-floats">
+      <span class="mf" style="top:10%;left:5%;animation-delay:0s">👶</span>
+      <span class="mf" style="top:60%;left:3%;animation-delay:1s">🍼</span>
+      <span class="mf" style="top:20%;right:6%;animation-delay:.7s">⭐</span>
+      <span class="mf" style="top:70%;right:4%;animation-delay:1.8s">🎀</span>
+      <span class="mf" style="top:40%;left:50%;animation-delay:.4s">🌟</span>
+    </div>
+    <div class="mission-tag">Our Mission</div>
+    <h2 class="reveal">Babies grow fast.<br>Kindness doesn't have to.</h2>
+    <p class="reveal" style="margin-top:16px">Baraka Box is a shared space where mom and baby items find new homes — just like you'd share with a friend. Housed under Emmanuel Baptist Church, Nairobi.</p>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats reveal">
+    <div class="stat-card reveal">
+      <div class="stat-icon">🚗</div>
+      <div class="stat-num">3</div>
+      <div class="stat-label">Car Seats Donated</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-icon">👨‍👩‍👧</div>
+      <div class="stat-num">7</div>
+      <div class="stat-label">Families Blessed Q1 '26</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-icon">👗</div>
+      <div class="stat-num">100s</div>
+      <div class="stat-label">Clothing Items (0–24 mo)</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-icon">🤝</div>
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Acts of Kindness</div>
+    </div>
+  </section>
+
+  <!-- ITEMS IN STOCK (Oryzo horizontal scroll) -->
+  <section class="stock-section" id="stock">
+    <div class="stock-header reveal">
+      <div class="tag">Currently Available</div>
+      <h2>Items in Stock</h2>
+      <p>A living collection of donated baby and mama essentials — scroll to explore what's available right now.</p>
+    </div>
+    <div class="stock-pin-outer" id="stock-pin">
+      <div class="stock-sticky">
+        <div class="stock-track" id="stock-track">
+          <div class="item-card featured">
+            <span class="ic-emoji">👗</span>
+            <div class="ic-name">Baby Clothing</div>
+            <div class="ic-label">In Stock</div>
+            <div class="ic-qty">Hundreds</div>
+            <span class="ic-tag">Ages 0–24 months</span>
+          </div>
+          <div class="item-card">
+            <span class="ic-emoji">🚗</span>
+            <div class="ic-name">Car Seats</div>
+            <div class="ic-label">Available</div>
+            <div class="ic-qty">3</div>
+            <span class="ic-tag">Infant & Toddler</span>
+          </div>
+          <div class="item-card">
+            <span class="ic-emoji">🍼</span>
+            <div class="ic-name">Food Warmers</div>
+            <div class="ic-label">Available</div>
+            <div class="ic-qty">2</div>
+            <span class="ic-tag">Electric</span>
+          </div>
+          <div class="item-card">
+            <span class="ic-emoji">🤱</span>
+            <div class="ic-name">Electric Pump</div>
+            <div class="ic-label">Available</div>
+            <div class="ic-qty">1</div>
+            <span class="ic-tag">Clean & Tested</span>
+          </div>
+          <div class="item-card">
+            <span class="ic-emoji">🛏️</span>
+            <div class="ic-name">Baby Bassinet</div>
+            <div class="ic-label">Available</div>
+            <div class="ic-qty">2</div>
+            <span class="ic-tag">Portable</span>
+          </div>
+          <div class="item-card featured" style="background:var(--sunshine)">
+            <span class="ic-emoji">🧸</span>
+            <div class="ic-name" style="color:var(--charcoal)">Blankets & Flannels</div>
+            <div class="ic-label" style="color:var(--brown)">Available</div>
+            <div class="ic-qty" style="color:var(--coral)">Many</div>
+            <span class="ic-tag" style="background:rgba(244,100,92,.2);color:var(--coral-dk)">Soft & Warm</span>
+          </div>
+          <div class="item-card">
+            <span class="ic-emoji">🛁</span>
+            <div class="ic-name">Wash Basins</div>
+            <div class="ic-label">Available</div>
+            <div class="ic-qty">4</div>
+            <span class="ic-tag">Baby Sized</span>
+          </div>
+          <div class="item-card">
+            <span class="ic-emoji">🎒</span>
+            <div class="ic-name">Baby Carriers</div>
+            <div class="ic-label">Available</div>
+            <div class="ic-qty">3</div>
+            <span class="ic-tag">Multiple Styles</span>
+          </div>
+          <div class="item-card">
+            <span class="ic-emoji">🎮</span>
+            <div class="ic-name">Baby Gym</div>
+            <div class="ic-label">Available</div>
+            <div class="ic-qty">1</div>
+            <span class="ic-tag">0–12 months</span>
+          </div>
+          <div class="item-card" style="background:var(--sky)">
+            <span class="ic-emoji">📚</span>
+            <div class="ic-name">Baby Books</div>
+            <div class="ic-label">Available</div>
+            <div class="ic-qty">20+</div>
+            <span class="ic-tag">Board Books</span>
+          </div>
+          <!-- Donate card -->
+          <div class="item-card" style="background:var(--coral);flex:0 0 280px;display:flex;flex-direction:column;justify-content:center">
+            <span class="ic-emoji">💝</span>
+            <div class="ic-name" style="color:#fff;font-size:1.6rem">Have something<br>to donate?</div>
+            <a href="#forms" class="ov-cta" style="margin-top:24px;display:inline-block;background:#fff;color:var(--coral);pointer-events:all">Add an Item →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT YOU CAN DONATE -->
+  <section class="donate-info" id="guidelines">
+    <div class="di-col can reveal">
+      <h3>✅ What You Can Pass On</h3>
+      <p style="margin-bottom:20px;font-size:.9rem;color:var(--muted);font-weight:600">If you'd give it to a friend, it's perfect for Baraka Box!</p>
+      <div class="di-box">
+        <ul>
+          <li>Baby Essentials (0–2 yrs): Clothes, blankets, shoes, cots, strollers</li>
+          <li>Maternity Wear & Support: Dresses, belly bands, nursing bras</li>
+          <li>Feeding & Care: Bottles, sterilizers, bibs, breast pumps</li>
+          <li>Play & Learning: Toys, books, baby gyms</li>
+          <li>Bath & Hygiene: Towels, baby bathtubs, unopened toiletries</li>
+        </ul>
+      </div>
+    </div>
+    <div class="di-col cant reveal">
+      <h3>❌ What We Can't Take</h3>
+      <p style="margin-bottom:20px;font-size:.9rem;color:var(--muted);font-weight:600">We keep it safe and high-quality for all families.</p>
+      <div class="di-box">
+        <ul>
+          <li>Used pacifiers, expired food/formula, broken or unsafe items</li>
+          <li>Torn or tattered clothes, shoes, and books</li>
+        </ul>
+      </div>
+      <div style="margin-top:32px;background:var(--coral);color:#fff;padding:28px;border-radius:var(--r);text-align:center">
+        <div style="font-family:'Caveat',cursive;font-size:1.4rem;margin-bottom:8px">Need help deciding?</div>
+        <div style="font-size:.85rem;font-weight:600;opacity:.85">Reach out to Muthoni India</div>
+        <a href="tel:0726499182" style="display:block;font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--sunshine);text-decoration:none;margin-top:8px">0726 499 182</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testi" id="testimonials">
+    <div class="testi-header reveal">
+      <div class="tag">Community Voices</div>
+      <h2>What Families Say</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="tq reveal">
+        <p class="tq-text">"I had been looking for that exact item. To find it here — and then be able to return it for another mum — meant so much."</p>
+        <div class="tq-author">— Baraka Box Recipient</div>
+      </div>
+      <div class="tq reveal">
+        <p class="tq-text">"I had so many things at home I wasn't using anymore, but they meant a lot to me from when I first became a mum. It made me so happy knowing they would go to another family, especially within this community."</p>
+        <div class="tq-author">— Baraka Box Donor</div>
+      </div>
+      <div class="tq reveal" style="background:var(--sunshine)">
+        <p class="tq-text">"The Gawana donation drive during Christmas was amazing. Baraka Box made it so easy to give. We'll definitely be back!"</p>
+        <div class="tq-author">— Community Member</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FORMS SECTION ═══ -->
+  <section class="forms-section" id="forms">
+    <div class="forms-header reveal">
+      <div class="tag">Get Involved</div>
+      <h2>Join the Circle of Giving</h2>
+      <p>Whether donating, nominating a family, or returning borrowed items — every act keeps the cycle going.</p>
+    </div>
+
+    <!-- Tab Switcher -->
+    <div class="ftabs">
+      <button class="ftab active" onclick="showForm('donate')">💝 Donate Items</button>
+      <button class="ftab" onclick="showForm('receive')">🎁 Receive / Nominate</button>
+      <button class="ftab" onclick="showForm('return')">🔄 Return Items</button>
+    </div>
+
+    <!-- FORM 1: DONATE -->
+    <div class="fpanel show" id="form-donate">
+      <div class="form-card">
+        <div class="form-title">Donate Items 💝</div>
+        <div class="form-sub">Drop off gently used baby and mama items. Tell us what you have and we'll coordinate the handover.</div>
+        <div class="frow">
+          <div class="fgroup">
+            <label>Your Name</label>
+            <input type="text" placeholder="Jane Wanjiku">
+          </div>
+          <div class="fgroup">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="0712 345 678">
+          </div>
+        </div>
+        <div class="frow full">
+          <div class="fgroup">
+            <label>Email (optional)</label>
+            <input type="email" placeholder="jane@email.com">
+          </div>
+        </div>
+        <div class="frow full">
+          <div class="fgroup">
+            <label>Items You're Donating</label>
+            <textarea placeholder="e.g. 3 baby onesies (3-6 months), 1 baby carrier, nursing bras size M..."></textarea>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fgroup">
+            <label>Condition</label>
+            <select>
+              <option value="">Select condition…</option>
+              <option>Like new – barely used</option>
+              <option>Good – clean and functional</option>
+              <option>Fair – some wear but fine</option>
+            </select>
+          </div>
+          <div class="fgroup">
+            <label>Preferred Drop-off</label>
+            <select>
+              <option value="">Select…</option>
+              <option>Sunday at church</option>
+              <option>Weekday arranged pickup</option>
+              <option>I'll contact Muthoni directly</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Nominate toggle -->
+        <div class="toggle-row">
+          <span>Would you also like to nominate a family to receive items?</span>
+          <label class="toggle">
+            <input type="checkbox" id="nom-toggle" onchange="toggleNominate()">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Nominate sub-form (hidden by default) -->
+        <div id="nominate-fields" style="display:none;margin-top:20px;padding:24px;background:var(--warm);border-radius:var(--r)">
+          <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--coral);margin-bottom:20px">🎁 Nominate a Family</div>
+          <div class="frow">
+            <div class="fgroup">
+              <label>Family / Mum's Name</label>
+              <input type="text" placeholder="Name of person you're nominating">
+            </div>
+            <div class="fgroup">
+              <label>Their Contact</label>
+              <input type="tel" placeholder="Phone number">
+            </div>
+          </div>
+          <div class="frow full">
+            <div class="fgroup">
+              <label>What do they need? (optional)</label>
+              <textarea placeholder="Describe what items would help them most…" style="min-height:80px"></textarea>
+            </div>
+          </div>
+          <div class="frow full">
+            <div class="fgroup">
+              <label>Your relationship to them</label>
+              <select>
+                <option value="">Select…</option>
+                <option>Friend</option>
+                <option>Family member</option>
+                <option>Church member</option>
+                <option>Neighbour</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button class="fsubmit" onclick="submitForm('donate')">Submit Donation 💝</button>
+        <div class="fsuccess" id="suc-donate">
+          <h3>Asante Sana! 🌟</h3>
+          <p>We've received your donation details. Muthoni will reach out to arrange the drop-off. You're amazing!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM 2: RECEIVE / NOMINATE -->
+    <div class="fpanel" id="form-receive">
+      <div class="form-card">
+        <div class="form-title">Request or Nominate 🎁</div>
+        <div class="form-sub">Request items for yourself or nominate a family in your community who would benefit. All requests are handled with care and discretion.</div>
+
+        <div class="frow full">
+          <div class="fgroup">
+            <label>This request is for</label>
+            <select onchange="toggleForWho(this)">
+              <option value="self">Myself / My family</option>
+              <option value="other">Someone I'm nominating</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- For self -->
+        <div id="self-fields">
+          <div class="frow">
+            <div class="fgroup">
+              <label>Your Name</label>
+              <input type="text" placeholder="Your name">
+            </div>
+            <div class="fgroup">
+              <label>Phone Number</label>
+              <input type="tel" placeholder="0712 345 678">
+            </div>
+          </div>
+          <div class="frow">
+            <div class="fgroup">
+              <label>Baby's Age</label>
+              <select>
+                <option value="">Select…</option>
+                <option>Expecting (due soon)</option>
+                <option>0–3 months</option>
+                <option>3–6 months</option>
+                <option>6–12 months</option>
+                <option>12–24 months</option>
+                <option>2 years+</option>
+              </select>
+            </div>
+            <div class="fgroup">
+              <label>Church / Area</label>
+              <input type="text" placeholder="e.g. Emmanuel Baptist, Westlands">
+            </div>
+          </div>
+        </div>
+
+        <!-- For other (hidden by default) -->
+        <div id="other-fields" style="display:none">
+          <div style="background:var(--warm);padding:20px;border-radius:var(--r);margin-bottom:20px">
+            <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--coral);margin-bottom:4px">About the person you're nominating</div>
+          </div>
+          <div class="frow">
+            <div class="fgroup">
+              <label>Their Name</label>
+              <input type="text" placeholder="Name of mum / family">
+            </div>
+            <div class="fgroup">
+              <label>Their Contact</label>
+              <input type="tel" placeholder="Their phone number">
+            </div>
+          </div>
+          <div class="frow">
+            <div class="fgroup">
+              <label>Your Name (nominator)</label>
+              <input type="text" placeholder="Your name">
+            </div>
+            <div class="fgroup">
+              <label>Your Phone</label>
+              <input type="tel" placeholder="Your phone">
+            </div>
+          </div>
+        </div>
+
+        <div class="frow full" style="margin-top:8px">
+          <div class="fgroup">
+            <label>Items Needed</label>
+            <div class="chip-group" id="need-chips">
+              <span class="chip" onclick="toggleChip(this)">👗 Clothing</span>
+              <span class="chip" onclick="toggleChip(this)">🚗 Car Seat</span>
+              <span class="chip" onclick="toggleChip(this)">🛏️ Bassinet</span>
+              <span class="chip" onclick="toggleChip(this)">🍼 Feeding items</span>
+              <span class="chip" onclick="toggleChip(this)">🤱 Breast pump</span>
+              <span class="chip" onclick="toggleChip(this)">🎒 Baby carrier</span>
+              <span class="chip" onclick="toggleChip(this)">🧸 Blankets</span>
+              <span class="chip" onclick="toggleChip(this)">🛁 Bath items</span>
+              <span class="chip" onclick="toggleChip(this)">📚 Books & Toys</span>
+              <span class="chip" onclick="toggleChip(this)">👙 Maternity wear</span>
+            </div>
+            <textarea placeholder="Or describe anything specific you need…" style="margin-top:12px"></textarea>
+          </div>
+        </div>
+
+        <button class="fsubmit" onclick="submitForm('receive')">Submit Request 🎁</button>
+        <div class="fsuccess" id="suc-receive">
+          <h3>We Got You! 🎀</h3>
+          <p>Muthoni will be in touch to arrange your gift bundle. Welcome to the Baraka Box family!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM 3: RETURN -->
+    <div class="fpanel" id="form-return">
+      <div class="form-card">
+        <div class="form-title">Return Items 🔄</div>
+        <div class="form-sub">Returning items you received from Baraka Box? That's the spirit! Your returned items go straight to another family in need.</div>
+        <div class="frow">
+          <div class="fgroup">
+            <label>Your Name</label>
+            <input type="text" placeholder="Jane Wanjiku">
+          </div>
+          <div class="fgroup">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="0712 345 678">
+          </div>
+        </div>
+        <div class="frow full">
+          <div class="fgroup">
+            <label>Items You're Returning</label>
+            <div class="chip-group">
+              <span class="chip" onclick="toggleChip(this)">👗 Clothing</span>
+              <span class="chip" onclick="toggleChip(this)">🚗 Car Seat</span>
+              <span class="chip" onclick="toggleChip(this)">🛏️ Bassinet/Cot</span>
+              <span class="chip" onclick="toggleChip(this)">🍼 Feeding items</span>
+              <span class="chip" onclick="toggleChip(this)">🤱 Breast pump</span>
+              <span class="chip" onclick="toggleChip(this)">🎒 Baby carrier</span>
+              <span class="chip" onclick="toggleChip(this)">🧸 Blankets</span>
+              <span class="chip" onclick="toggleChip(this)">🛁 Bath items</span>
+              <span class="chip" onclick="toggleChip(this)">📚 Books & Toys</span>
+            </div>
+            <textarea placeholder="Please describe the items and their current condition…" style="margin-top:12px"></textarea>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fgroup">
+            <label>Condition on Return</label>
+            <select>
+              <option value="">Select…</option>
+              <option>Excellent – like new</option>
+              <option>Good – clean, some wear</option>
+              <option>Fair – functional, more wear</option>
+            </select>
+          </div>
+          <div class="fgroup">
+            <label>How long did you have it?</label>
+            <select>
+              <option value="">Select…</option>
+              <option>Less than 1 month</option>
+              <option>1–3 months</option>
+              <option>3–6 months</option>
+              <option>6–12 months</option>
+              <option>Over a year</option>
+            </select>
+          </div>
+        </div>
+        <div class="frow full">
+          <div class="fgroup">
+            <label>Message (optional)</label>
+            <textarea placeholder="Any feedback, gratitude, or message for the next family? 💕"></textarea>
+          </div>
+        </div>
+        <div class="frow full">
+          <div class="fgroup">
+            <label>Return Arrangement</label>
+            <select>
+              <option value="">Select…</option>
+              <option>Sunday at church</option>
+              <option>Weekday arranged drop-off</option>
+              <option>I'll contact Muthoni directly</option>
+            </select>
+          </div>
+        </div>
+        <button class="fsubmit" onclick="submitForm('return')">Return Items 🔄</button>
+        <div class="fsuccess" id="suc-return">
+          <h3>Karibu! Thank You! 🌟</h3>
+          <p>Your returned items will bless another family. You've kept the circle of giving alive — asante sana!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-top">
+    <div>
+      <div class="f-brand">Baraka Box 🎀</div>
+      <div class="f-tagline">share the good stuff!</div>
+      <div class="f-contact">
+        <div style="font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px">Contact</div>
+        <div style="margin-bottom:6px;font-size:.9rem;font-weight:600">Muthoni India</div>
+        <a href="tel:0726499182">0726 499 182</a>
+      </div>
+    </div>
+    <div class="f-col">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="#stock">Items in Stock</a></li>
+        <li><a href="#about">About Baraka Box</a></li>
+        <li><a href="#forms">Donate Items</a></li>
+        <li><a href="#forms">Receive Items</a></li>
+        <li><a href="#forms">Return Items</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h4>What We Accept</h4>
+      <ul>
+        <li><a href="#">Baby Clothing (0–2 yrs)</a></li>
+        <li><a href="#">Maternity Wear</a></li>
+        <li><a href="#">Feeding Equipment</a></li>
+        <li><a href="#">Toys & Books</a></li>
+        <li><a href="#">Bath & Hygiene</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="fb-left">© 2026 Baraka Box — All blessings reserved 🌟</div>
+    <div class="fb-church">Housed under Emmanuel Baptist Church, Nairobi</div>
+  </div>
+</footer>
+
+<!-- THREE.JS IMPORT MAP -->
+<script type="importmap">
+{
+  "imports": {
+    "three":         "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+// ── GSAP + LENIS ──────────────────────────────────────────────────
+gsap.registerPlugin(ScrollTrigger);
+const lenis = new Lenis({ duration:1.4, easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)), smoothWheel:true });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
+
+// ── RENDERER ──────────────────────────────────────────────────────
+const canvas = document.getElementById('bg-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, powerPreference:'high-performance' });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+// ── SCENE + CAMERA ────────────────────────────────────────────────
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#FFF8F0');
+scene.fog = new THREE.FogExp2('#FFF8F0', 0.04);
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.01, 100);
+const cam = { px:0, py:2.2, pz:7, tx:0, ty:0.8, tz:0, fov:50 };
+
+// ── ENVIRONMENT ───────────────────────────────────────────────────
+const pmrem  = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(renderer)).texture;
+
+// ── LIGHTS ────────────────────────────────────────────────────────
+scene.add(new THREE.AmbientLight(0xfff4ee, 0.8));
+const key = new THREE.DirectionalLight(0xfff0e8, 3.5);
+key.position.set(4, 8, 5); key.castShadow=true;
+key.shadow.mapSize.set(2048,2048);
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xffddcc, 1.5);
+fill.position.set(-5, 4, 2); scene.add(fill);
+const coral = new THREE.PointLight(0xF4645C, 1.8, 18);
+coral.position.set(3, 3, 0); scene.add(coral);
+const sunshine = new THREE.PointLight(0xFFD166, 1.4, 15);
+sunshine.position.set(-3, 2, 4); scene.add(sunshine);
+
+// ── FLOOR ─────────────────────────────────────────────────────────
+const flr = new THREE.Mesh(new THREE.PlaneGeometry(40,40), new THREE.ShadowMaterial({opacity:.06}));
+flr.rotation.x=-Math.PI/2; flr.receiveShadow=true; scene.add(flr);
+
+// ── PROCEDURAL BABY-ITEM MODEL ────────────────────────────────────
+// A charming "gift box" model made from primitives
+const group = new THREE.Group();
+
+const boxMat  = new THREE.MeshStandardMaterial({ color:0xF4645C, roughness:.35, metalness:.05, envMapIntensity:1.6 });
+const lidMat  = new THREE.MeshStandardMaterial({ color:0xD94840, roughness:.3,  metalness:.05, envMapIntensity:1.6 });
+const ribbonH = new THREE.MeshStandardMaterial({ color:0xFFD166, roughness:.2,  metalness:.1,  envMapIntensity:2 });
+const starMat = new THREE.MeshStandardMaterial({ color:0xFFD166, roughness:.15, metalness:.3,  envMapIntensity:2 });
+const heartMat= new THREE.MeshStandardMaterial({ color:0xFF8A84, roughness:.4,  metalness:0,   envMapIntensity:1 });
+
+// Main box body
+const body = new THREE.Mesh(new THREE.BoxGeometry(2.4, 2, 2.4), boxMat);
+body.position.y=1; body.castShadow=true; group.add(body);
+
+// Lid
+const lid = new THREE.Mesh(new THREE.BoxGeometry(2.5, .45, 2.5), lidMat);
+lid.position.y=2.22; lid.castShadow=true; group.add(lid);
+
+// Ribbon horizontal
+const rh = new THREE.Mesh(new THREE.BoxGeometry(2.52, .28, .36), ribbonH);
+rh.position.y=1; group.add(rh);
+const rv = new THREE.Mesh(new THREE.BoxGeometry(.36, 2.52, .36), ribbonH);
+rv.position.y=1.26; rv.rotation.x=0; group.add(rv);
+
+// Ribbon on lid
+const rlh = new THREE.Mesh(new THREE.BoxGeometry(2.55, .46, .38), ribbonH);
+rlh.position.y=2.22; group.add(rlh);
+const rlv = new THREE.Mesh(new THREE.BoxGeometry(.38, .46, 2.55), ribbonH);
+rlv.position.y=2.22; group.add(rlv);
+
+// Bow loop left
+function bowLoop(x, isLeft) {
+  const loop = new THREE.Mesh(new THREE.TorusGeometry(.32, .09, 8, 20, Math.PI), ribbonH);
+  loop.position.set(x, 2.6, 0);
+  loop.rotation.z = isLeft ? Math.PI/4 : -Math.PI/4;
+  loop.castShadow=true;
+  group.add(loop);
+}
+bowLoop(-.22, true); bowLoop(.22, false);
+
+// Center knot
+const knot = new THREE.Mesh(new THREE.SphereGeometry(.14, 12, 12), ribbonH);
+knot.position.set(0, 2.58, 0); group.add(knot);
+
+// Stars scattered around
+function addStar(x,y,z,s) {
+  const sg = new THREE.OctahedronGeometry(s);
+  const sm = new THREE.Mesh(sg, starMat);
+  sm.position.set(x,y,z);
+  sm.rotation.set(Math.random(),Math.random(),Math.random());
+  sm.castShadow=true;
+  group.add(sm);
+}
+addStar(-2,3,0.5,0.22); addStar(2.3,2.8,-0.3,0.18);
+addStar(0.5,3.5,-1,0.15); addStar(-1.5,1.5,1.5,0.12);
+addStar(1.8,0.8,-1.6,0.14); addStar(-0.8,3.2,1.2,0.1);
+
+// Floating heart
+const hg = new THREE.SphereGeometry(.18, 12, 12);
+const heart = new THREE.Mesh(hg, heartMat);
+heart.position.set(1.5, 3.6, .5); heart.castShadow=true; group.add(heart);
+
+// Contact shadow
+const blobCanvas = document.createElement('canvas');
+blobCanvas.width = blobCanvas.height = 512;
+const bc = blobCanvas.getContext('2d');
+const bg = bc.createRadialGradient(256,256,0,256,256,220);
+bg.addColorStop(0,'rgba(244,100,92,0.5)');
+bg.addColorStop(.5,'rgba(244,100,92,0.15)');
+bg.addColorStop(1,'rgba(0,0,0,0)');
+bc.fillStyle=bg; bc.fillRect(0,0,512,512);
+const shadow = new THREE.Mesh(
+  new THREE.PlaneGeometry(4,4),
+  new THREE.MeshBasicMaterial({ map:new THREE.CanvasTexture(blobCanvas), transparent:true, depthWrite:false, opacity:.5 })
+);
+shadow.rotation.x=-Math.PI/2; shadow.position.y=.001; scene.add(shadow);
+group.position.y = 0;
+scene.add(group);
+
+// ── KEYFRAMES ─────────────────────────────────────────────────────
+const KF = [
+  { p:0.00, pos:[ 0, 2.2, 7.0], tgt:[0, 1.0, 0], fov:50 },
+  { p:0.28, pos:[ 0, 2.2, 7.0], tgt:[0, 1.0, 0], fov:50 },
+  { p:0.36, pos:[ 1.5, 2.8, 3.2], tgt:[0, 2.4, 0], fov:30 },  // zoom into bow/ribbon
+  { p:0.64, pos:[ 1.5, 2.8, 3.2], tgt:[0, 2.4, 0], fov:30 },
+  { p:0.72, pos:[-3.5, 1.8,-4.5], tgt:[0, 1.2, 0], fov:44 },  // side reveal
+  { p:1.00, pos:[-4.0, 2.0,-5.0], tgt:[0, 1.0, 0], fov:44 },
+];
+const lerp = (a,b,t)=>a+(b-a)*t;
+const ss   = t=>t*t*(3-2*t);
+const cl   = v=>Math.max(0,Math.min(1,v));
+
+function applyKF(p) {
+  let k0=KF[0], k1=KF[KF.length-1];
+  for(let i=0;i<KF.length-1;i++) {
+    if(p>=KF[i].p&&p<=KF[i+1].p){k0=KF[i];k1=KF[i+1];break;}
+  }
+  const span=k1.p-k0.p;
+  const t=span<1e-4?0:ss(cl((p-k0.p)/span));
+  cam.px=lerp(k0.pos[0],k1.pos[0],t);
+  cam.py=lerp(k0.pos[1],k1.pos[1],t);
+  cam.pz=lerp(k0.pos[2],k1.pos[2],t);
+  cam.tx=lerp(k0.tgt[0],k1.tgt[0],t);
+  cam.ty=lerp(k0.tgt[1],k1.tgt[1],t);
+  cam.tz=lerp(k0.tgt[2],k1.tgt[2],t);
+  cam.fov=lerp(k0.fov,k1.fov,t);
+  autoRot = p < 0.28;
+}
+
+let autoRot = true;
+
+// ── SCROLL TRIGGERS ───────────────────────────────────────────────
+function initScroll() {
+  document.getElementById('loader').classList.add('out');
+
+  ScrollTrigger.create({
+    trigger:'#scroll-container', start:'top top', end:'bottom bottom',
+    onUpdate(s) { applyKF(s.progress); syncDots(s.progress); }
+  });
+
+  // Overlay 1
+  gsap.timeline({ scrollTrigger:{ trigger:'#scroll-container', start:'top top', end:'33% top', scrub:1.2 } })
+    .fromTo('#ov1',{opacity:0,y:40},{opacity:1,y:0,duration:.28,ease:'power2.out'})
+    .to('#ov1',{opacity:0,y:-30,duration:.22,ease:'power2.in'},.72);
+
+  // Overlay 2
+  gsap.timeline({ scrollTrigger:{ trigger:'#scroll-container', start:'30% top', end:'68% top', scrub:1.2 } })
+    .fromTo('#ov2',{opacity:0,x:50},{opacity:1,x:0,duration:.28,ease:'power2.out'})
+    .to('#ov2',{opacity:0,x:-40,duration:.22,ease:'power2.in'},.72);
+
+  // Overlay 3
+  gsap.timeline({ scrollTrigger:{ trigger:'#scroll-container', start:'67% top', end:'100% bottom', scrub:1.2 } })
+    .fromTo('#ov3',{opacity:0,y:40},{opacity:1,y:0,duration:.35,ease:'power2.out'});
+
+  // Scroll hint fade
+  gsap.to('#sh',{ opacity:0, pointerEvents:'none',
+    scrollTrigger:{ trigger:'#scroll-container', start:'8% top', end:'18% top', scrub:true }
+  });
+}
+
+// ── LOADER ────────────────────────────────────────────────────────
+let prog = 0;
+const lf = document.getElementById('ld-fill');
+function fakeLoad() {
+  prog += Math.random() * 18;
+  lf.style.width = Math.min(prog, 95) + '%';
+  if(prog < 95) setTimeout(fakeLoad, 120);
+}
+fakeLoad();
+setTimeout(() => { lf.style.width='100%'; setTimeout(initScroll, 350); }, 1600);
+
+// ── PROGRESS DOTS ─────────────────────────────────────────────────
+const dots = [...document.querySelectorAll('.pd')];
+function syncDots(p) {
+  const i = p<.34?0:p<.68?1:2;
+  dots.forEach((d,j)=>d.classList.toggle('on',j===i));
+}
+
+// ── RENDER LOOP ───────────────────────────────────────────────────
+let t = 0;
+function tick() {
+  requestAnimationFrame(tick);
+  t += 0.008;
+  if(autoRot) {
+    group.rotation.y += 0.004;
+    // floating stars pulse
+    const s = 1 + Math.sin(t*1.5)*.03;
+    group.children.forEach((c,i)=>{ if(i>8) c.position.y += Math.sin(t+i)*.002; });
+  }
+  // Heart bob always
+  heart.position.y = 3.6 + Math.sin(t*2)*.12;
+  coral.position.x  = 3 + Math.sin(t)*.5;
+  sunshine.position.x = -3 + Math.cos(t*.7)*.5;
+  camera.position.set(cam.px,cam.py,cam.pz);
+  if(Math.abs(camera.fov-cam.fov)>.01){ camera.fov=cam.fov; camera.updateProjectionMatrix(); }
+  camera.lookAt(cam.tx,cam.ty,cam.tz);
+  renderer.render(scene,camera);
+}
+tick();
+
+window.addEventListener('resize',()=>{
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+</script>
+
+<!-- ─── HORIZONTAL STOCK SCROLL ─── -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+window.addEventListener('load', () => {
+  const track = document.getElementById('stock-track');
+  const pin   = document.getElementById('stock-pin');
+  if(!track || !pin) return;
+
+  const getScrollWidth = ()=> track.scrollWidth - window.innerWidth + 120;
+
+  let ctx = gsap.context(()=>{
+    gsap.to(track, {
+      x: ()=> -getScrollWidth(),
+      ease:'none',
+      scrollTrigger:{
+        trigger: pin,
+        start: 'top 80px',
+        end: ()=> `+=${getScrollWidth() * 1.2}`,
+        scrub: 1,
+        pin: '.stock-sticky',
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+      }
+    });
+  });
+});
+
+// ─── REVEAL ON SCROLL ───────────────────────────────────────────
+function revealOnScroll() {
+  const els = document.querySelectorAll('.reveal');
+  const io  = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.15});
+  els.forEach(el=>io.observe(el));
+}
+document.addEventListener('DOMContentLoaded', revealOnScroll);
+
+// ─── FORM LOGIC ─────────────────────────────────────────────────
+function showForm(id) {
+  document.querySelectorAll('.fpanel').forEach(p=>p.classList.remove('show'));
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('form-'+id).classList.add('show');
+  const idx = {donate:0,receive:1,return:2}[id];
+  document.querySelectorAll('.ftab')[idx].classList.add('active');
+  document.getElementById('forms').scrollIntoView({behavior:'smooth',block:'start'});
+}
+window.showForm = showForm;
+
+function toggleNominate() {
+  const on = document.getElementById('nom-toggle').checked;
+  document.getElementById('nominate-fields').style.display = on ? 'block' : 'none';
+}
+window.toggleNominate = toggleNominate;
+
+function toggleForWho(sel) {
+  document.getElementById('self-fields').style.display  = sel.value==='self'  ? 'block':'none';
+  document.getElementById('other-fields').style.display = sel.value==='other' ? 'block':'none';
+}
+window.toggleForWho = toggleForWho;
+
+function toggleChip(el) { el.classList.toggle('selected'); }
+window.toggleChip = toggleChip;
+
+function submitForm(id) {
+  const suc = document.getElementById('suc-'+id);
+  suc.classList.add('show');
+  suc.scrollIntoView({behavior:'smooth',block:'nearest'});
+  document.querySelector(`#form-${id} .fsubmit`).style.display='none';
+}
+window.submitForm = submitForm;
+</script>
+</body>
+</html>
