@@ -6,7 +6,13 @@
       "Bash(npx skills *)",
       "Bash(where npx *)",
       "Bash(npx --version)",
-      "Bash(npx serve *)"
+      "Bash(npx serve *)",
+      "WebSearch",
+      "WebFetch(domain:market.pmnd.rs)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:poly.pizza)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:sketchfab.com)"
     ]
   }
 }

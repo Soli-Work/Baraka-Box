@@ -31,10 +31,18 @@
     /* ── Loader ── */
     #loader { position:fixed; inset:0; background:var(--cream); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; transition:opacity 1.3s cubic-bezier(.76,0,.24,1),visibility 1.3s,transform 1.3s cubic-bezier(.76,0,.24,1); transform-origin:center top; }
     #loader.fade-out { opacity:0; visibility:hidden; transform:scaleY(0); }
-    .loader-brand { font-size:.72rem; font-weight:800; letter-spacing:.35em; text-transform:uppercase; color:var(--charcoal); margin-bottom:52px; }
-    .loader-track { width:180px; height:1px; background:rgba(28,28,28,.1); position:relative; overflow:hidden; }
-    #loader-fill { position:absolute; top:0; left:0; height:100%; background:linear-gradient(90deg,var(--coral),var(--gold),var(--yellow)); width:0; transition:width .25s ease; }
-    .loader-pct { margin-top:20px; font-size:.6rem; letter-spacing:.15em; color:rgba(28,28,28,.35); }
+    .loader-pram { margin-bottom:28px; animation:pram-float 2.6s ease-in-out infinite; }
+    @keyframes pram-float {
+      0%,100% { transform:translateY(0) rotate(-1.5deg); }
+      50%      { transform:translateY(-10px) rotate(1.5deg); }
+    }
+    .loader-pram svg .wheel-l { transform-origin:22px 74px; animation:wheel-spin 1.8s linear infinite; }
+    .loader-pram svg .wheel-r { transform-origin:78px 74px; animation:wheel-spin 1.8s linear infinite; }
+    @keyframes wheel-spin { to { transform:rotate(360deg); } }
+    .loader-brand { font-size:.72rem; font-weight:800; letter-spacing:.35em; text-transform:uppercase; color:var(--charcoal); margin-bottom:36px; }
+    .loader-track { width:200px; height:2px; background:rgba(28,28,28,.08); border-radius:2px; position:relative; overflow:hidden; }
+    #loader-fill { position:absolute; top:0; left:0; height:100%; background:linear-gradient(90deg,var(--coral),var(--gold),var(--yellow)); width:0; transition:width .25s ease; border-radius:2px; }
+    .loader-pct { margin-top:16px; font-size:.6rem; letter-spacing:.15em; color:rgba(28,28,28,.3); }
 
     /* ── Canvas ── */
     #bg-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
@@ -85,6 +93,11 @@
     .form-block { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:100px 7% 80px; }
     .form-block--donate { background:var(--cream); }
     .form-block--return { background:#FDF8F0; }
+    .cant-take-block { background:var(--cream); padding:48px 7%; border-top:1px solid rgba(28,28,28,.06); border-bottom:1px solid rgba(28,28,28,.06); }
+    .cant-take-inner { max-width:720px; margin:0 auto; background:#fff; border-radius:16px; padding:32px 36px; border-left:4px solid var(--coral); box-shadow:0 4px 24px rgba(28,28,28,.05); }
+    .cant-take-list { list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+    .cant-take-list li { font-size:.82rem; color:var(--charcoal); line-height:1.7; padding-left:20px; position:relative; }
+    .cant-take-list li::before { content:'✕'; position:absolute; left:0; color:var(--coral); font-size:.72rem; font-weight:700; top:1px; }
     .panel-grid { display:grid; grid-template-columns:1fr 1fr; gap:64px; width:100%; max-width:1120px; align-items:start; }
     .panel-label { font-size:.58rem; font-weight:700; letter-spacing:.35em; text-transform:uppercase; color:var(--coral); margin-bottom:20px; display:block; }
     .panel-title { font-family:'Playfair Display',serif; font-size:clamp(2rem,3.4vw,3.4rem); font-weight:700; line-height:1.08; color:var(--charcoal); margin-bottom:20px; }
@@ -366,6 +379,7 @@
     .review-meta { display:flex; align-items:center; gap:10px; }
     .review-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--coral-lt),var(--gold)); display:flex; align-items:center; justify-content:center; font-size:.65rem; font-weight:800; color:#fff; flex-shrink:0; }
     .review-name { font-size:.7rem; font-weight:700; color:var(--charcoal); }
+    .review-author { font-size:.7rem; color:var(--gray); font-style:normal; margin-top:4px; }
     .review-role { font-size:.6rem; color:var(--gray); }
     .review-form-wrap { max-width:640px; margin:0 auto; background:#fff; border-radius:20px; padding:36px 32px; box-shadow:0 8px 48px rgba(28,28,28,.07); }
     .review-form-title { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; color:var(--charcoal); margin-bottom:6px; }
@@ -524,6 +538,8 @@
                 <option value="">Select a category…</option>
                 <option>Baby clothes (0–6 months)</option><option>Baby clothes (6–12 months)</option>
                 <option>Baby clothes (12–24 months)</option><option>Blankets & flannels</option>
+                <option>Baby shoes</option><option>Bibs</option><option>Baby books</option>
+                <option>Belly bands / postpartum support</option><option>Baby bathtub / towels</option>
                 <option>Car seat</option><option>Stroller / pram</option>
                 <option>Feeding items (bottles, steriliser…)</option><option>Nursing / maternity wear</option>
                 <option>Baby carrier</option><option>Bassinet / cot</option>
@@ -561,6 +577,20 @@
       </div>
     </div>
 
+    <div class="cant-take-block">
+      <div class="cant-take-inner">
+        <span class="panel-label" style="color:var(--coral);">Please Note</span>
+        <h3 style="font-family:'Playfair Display',serif;font-size:clamp(1.25rem,3vw,1.75rem);color:var(--charcoal);margin:8px 0 18px;">What We <em style="color:var(--coral);font-style:italic;">Can't</em> Accept</h3>
+        <ul class="cant-take-list">
+          <li>Used pacifiers or teethers</li>
+          <li>Expired baby food, formula, or medication</li>
+          <li>Broken, cracked, or unsafe items (car seats past expiry, recalled products)</li>
+          <li>Torn, heavily stained, or tattered clothing, shoes, or books</li>
+        </ul>
+        <p style="font-size:.72rem;color:var(--gray);margin-top:14px;line-height:1.7;">If you're unsure, please reach out to <strong style="color:var(--charcoal);">Muthoni India</strong> on <strong style="color:var(--charcoal);">0726 499 182</strong> before dropping anything off.</p>
+      </div>
+    </div>
+
     <div class="form-block form-block--return" id="return-block">
       <div class="panel-grid">
         <div class="panel-info">
@@ -593,6 +623,8 @@
                 <select class="form-select" required>
                   <option value="">Select…</option>
                   <option>Baby clothes bundle</option><option>Blankets & flannels</option>
+                  <option>Baby shoes</option><option>Bibs</option><option>Baby books</option>
+                  <option>Belly bands / postpartum support</option><option>Baby bathtub / towels</option>
                   <option>Car seat</option><option>Stroller / pram</option>
                   <option>Feeding items</option><option>Nursing / maternity wear</option>
                   <option>Baby carrier</option><option>Bassinet / cot</option>
@@ -664,7 +696,16 @@
       <p>Every word shared here helps another family trust in the circle of care.</p>
     </div>
     <div class="reviews-grid" id="reviews-grid">
-      <div class="reviews-empty">No reviews yet — be the first to share your experience below.</div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"I had been looking for a good stroller for weeks and everything was so expensive. A friend told me about Baraka Box and I thought, let me try. And there it was. Waiting for us. It felt like it had been kept just for my baby."</p>
+        <p class="review-author">— A grateful mum, Nairobi</p>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"I had so many things at home I wasn't using anymore — my baby had outgrown everything so fast. Donating through Baraka Box felt right. Knowing another family is using those things now… it gives them a second life."</p>
+        <p class="review-author">— A donor from Emmanuel Baptist</p>
+      </div>
     </div>
     <div class="review-form-wrap">
       <p class="review-form-title">Leave a Review</p>
@@ -760,34 +801,99 @@
     const cs=new THREE.Mesh(new THREE.PlaneGeometry(3.6,2.6),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(bC),transparent:true,depthWrite:false,opacity:.65}));
     cs.rotation.x=-Math.PI/2;cs.position.y=.002;scene.add(cs);
 
-    const bg2=new THREE.Group();
-    const mS=new THREE.MeshStandardMaterial({color:0xC2945A,roughness:.55,metalness:.05});
-    const mB=new THREE.MeshStandardMaterial({color:0xF4A49F,roughness:.65,metalness:0});
-    const mT=new THREE.MeshStandardMaterial({color:0xE8736A,roughness:.6,metalness:0});
-    const mC=new THREE.MeshStandardMaterial({color:0xFFF9F4,roughness:.75,metalness:0});
-    const mD=new THREE.MeshStandardMaterial({color:0xF5D87A,roughness:.5,metalness:.1});
-    function am(geo,mat,px=0,py=0,pz=0,rx=0,ry=0,rz=0,sx=1,sy=1,sz=1){
-      const m=new THREE.Mesh(geo,mat);m.position.set(px,py,pz);m.rotation.set(rx,ry,rz);m.scale.set(sx,sy,sz);m.castShadow=true;m.receiveShadow=true;bg2.add(m);return m;
+    let autoRotate = true;
+    let mouseX = 0, mouseY = 0, targetMX = 0, targetMY = 0;
+    window.addEventListener('mousemove', e => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    // ── Baby Pram / Stroller ──────────────────────────────────────
+    const mCoral  = new THREE.MeshStandardMaterial({color:0xD4584F,roughness:.42,metalness:.04});
+    const mGold   = new THREE.MeshStandardMaterial({color:0xBF8C40,roughness:.38,metalness:.12});
+    const mCream  = new THREE.MeshStandardMaterial({color:0xF4EDE0,roughness:.55,metalness:.02});
+    const mDark   = new THREE.MeshStandardMaterial({color:0x2A2218,roughness:.45,metalness:.18});
+    const mRubber = new THREE.MeshStandardMaterial({color:0x1A1410,roughness:.88,metalness:.0});
+
+    const pramModel = new THREE.Group();
+    function pm(geo,mat,px=0,py=0,pz=0,rx=0,ry=0,rz=0){
+      const m=new THREE.Mesh(geo,mat);
+      m.position.set(px,py,pz);m.rotation.set(rx,ry,rz);
+      m.castShadow=true;m.receiveShadow=true;pramModel.add(m);return m;
     }
-    am(new THREE.SphereGeometry(1,32,16),mS,0,0,0,0,0,0,1.1,.18,.6);
-    am(new THREE.SphereGeometry(.6,32,16),mB,-.52,.22,0,0,0,0,1,.9,.9);
-    am(new THREE.SphereGeometry(.7,32,16),mB,0,.18,0,0,0,0,1,.75,.85);
-    am(new THREE.SphereGeometry(.55,32,16),mT,.62,.16,0,0,0,0,1.05,.72,.82);
-    am(new THREE.TorusGeometry(.46,.13,16,40),mC,-.46,.42,0,Math.PI/2,0,0);
-    for(let i=0;i<5;i++){const a=(i/5)*Math.PI-.2;am(new THREE.SphereGeometry(.055,12,8),mD,Math.cos(a)*.55,.32,Math.sin(a)*.32);}
-    am(new THREE.TorusGeometry(.16,.055,8,20),mD,.12,.52,.22,0,0,Math.PI/4);
-    am(new THREE.TorusGeometry(.16,.055,8,20),mD,.12,.52,-.22,0,0,-Math.PI/4);
-    am(new THREE.SphereGeometry(.075,12,8),mD,.12,.52,0);
-    bg2.scale.setScalar(.78);bg2.position.set(0,.01,0);scene.add(bg2);
-    let autoRotate=true;
+
+    // Basket body — hemisphere + cylinder
+    pm(new THREE.SphereGeometry(.5,28,16,0,Math.PI*2,0,Math.PI/2), mCoral, 0,.6,0);
+    pm(new THREE.CylinderGeometry(.5,.5,.26,28), mCoral, 0,.74,0);
+    pm(new THREE.CylinderGeometry(.46,.46,.22,24), mCream, 0,.75,0);
+
+    // Hood — tilted half-sphere
+    const hd=new THREE.Mesh(new THREE.SphereGeometry(.54,28,14,0,Math.PI*2,0,Math.PI*.58),mGold);
+    hd.rotation.set(Math.PI*.5,0,Math.PI*.12);hd.position.set(-.1,.9,0);hd.castShadow=true;pramModel.add(hd);
+    // Hood trim
+    const ht=new THREE.Mesh(new THREE.TorusGeometry(.54,.022,8,36,Math.PI),mCoral);
+    ht.rotation.set(Math.PI*.5,0,Math.PI*.12);ht.position.set(-.1,.88,0);pramModel.add(ht);
+
+    // Handle — arched tube
+    const hPts=[
+      new THREE.Vector3(-.38,.84,.28),new THREE.Vector3(-.44,1.1,.2),
+      new THREE.Vector3(-.42,1.38,.02),new THREE.Vector3(-.3,1.5,-.24),
+      new THREE.Vector3(.3,1.5,-.24),new THREE.Vector3(.42,1.38,.02),
+      new THREE.Vector3(.44,1.1,.2),new THREE.Vector3(.38,.84,.28),
+    ];
+    const hMesh=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(hPts),48,.034,8),mDark);
+    hMesh.castShadow=true;pramModel.add(hMesh);
+
+    // Legs — 4 diagonal struts
+    function leg(x,z){
+      const start=new THREE.Vector3(x*.72,.56,z),end=new THREE.Vector3(x,.2,z);
+      const dir=end.clone().sub(start),len=dir.length();
+      const l=new THREE.Mesh(new THREE.CylinderGeometry(.022,.022,len,8),mDark);
+      l.position.copy(start.clone().add(end).multiplyScalar(.5));
+      l.rotation.z=Math.atan2(dir.x,dir.y);l.castShadow=true;pramModel.add(l);
+    }
+    leg(-.38,.32);leg(.38,.32);leg(-.38,-.32);leg(.38,-.32);
+
+    // Cross braces
+    pm(new THREE.CylinderGeometry(.018,.018,.74,8),mDark,0,.28,.32,0,0,Math.PI/2);
+    pm(new THREE.CylinderGeometry(.018,.018,.74,8),mDark,0,.28,-.32,0,0,Math.PI/2);
+    // Axles
+    pm(new THREE.CylinderGeometry(.016,.016,.72,8),mDark,0,.2,.32,Math.PI/2);
+    pm(new THREE.CylinderGeometry(.016,.016,.72,8),mDark,0,.2,-.32,Math.PI/2);
+
+    // Wheels — 4 with spokes
+    function addWheel(x,z){
+      const w=new THREE.Group();
+      const tire=new THREE.Mesh(new THREE.TorusGeometry(.19,.058,10,30),mRubber);
+      tire.castShadow=true;w.add(tire);
+      w.add(new THREE.Mesh(new THREE.TorusGeometry(.13,.018,8,22),mDark));
+      const hub=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,.09,10),mDark);
+      hub.rotation.x=Math.PI/2;w.add(hub);
+      for(let i=0;i<5;i++){
+        const s=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.23,6),mDark);
+        s.rotation.z=(i/5)*Math.PI;w.add(s);
+      }
+      w.rotation.y=Math.PI/2;w.position.set(x,.2,z);pramModel.add(w);
+    }
+    addWheel(-.38,.32);addWheel(.38,.32);addWheel(-.38,-.32);addWheel(.38,-.32);
+
+    pramModel.position.set(0,0,0);scene.add(pramModel);
+
+    // Gold floating particles
+    const partGeo=new THREE.BufferGeometry();
+    const partPos=new Float32Array(80*3);
+    for(let i=0;i<80;i++){partPos[i*3]=(Math.random()-.5)*7;partPos[i*3+1]=Math.random()*4-.5;partPos[i*3+2]=(Math.random()-.5)*4;}
+    partGeo.setAttribute('position',new THREE.BufferAttribute(partPos,3));
+    const particles=new THREE.Points(partGeo,new THREE.PointsMaterial({color:0xF5D87A,size:.04,sizeAttenuation:true,transparent:true,opacity:.6,depthWrite:false}));
+    scene.add(particles);
 
     const KF=[
-      {p:.00,pos:[3.5,1.6,5.5],tgt:[0,.55,0],fov:45},
-      {p:.28,pos:[3.5,1.6,5.5],tgt:[0,.55,0],fov:45},
-      {p:.35,pos:[1.2,.5,2.2],tgt:[.3,.3,.3],fov:30},
-      {p:.65,pos:[1.2,.5,2.2],tgt:[.3,.3,.3],fov:30},
-      {p:.72,pos:[-2,1.5,-3.2],tgt:[0,.8,0],fov:40},
-      {p:1.00,pos:[-2.6,1.8,-3.8],tgt:[0,.75,0],fov:40},
+      {p:.00,pos:[3.5,1.8,5.5],tgt:[0,.72,0],fov:45},
+      {p:.28,pos:[3.5,1.8,5.5],tgt:[0,.72,0],fov:45},
+      {p:.35,pos:[1.2,.9,2.2],tgt:[.2,.65,.2],fov:30},
+      {p:.65,pos:[1.2,.9,2.2],tgt:[.2,.65,.2],fov:30},
+      {p:.72,pos:[-2,1.8,-3.2],tgt:[0,.82,0],fov:40},
+      {p:1.00,pos:[-2.6,2.0,-3.8],tgt:[0,.78,0],fov:40},
     ];
     const lerp=(a,b,t)=>a+(b-a)*t,cl=v=>Math.max(0,Math.min(1,v)),ss=t=>t*t*(3-2*t);
     function applyKF(p){
@@ -934,7 +1040,7 @@
 
     // Webgi-style: canvas hidden + camera far back — revealed after loader
     gsap.set('#bg-canvas',{opacity:0,scale:1.12});
-    cam.pz=13; cam.py=3.5; cam.fov=58; camera.fov=58; camera.updateProjectionMatrix();
+    cam.pz=13; cam.py=4.0; cam.fov=58; camera.fov=58; camera.updateProjectionMatrix();
 
     initHero();
     window._hygraphPromise.then(hygraphItems => {
@@ -946,9 +1052,16 @@
     (function tick(){
       requestAnimationFrame(tick);
       const t=clk.getElapsedTime();
-      bg2.position.y=.01+Math.sin(t*1.2)*.06;
-      if(autoRotate) bg2.rotation.y+=.006;
-      bg2.rotation.z=Math.sin(t*.8)*.03;bg2.rotation.x=Math.sin(t*.6)*.02;
+      // Smooth mouse parallax
+      targetMX += (mouseX - targetMX) * 0.04;
+      targetMY += (mouseY - targetMY) * 0.04;
+      pramModel.position.y = Math.sin(t*1.1)*.055;
+      if(autoRotate) pramModel.rotation.y += .004;
+      pramModel.rotation.z = Math.sin(t*.7)*.018 + targetMY*.06;
+      pramModel.position.x = targetMX * 0.22;
+      // Animate particles
+      particles.rotation.y = t * 0.04;
+      particles.rotation.x = Math.sin(t * 0.18) * 0.05;
       camera.position.set(cam.px,cam.py,cam.pz);
       if(Math.abs(camera.fov-cam.fov)>.01){camera.fov=cam.fov;camera.updateProjectionMatrix();}
       camera.lookAt(cam.tx,cam.ty,cam.tz);
@@ -973,7 +1086,7 @@
           document.getElementById('loader').classList.add('fade-out');
           // Camera flies in + canvas reveals — webgi moment
           gsap.to('#bg-canvas',{opacity:1,scale:1,duration:2.4,ease:'power3.out',delay:.15});
-          gsap.to(cam,{pz:5.5,py:1.6,fov:45,duration:3,ease:'power3.inOut',delay:.1});
+          gsap.to(cam,{pz:5.5,py:1.8,fov:45,duration:3,ease:'power3.inOut',delay:.1});
         },400);
       }
     },50);
