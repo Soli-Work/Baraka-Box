@@ -29,12 +29,12 @@
     body { font-family:'Inter',-apple-system,sans-serif; background:var(--cream); overflow-x:hidden; -webkit-font-smoothing:antialiased; }
 
     /* ── Loader ── */
-    #loader { position:fixed; inset:0; background:#0A0A0A; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; transition:opacity 1s ease,visibility 1s ease; }
-    #loader.fade-out { opacity:0; visibility:hidden; }
-    .loader-brand { font-size:.72rem; font-weight:800; letter-spacing:.35em; text-transform:uppercase; color:rgba(255,255,255,.9); margin-bottom:52px; }
-    .loader-track { width:180px; height:1px; background:rgba(255,255,255,.08); position:relative; overflow:hidden; }
-    #loader-fill { position:absolute; top:0; left:0; height:100%; background:linear-gradient(90deg,var(--coral),var(--yellow)); width:0; transition:width .3s ease; }
-    .loader-pct { margin-top:20px; font-size:.6rem; letter-spacing:.15em; color:rgba(255,255,255,.2); }
+    #loader { position:fixed; inset:0; background:var(--cream); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; transition:opacity 1.3s cubic-bezier(.76,0,.24,1),visibility 1.3s,transform 1.3s cubic-bezier(.76,0,.24,1); transform-origin:center top; }
+    #loader.fade-out { opacity:0; visibility:hidden; transform:scaleY(0); }
+    .loader-brand { font-size:.72rem; font-weight:800; letter-spacing:.35em; text-transform:uppercase; color:var(--charcoal); margin-bottom:52px; }
+    .loader-track { width:180px; height:1px; background:rgba(28,28,28,.1); position:relative; overflow:hidden; }
+    #loader-fill { position:absolute; top:0; left:0; height:100%; background:linear-gradient(90deg,var(--coral),var(--gold),var(--yellow)); width:0; transition:width .25s ease; }
+    .loader-pct { margin-top:20px; font-size:.6rem; letter-spacing:.15em; color:rgba(28,28,28,.35); }
 
     /* ── Canvas ── */
     #bg-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
@@ -380,26 +380,52 @@
     .toast.show { transform:translateY(0); opacity:1; }
 
     @media(max-width:768px){
-      nav { padding:18px 24px; }
+      nav { padding:16px 20px; }
       .nav-menu { display:none; }
-      .overlay-inner,.overlay.right .overlay-inner { padding:0 6%; }
-      .ov-title { font-size:2.4rem; }
+      .overlay-inner,.overlay.right .overlay-inner,.overlay.center .overlay-inner { padding:0 6%; text-align:left; }
+      .overlay.right { align-items:flex-start; }
+      .overlay.center { align-items:flex-start; }
+      .overlay.center .ov-body { margin:0; text-align:left; }
+      .ov-title { font-size:clamp(2rem,7vw,2.8rem); }
+      .ov-body { font-size:.82rem; max-width:90%; }
       #progress { display:none; }
-      .form-block { padding:80px 5%; min-height:auto; }
-      .panel-grid { grid-template-columns:1fr; gap:32px; }
+      .form-block { padding:70px 5% 60px; }
+      .panel-grid { grid-template-columns:1fr; gap:28px; }
+      .panel-title { font-size:clamp(1.8rem,5vw,2.4rem); }
       .form-row { grid-template-columns:1fr; }
-      .stock-topbar { padding:20px 20px 0; }
-      .stock-bottom { padding:0 20px 20px; }
-      .stock-card { width:150px !important; height:220px !important; }
-      .stock-card.is-active { width:240px !important; height:360px !important; }
-      .stock-card.is-adjacent { width:180px !important; height:280px !important; }
+      .panel-form-wrap { padding:24px 18px; }
+      /* Stock */
+      .stock-topbar { padding:16px 16px 0; flex-wrap:wrap; gap:10px; }
+      .stock-title { font-size:1.5rem; }
+      .stock-contact { display:none; }
+      .stock-bottom { padding:0 16px 16px; }
+      .stock-item-label { font-size:.78rem; min-width:120px; }
+      .stock-scroll-hint { min-width:auto; font-size:.44rem; }
+      /* Cards sized by JS but ensure CSS matches */
+      .stock-card { width:100px; height:150px; }
+      .stock-card.is-active { width:230px; height:340px; }
+      .stock-card.is-adjacent { width:140px; height:210px; }
+      /* Reviews */
       #reviews-section { padding:60px 5% 50px; }
       .reviews-grid { grid-template-columns:1fr; }
       .review-form-wrap { padding:24px 18px; }
+      .reviews-header .panel-title { font-size:1.8rem; }
     }
     @media(max-width:480px){
+      nav { padding:14px 16px; }
       .nav-cta-group { gap:6px; }
       .nav-phone { display:none; }
+      .ov-title { font-size:1.9rem; }
+      .ov-link { font-size:.55rem; }
+      .panel-title { font-size:1.6rem; }
+      .btn-submit { font-size:.55rem; }
+      .stock-counter { display:none; }
+      .stock-dots { display:none; }
+      .sci-qty { font-size:2.2rem; }
+    }
+    @media(max-width:360px){
+      .ov-title { font-size:1.65rem; }
+      .stock-card.is-active { width:200px !important; height:300px !important; }
     }
   </style>
 </head>
@@ -416,7 +442,7 @@
   <svg style="display:none"><symbol id="ico-wa" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.556 4.118 1.528 5.845L.057 23.213a.75.75 0 0 0 .92.92l5.368-1.471A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.695-.513-5.228-1.406l-.374-.216-3.876 1.061 1.061-3.877-.216-.374A9.956 9.956 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></symbol></svg>
 
   <nav>
-    <div class="nav-brand">Baraka Box</div>
+    <a class="nav-brand" href="javascript:void(0)" onclick="window._lenis?window._lenis.scrollTo(0,{duration:1.5}):window.scrollTo({top:0,behavior:'smooth'})" style="text-decoration:none;cursor:pointer;">Baraka Box</a>
     <ul class="nav-menu">
       <li><a onclick="scrollToId('forms-section')" href="javascript:void(0)">Donate</a></li>
       <li><a onclick="scrollToId('return-block')" href="javascript:void(0)">Return</a></li>
@@ -801,11 +827,12 @@
       const cards    = [...track.querySelectorAll('.stock-card')];
       const n        = cards.length;
 
-      // Card widths for layout calculation
-      const ACTIVE_W  = 420;
-      const ADJ_W     = 260;
-      const SMALL_W   = 200;
-      const GAP       = 16;
+      // Card widths — responsive
+      const mob = window.innerWidth < 768;
+      const ACTIVE_W = mob ? 230 : 420;
+      const ADJ_W    = mob ? 140 : 260;
+      const SMALL_W  = mob ? 100 : 200;
+      const GAP      = mob ? 10  : 16;
 
       // One scroll-step per card. Total scroll = n steps.
       const stepHeight = window.innerHeight * 1.2;
@@ -905,11 +932,14 @@
       gsap.set(track, { x: viewW / 2 - ACTIVE_W / 2 });
     }
 
-    document.getElementById('loader').classList.add('fade-out');
+    // Webgi-style: canvas hidden + camera far back — revealed after loader
+    gsap.set('#bg-canvas',{opacity:0,scale:1.12});
+    cam.pz=13; cam.py=3.5; cam.fov=58; camera.fov=58; camera.updateProjectionMatrix();
+
     initHero();
     window._hygraphPromise.then(hygraphItems => {
       window._buildStock(hygraphItems);
-      setTimeout(() => { initStock(); ScrollTrigger.refresh(); }, 400);
+      setTimeout(() => { initStock(); ScrollTrigger.refresh(); }, 800);
     });
 
     const clk = new THREE.Clock();
@@ -934,11 +964,19 @@
 
     let pct=0;
     const t2=setInterval(()=>{
-      pct=Math.min(pct+12,100);
+      pct=Math.min(pct+7,100);
       document.getElementById('loader-fill').style.width=pct+'%';
       document.getElementById('loader-pct').textContent=pct+'%';
-      if(pct>=100) clearInterval(t2);
-    },60);
+      if(pct>=100){
+        clearInterval(t2);
+        setTimeout(()=>{
+          document.getElementById('loader').classList.add('fade-out');
+          // Camera flies in + canvas reveals — webgi moment
+          gsap.to('#bg-canvas',{opacity:1,scale:1,duration:2.4,ease:'power3.out',delay:.15});
+          gsap.to(cam,{pz:5.5,py:1.6,fov:45,duration:3,ease:'power3.inOut',delay:.1});
+        },400);
+      }
+    },50);
   </script>
 
   <script>
@@ -1096,7 +1134,7 @@
 
       // Hygraph items take priority; fall back to static list
       const items=hygraphItems.length>0
-        ? hygraphItems.map(h=>({name:h.stockName||'Item',qty:null,age:null,level:'good',imageUrl:h.stockImage?.url||''}))
+        ? hygraphItems.map(h=>({name:h.stockName||'Item',qty:null,age:null,level:'good',imageUrl:h.stockImage?.[0]?.url||''}))
         : stockItems;
 
       window._stockItems=items;
