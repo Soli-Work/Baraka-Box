@@ -12,7 +12,8 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:poly.pizza)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "WebFetch(domain:sketchfab.com)"
+      "WebFetch(domain:sketchfab.com)",
+      "Bash(Copy-Item *)"
     ]
   }
 }
