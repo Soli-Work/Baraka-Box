@@ -1,1172 +1,1719 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Baraka Box – Share the Good Stuff!</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --cream:#FFF8F0;
-  --warm:#FFF3E0;
-  --coral:#F4645C;
-  --coral-lt:#FF8A84;
-  --coral-dk:#D94840;
-  --sunshine:#FFD166;
-  --sunshine-dk:#F0BC4A;
-  --mint:#A8E6CF;
-  --sky:#B8DFFE;
-  --lilac:#D4AEED;
-  --peach:#FFB997;
-  --charcoal:#2C1810;
-  --brown:#6B3F2A;
-  --text:#3D2314;
-  --muted:#8C6B5A;
-  --white:#FFFFFF;
-  --r:20px;
-  --r-lg:32px;
-}
-html{scroll-behavior:auto;overflow-x:hidden}
-body{font-family:'Nunito',sans-serif;background:var(--cream);overflow-x:hidden;-webkit-font-smoothing:antialiased;color:var(--text)}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baraka Box – Share the Good Stuff</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --cream:    #F7F3EC;
+      --cream-dk: #EDE8DF;
+      --charcoal: #1C1C1C;
+      --gray:     #5A5248;
+      --gold:     #C2945A;
+      --gold-lt:  #E8C48A;
+      --coral:    #E8736A;
+      --coral-lt: #F4A49F;
+      --yellow:   #F5D87A;
+      --mint:     #A8D5C2;
+      /* Newsletter brand colors */
+      --nb-coral: #E8736A;
+      --nb-gold:  #C2945A;
+      --nb-cream: #FDF8F0;
+    }
+    html { scroll-behavior: auto; }
+    body { font-family:'Inter',-apple-system,sans-serif; background:var(--cream); overflow-x:hidden; -webkit-font-smoothing:antialiased; }
 
-/* ═══ LOADER ═══ */
-#loader{position:fixed;inset:0;background:var(--coral);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .9s ease,visibility .9s ease}
-#loader.out{opacity:0;visibility:hidden}
-.ld-brand{font-family:'Fredoka One',cursive;font-size:3.5rem;color:#fff;letter-spacing:.02em;margin-bottom:8px}
-.ld-sub{font-family:'Caveat',cursive;font-size:1.4rem;color:rgba(255,255,255,.8);margin-bottom:48px}
-.ld-track{width:220px;height:6px;background:rgba(255,255,255,.2);border-radius:99px;overflow:hidden}
-.ld-fill{height:100%;background:#fff;border-radius:99px;width:0;transition:width .3s ease}
-/* floaty baby silhouettes */
-.ld-star{position:absolute;font-size:2rem;animation:spin 6s linear infinite;opacity:.35}
+    /* ══ CORNER BABY ILLUSTRATIONS ══ */
+    .baby-corner {
+      position: fixed;
+      z-index: 5;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .baby-corner.visible { opacity: 1; }
+    .baby-corner img { width: 100%; height: 100%; object-fit: contain; }
 
-/* ═══ NAV ═══ */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,248,240,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(244,100,92,.12)}
-.nav-brand{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--coral);letter-spacing:.03em}
-.nav-brand span{color:var(--charcoal)}
-.nav-links{display:flex;gap:32px;list-style:none}
-.nav-links a{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .25s}
-.nav-links a:hover{color:var(--coral)}
-.nav-donate{background:var(--coral);color:#fff;padding:10px 22px;border-radius:99px;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:background .25s,transform .2s;white-space:nowrap}
-.nav-donate:hover{background:var(--coral-dk);transform:scale(1.03)}
+    .baby-tl {
+      top: 80px; left: -10px;
+      width: 120px; height: 150px;
+      transform: rotate(-8deg);
+    }
+    .baby-tr {
+      top: 60px; right: -8px;
+      width: 100px; height: 130px;
+      transform: rotate(10deg);
+    }
+    .baby-bl {
+      bottom: 120px; left: -8px;
+      width: 100px; height: 120px;
+      transform: rotate(6deg);
+      opacity: 0;
+    }
+    .baby-br {
+      bottom: 100px; right: -6px;
+      width: 110px; height: 140px;
+      transform: rotate(-5deg);
+      opacity: 0;
+    }
 
-/* ═══ FIXED CANVAS ═══ */
-#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+    /* ══════════════════════════════════════════════════════════
+       ANIMATED LOADER
+    ══════════════════════════════════════════════════════════ */
+    #loader {
+      position: fixed; inset: 0;
+      background: var(--cream);
+      z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity 1.3s cubic-bezier(.76,0,.24,1), visibility 1.3s, transform 1.3s cubic-bezier(.76,0,.24,1);
+      transform-origin: center top;
+      overflow: hidden;
+    }
+    #loader.fade-out { opacity: 0; visibility: hidden; transform: scaleY(0); }
 
-/* ═══ SCROLL CONTAINER ═══ */
-#scroll-container{position:relative;z-index:1;height:450vh}
+    .loader-particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .lp { position: absolute; border-radius: 50%; opacity: 0; animation: lp-float linear infinite; }
+    .lp:nth-child(1)  { width:6px;  height:6px;  background:var(--coral-lt); left:15%; animation-duration:6s;  animation-delay:0s;   }
+    .lp:nth-child(2)  { width:4px;  height:4px;  background:var(--gold-lt);  left:30%; animation-duration:8s;  animation-delay:1s;   }
+    .lp:nth-child(3)  { width:8px;  height:8px;  background:var(--mint);     left:55%; animation-duration:7s;  animation-delay:0.5s; }
+    .lp:nth-child(4)  { width:5px;  height:5px;  background:var(--yellow);   left:70%; animation-duration:9s;  animation-delay:2s;   }
+    .lp:nth-child(5)  { width:7px;  height:7px;  background:var(--coral);    left:85%; animation-duration:6.5s;animation-delay:0.8s; }
+    .lp:nth-child(6)  { width:4px;  height:4px;  background:var(--gold);     left:45%; animation-duration:7.5s;animation-delay:1.5s; }
+    .lp:nth-child(7)  { width:6px;  height:6px;  background:var(--mint);     left:8%;  animation-duration:8.5s;animation-delay:0.3s; }
+    .lp:nth-child(8)  { width:5px;  height:5px;  background:var(--yellow);   left:92%; animation-duration:7s;  animation-delay:1.8s; }
+    @keyframes lp-float {
+      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
 
-/* ═══ FLOATING OVERLAYS ═══ */
-.overlay{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:center;pointer-events:none;opacity:0;will-change:opacity,transform}
-.ov-inner{padding:0 8%;max-width:640px}
-.overlay.right{align-items:flex-end}
-.overlay.right .ov-inner{text-align:right;padding:0 8%}
-.overlay.center{align-items:center}
-.overlay.center .ov-inner{text-align:center;max-width:700px}
-.ov-tag{display:inline-block;background:var(--sunshine);color:var(--charcoal);font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding:6px 16px;border-radius:99px;margin-bottom:20px}
-.ov-h{font-family:'Fredoka One',cursive;font-size:clamp(3rem,6vw,6rem);line-height:1.05;color:var(--charcoal);margin-bottom:20px}
-.ov-h em{color:var(--coral);font-style:normal}
-.ov-p{font-size:clamp(.9rem,1.2vw,1.1rem);line-height:1.85;color:var(--muted);max-width:420px;font-weight:600}
-.overlay.right .ov-p{margin-left:auto}
-.overlay.center .ov-p{margin:0 auto;text-align:center}
-.ov-cta{display:inline-block;margin-top:36px;background:var(--coral);color:#fff;padding:14px 32px;border-radius:99px;font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;pointer-events:all;transition:transform .2s,background .2s}
-.ov-cta:hover{background:var(--coral-dk);transform:translateY(-2px)}
+    .loader-scene { position: relative; width: 200px; height: 220px; margin-bottom: 32px; }
+    .lbox-base { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 140px; height: 90px; }
+    .lbox-base svg { width: 100%; height: 100%; }
+    .lbox-lid { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); width: 148px; height: 40px; transform-origin: bottom left; animation: lid-lift 2s cubic-bezier(.34,1.56,.64,1) forwards; animation-delay: 0.8s; }
+    .lbox-lid svg { width: 100%; height: 100%; }
+    @keyframes lid-lift {
+      0%   { transform: translateX(-50%) rotate(0deg) translateY(0); }
+      40%  { transform: translateX(-50%) rotate(-65deg) translateY(-10px); }
+      60%  { transform: translateX(-50%) rotate(-70deg) translateY(-12px); }
+      100% { transform: translateX(-50%) rotate(-68deg) translateY(-11px); }
+    }
+    .lbox-item { position: absolute; bottom: 110px; left: 50%; font-size: 26px; opacity: 0; line-height: 1; }
+    .lbox-item:nth-child(3) { animation: item-pop-left 2.2s cubic-bezier(.34,1.56,.64,1) forwards; animation-delay: 1.2s; }
+    .lbox-item:nth-child(4) { animation: item-pop-up 2.2s cubic-bezier(.34,1.56,.64,1) forwards; animation-delay: 1.45s; }
+    .lbox-item:nth-child(5) { animation: item-pop-right 2.2s cubic-bezier(.34,1.56,.64,1) forwards; animation-delay: 1.7s; }
+    @keyframes item-pop-left {
+      0%   { opacity:0; transform: translate(-50%,0) scale(0.3) rotate(0deg); }
+      30%  { opacity:1; }
+      60%  { opacity:1; transform: translate(calc(-50% - 52px),-65px) scale(1.1) rotate(-22deg); }
+      100% { opacity:0.9; transform: translate(calc(-50% - 50px),-60px) scale(1) rotate(-20deg); }
+    }
+    @keyframes item-pop-up {
+      0%   { opacity:0; transform: translate(-50%,0) scale(0.3) rotate(0deg); }
+      30%  { opacity:1; }
+      60%  { opacity:1; transform: translate(-50%,-90px) scale(1.2) rotate(8deg); }
+      100% { opacity:0.9; transform: translate(-50%,-88px) scale(1.1) rotate(5deg); }
+    }
+    @keyframes item-pop-right {
+      0%   { opacity:0; transform: translate(-50%,0) scale(0.3) rotate(0deg); }
+      30%  { opacity:1; }
+      60%  { opacity:1; transform: translate(calc(-50% + 52px),-62px) scale(1.1) rotate(18deg); }
+      100% { opacity:0.9; transform: translate(calc(-50% + 50px),-60px) scale(1) rotate(16deg); }
+    }
+    .lbox-stroller { position: absolute; bottom: 88px; left: 50%; transform: translateX(-50%) scale(0) translateY(0px); font-size: 44px; opacity: 0; filter: drop-shadow(0 4px 12px rgba(194,148,90,0.5)); transition: none; }
+    .lbox-stroller.emerge { animation: stroller-emerge 0.9s cubic-bezier(.34,1.56,.64,1) forwards; }
+    @keyframes stroller-emerge {
+      0%   { transform: translateX(-50%) scale(0) translateY(20px); opacity:0; }
+      60%  { transform: translateX(-50%) scale(1.2) translateY(-8px); opacity:1; }
+      100% { transform: translateX(-50%) scale(1) translateY(0px); opacity:1; }
+    }
+    .lbox-glow { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%) scale(0); width: 80px; height: 20px; background: radial-gradient(ellipse, rgba(194,148,90,0.6) 0%, transparent 70%); border-radius: 50%; opacity: 0; }
+    .lbox-glow.emerge { animation: glow-pop 0.9s ease forwards; animation-delay: 0.1s; }
+    @keyframes glow-pop {
+      0%   { transform: translateX(-50%) scale(0); opacity:0; }
+      50%  { transform: translateX(-50%) scale(1.3); opacity:1; }
+      100% { transform: translateX(-50%) scale(1); opacity:0.7; }
+    }
+    .lbox-base { animation: box-settle 0.6s cubic-bezier(.34,1.56,.64,1) both; animation-delay: 0.2s; }
+    @keyframes box-settle {
+      0%   { transform: translateX(-50%) scale(0.8) translateY(20px); opacity:0; }
+      100% { transform: translateX(-50%) scale(1) translateY(0); opacity:1; }
+    }
+    .loader-brand { font-size: .72rem; font-weight: 800; letter-spacing: .35em; text-transform: uppercase; color: var(--nb-coral); margin-bottom: 28px; animation: brand-in 0.8s ease both; animation-delay: 0.3s; }
+    @keyframes brand-in { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    .loader-track { width: 200px; height: 2px; background: rgba(28,28,28,.08); border-radius: 2px; position: relative; overflow: hidden; animation: brand-in 0.6s ease both; animation-delay: 0.5s; }
+    #loader-fill { position: absolute; top:0; left:0; height:100%; background: linear-gradient(90deg,var(--coral),var(--gold),var(--yellow)); width: 0; transition: width .25s ease; border-radius: 2px; }
+    .loader-pct { margin-top: 16px; font-size: .6rem; letter-spacing: .15em; color: rgba(28,28,28,.45); animation: brand-in 0.6s ease both; animation-delay: 0.5s; }
 
-/* ═══ PROGRESS DOTS ═══ */
-#pdots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:12px}
-.pd{width:8px;height:8px;border-radius:50%;background:var(--coral);opacity:.2;transition:all .4s cubic-bezier(.22,1,.36,1);cursor:pointer}
-.pd.on{opacity:1;height:28px;border-radius:4px}
+    /* ── Canvas ── */
+    #bg-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
 
-/* ═══ SCROLL HINT ═══ */
-#sh{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;align-items:center;gap:8px}
-.sh-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--coral),transparent);opacity:.35;animation:sh-pulse 2s ease-in-out infinite}
-@keyframes sh-pulse{0%,100%{opacity:.2}50%{opacity:.5}}
-.sh-txt{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);opacity:.6;font-weight:700}
+    /* ── Nav ── */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      padding:22px 52px;
+      display:flex; justify-content:space-between; align-items:center;
+      background: rgba(247,243,236,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(28,28,28,0.06);
+    }
+    .nav-brand {
+      font-size:.72rem; font-weight:800; letter-spacing:.28em; text-transform:uppercase;
+      /* Newsletter coral/gold color for brand */
+      color: var(--nb-coral);
+      text-shadow: none;
+    }
+    .nav-menu { list-style:none; display:flex; gap:40px; }
+    .nav-menu a { font-size:.62rem; font-weight:600; letter-spacing:.15em; text-decoration:none; text-transform:uppercase; color:var(--charcoal); opacity:.55; transition:opacity .3s; cursor:pointer; }
+    .nav-menu a:hover { opacity:1; }
+    .nav-cta-group { display:flex; align-items:center; gap:10px; }
+    .nav-phone { font-size:.62rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; padding:10px 20px; border:1px solid var(--charcoal); color:var(--charcoal); text-decoration:none; transition:background .3s,color .3s; }
+    .nav-phone:hover { background:var(--charcoal); color:var(--cream); }
+    .nav-wa { display:flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:50%; background:#25D366; color:#fff; text-decoration:none; transition:transform .25s,box-shadow .25s; box-shadow:0 2px 10px rgba(37,211,102,.3); flex-shrink:0; }
+    .nav-wa:hover { transform:scale(1.1); box-shadow:0 4px 18px rgba(37,211,102,.45); }
+    .nav-wa svg { width:18px; height:18px; fill:#fff; }
 
-/* ═══ CONTENT SECTIONS (below the 3D area) ═══ */
-main{position:relative;z-index:5;background:var(--cream)}
+    /* ── Hero ── */
+    #scroll-container { position:relative; z-index:1; height:500vh; }
+    .overlay { position:fixed; inset:0; z-index:10; display:flex; flex-direction:column; justify-content:center; pointer-events:none; opacity:0; will-change:opacity,transform; }
+    .overlay-inner { padding:0 9%; max-width:680px; }
+    .overlay.right { align-items:flex-end; }
+    .overlay.right .overlay-inner { text-align:right; padding:0 9%; }
+    .overlay.center { align-items:center; }
+    .overlay.center .overlay-inner { text-align:center; }
+    .ov-label { font-size:.6rem; font-weight:700; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); margin-bottom:18px; display:block; }
+    .ov-title { font-family:'Playfair Display',serif; font-size:clamp(2.8rem,5.5vw,5.5rem); font-weight:700; line-height:1.05; color:var(--charcoal); margin-bottom:26px; }
+    .ov-title em { font-style:italic; color:var(--gold); }
+    .ov-body { font-size:clamp(.88rem,1.15vw,1.05rem); line-height:1.9; color:var(--charcoal); max-width:400px; font-weight:500; opacity:0.78; }
+    .overlay.right .ov-body { margin-left:auto; }
+    .overlay.center .ov-body { margin:0 auto; text-align:center; }
+    .ov-link { display:inline-flex; align-items:center; gap:10px; margin-top:40px; font-size:.62rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--charcoal); text-decoration:none; padding-bottom:5px; border-bottom:1px solid rgba(28,28,28,.4); pointer-events:all; cursor:pointer; transition:border-color .3s; }
+    .ov-link:hover { border-color:var(--charcoal); }
 
-/* ─── MISSION STRIP ─── */
-.mission{background:var(--coral);padding:100px 60px;text-align:center;position:relative;overflow:hidden}
-.mission::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M30 0C13.4 0 0 13.4 0 30s13.4 30 30 30 30-13.4 30-30S46.6 0 30 0zm0 54C16.8 54 6 43.2 6 30S16.8 6 30 6s24 10.8 24 24-10.8 24-24 24z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
-.mission-tag{display:inline-block;background:rgba(255,255,255,.2);color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding:8px 20px;border-radius:99px;margin-bottom:24px}
-.mission h2{font-family:'Fredoka One',cursive;font-size:clamp(2.5rem,5vw,4.5rem);color:#fff;margin-bottom:24px;line-height:1.1}
-.mission p{font-size:1.05rem;line-height:1.9;color:rgba(255,255,255,.85);max-width:680px;margin:0 auto;font-weight:600}
-.mission-floats{position:absolute;pointer-events:none;top:0;left:0;right:0;bottom:0}
-.mf{position:absolute;font-size:2rem;opacity:.15;animation:float 5s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(8deg)}}
+    /* FIX: ov1 only animates in ONCE — no duplicate display */
+    #ov1 { opacity:1; }
+    #ov1 .ov-label { opacity:0; transform:translateY(16px); }
+    #ov1 .ov-title { opacity:0; transform:translateY(28px); }
+    #ov1 .ov-body { opacity:0; transform:translateY(20px); }
+    #ov1 .ov-link { opacity:0; transform:translateY(16px); }
 
-/* ─── GOOD STUFF STATS ─── */
-.stats{padding:100px 60px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px;background:var(--warm)}
-.stat-card{background:#fff;border-radius:var(--r-lg);padding:40px 32px;text-align:center;box-shadow:0 4px 24px rgba(244,100,92,.08);transition:transform .3s}
-.stat-card:hover{transform:translateY(-6px)}
-.stat-num{font-family:'Fredoka One',cursive;font-size:3.5rem;color:var(--coral);line-height:1}
-.stat-label{font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:12px}
-.stat-icon{font-size:2rem;margin-bottom:16px}
+    #ov1 .ov-label.revealed { animation: ov-el-in 0.7s cubic-bezier(.22,1,.36,1) forwards; }
+    #ov1 .ov-title.revealed { animation: ov-el-in 0.9s cubic-bezier(.22,1,.36,1) forwards; animation-delay:0.12s; }
+    #ov1 .ov-body.revealed  { animation: ov-el-in 0.8s cubic-bezier(.22,1,.36,1) forwards; animation-delay:0.26s; }
+    #ov1 .ov-link.revealed  { animation: ov-el-in 0.7s cubic-bezier(.22,1,.36,1) forwards; animation-delay:0.42s; }
 
-/* ─── ITEMS IN STOCK (ORYZO HORIZONTAL SCROLL) ─── */
-.stock-section{padding:100px 0;background:var(--cream);overflow:hidden}
-.stock-header{padding:0 60px;margin-bottom:60px}
-.stock-header .tag{display:inline-block;background:var(--sunshine);color:var(--charcoal);font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding:8px 20px;border-radius:99px;margin-bottom:20px}
-.stock-header h2{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,4vw,3.8rem);color:var(--charcoal);margin-bottom:12px}
-.stock-header p{font-size:1rem;color:var(--muted);font-weight:600;max-width:500px}
+    @keyframes ov-el-in {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
 
-/* The pinned horizontal scroll wrapper */
-.stock-pin-outer{height:400vh;position:relative}
-.stock-sticky{position:sticky;top:80px;height:calc(100vh - 80px);overflow:hidden;display:flex;align-items:center}
-.stock-track{display:flex;gap:28px;padding:0 60px;will-change:transform}
-.item-card{flex:0 0 300px;background:#fff;border-radius:var(--r-lg);padding:36px 28px;text-align:center;box-shadow:0 8px 32px rgba(44,24,16,.07);border:2px solid transparent;transition:border-color .3s,transform .4s}
-.item-card:hover{border-color:var(--coral-lt);transform:scale(1.03)}
-.item-card.featured{flex:0 0 360px;background:var(--coral);color:#fff}
-.item-card.featured .ic-label,.item-card.featured .ic-qty{color:rgba(255,255,255,.75)}
-.item-card.featured .ic-name{color:#fff}
-.ic-emoji{font-size:3.5rem;margin-bottom:20px;display:block;line-height:1}
-.ic-name{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--charcoal);margin-bottom:8px}
-.ic-label{font-size:.65rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.ic-qty{font-size:2rem;font-weight:900;color:var(--coral);font-family:'Fredoka One',cursive}
-.item-card.featured .ic-qty{color:var(--sunshine)}
-.ic-tag{display:inline-block;background:var(--sunshine);color:var(--charcoal);font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:99px;margin-top:12px}
-.item-card.featured .ic-tag{background:rgba(255,255,255,.25);color:#fff}
+    /* Enhanced hero animations */
+    @keyframes gentle-float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes gentle-sway {
+      0%, 100% { transform: translateX(0px) rotate(0deg); }
+      25% { transform: translateX(3px) rotate(0.5deg); }
+      75% { transform: translateX(-3px) rotate(-0.5deg); }
+    }
+    @keyframes text-shimmer {
+      0%, 100% { background-position: -200% center; }
+      50% { background-position: 200% center; }
+    }
+    @keyframes soft-pulse {
+      0%, 100% { opacity: 0.78; }
+      50% { opacity: 0.88; }
+    }
+    .ov-title em {
+      background: linear-gradient(90deg, var(--gold) 0%, var(--gold-lt) 25%, var(--gold) 50%, var(--gold-lt) 75%, var(--gold) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: text-shimmer 6s ease-in-out infinite;
+    }
+    #ov1.hero-active .ov-label.revealed,
+    #ov1.hero-active .ov-title.revealed {
+      animation: ov-el-in 0.9s cubic-bezier(.22,1,.36,1) forwards, gentle-float 4s ease-in-out infinite 1s;
+    }
+    #ov1.hero-active .ov-body.revealed {
+      animation: ov-el-in 0.8s cubic-bezier(.22,1,.36,1) forwards, soft-pulse 3s ease-in-out infinite 1.5s;
+    }
+    #ov1.hero-active .ov-link.revealed {
+      animation: ov-el-in 0.7s cubic-bezier(.22,1,.36,1) forwards, gentle-sway 5s ease-in-out infinite 2s;
+    }
+    
+    /* Floating baby items decoration */
+    .hero-floating-items {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-float-item {
+      position: absolute;
+      font-size: 1.8rem;
+      opacity: 0;
+      filter: blur(0.5px);
+      animation: hero-item-float linear infinite;
+    }
+    .hero-float-item:nth-child(1) { left: 8%; top: 20%; animation-duration: 18s; animation-delay: 0s; }
+    .hero-float-item:nth-child(2) { left: 88%; top: 15%; animation-duration: 22s; animation-delay: 2s; }
+    .hero-float-item:nth-child(3) { left: 12%; top: 70%; animation-duration: 20s; animation-delay: 4s; }
+    .hero-float-item:nth-child(4) { left: 85%; top: 75%; animation-duration: 24s; animation-delay: 1s; }
+    .hero-float-item:nth-child(5) { left: 5%; top: 45%; animation-duration: 19s; animation-delay: 3s; }
+    .hero-float-item:nth-child(6) { left: 92%; top: 50%; animation-duration: 21s; animation-delay: 5s; }
+    @keyframes hero-item-float {
+      0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+      10% { opacity: 0.35; }
+      50% { transform: translateY(-40px) rotate(15deg) scale(1); opacity: 0.5; }
+      90% { opacity: 0.35; }
+      100% { transform: translateY(-80px) rotate(-10deg) scale(0.9); opacity: 0; }
+    }
 
-/* ─── WHAT YOU CAN DONATE ─── */
-.donate-info{padding:100px 60px;background:var(--warm);display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
-.di-col h3{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:28px}
-.di-col.can h3{color:var(--coral)}
-.di-col.cant h3{color:var(--brown)}
-.di-box{background:#fff;border-radius:var(--r);padding:32px;box-shadow:0 4px 16px rgba(44,24,16,.06)}
-.di-box ul{list-style:none;display:flex;flex-direction:column;gap:14px}
-.di-box li{display:flex;align-items:flex-start;gap:12px;font-size:.95rem;font-weight:600;color:var(--text);line-height:1.5}
-.di-box li::before{content:'✓';background:var(--mint);color:var(--brown);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:900;flex-shrink:0;margin-top:1px}
-.di-col.cant .di-box li::before{content:'✕';background:#FFE0DD;color:var(--coral-dk)}
+    /* Enhanced scroll hint animation */
+    #scroll-hint .sh-line {
+      animation: scroll-bounce 2.5s ease-in-out infinite;
+    }
+    @keyframes scroll-bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.2; }
+      50% { transform: translateY(6px); opacity: 0.5; }
+    }
 
-/* ─── TESTIMONIALS ─── */
-.testi{padding:100px 60px;background:var(--cream)}
-.testi-header{text-align:center;margin-bottom:64px}
-.testi-header .tag{display:inline-block;background:var(--lilac);color:var(--charcoal);font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding:8px 20px;border-radius:99px;margin-bottom:20px}
-.testi-header h2{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,4vw,3.5rem);color:var(--charcoal)}
-.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:28px}
-.tq{background:#fff;border-radius:var(--r-lg);padding:40px;box-shadow:0 4px 24px rgba(44,24,16,.06);position:relative;overflow:hidden}
-.tq::before{content:'"';font-family:'Fredoka One',cursive;font-size:8rem;color:var(--sunshine);opacity:.3;position:absolute;top:-10px;left:16px;line-height:1}
-.tq-text{font-size:1rem;line-height:1.85;color:var(--text);font-weight:600;font-family:'Caveat',cursive;font-size:1.15rem;position:relative;z-index:1}
-.tq-author{margin-top:24px;font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    #progress { position:fixed; right:32px; top:50%; transform:translateY(-50%); z-index:100; display:flex; flex-direction:column; gap:14px; }
+    .p-dot { width:5px; height:5px; border-radius:50%; background:var(--charcoal); opacity:.2; cursor:pointer; transition:all .5s cubic-bezier(.22,1,.36,1); }
+    .p-dot.active { opacity:1; background:var(--gold); height:24px; border-radius:3px; }
 
-/* ═══ FORMS SECTION ═══ */
-.forms-section{padding:100px 60px;background:var(--warm)}
-.forms-header{text-align:center;margin-bottom:72px}
-.forms-header .tag{display:inline-block;background:var(--coral);color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding:8px 20px;border-radius:99px;margin-bottom:20px}
-.forms-header h2{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,4vw,3.5rem);color:var(--charcoal);margin-bottom:16px}
-.forms-header p{font-size:1rem;color:var(--muted);font-weight:600;max-width:500px;margin:0 auto}
+    #scroll-hint { position:fixed; bottom:36px; left:50%; transform:translateX(-50%); z-index:100; display:flex; flex-direction:column; align-items:center; gap:10px; }
+    .sh-line { width:1px; height:44px; background:linear-gradient(to bottom,var(--charcoal),transparent); opacity:.25; animation:pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:.15} 50%{opacity:.4} }
+    .sh-label { font-size:.55rem; letter-spacing:.25em; text-transform:uppercase; color:var(--charcoal); opacity:.55; font-weight:600; }
 
-/* Form tabs */
-.ftabs{display:flex;justify-content:center;gap:12px;margin-bottom:48px;flex-wrap:wrap}
-.ftab{padding:12px 28px;border-radius:99px;border:2px solid rgba(244,100,92,.3);background:transparent;color:var(--muted);font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .25s;font-family:'Nunito',sans-serif}
-.ftab:hover,.ftab.active{background:var(--coral);border-color:var(--coral);color:#fff}
+    /* ══════════════════════════════════════════════════════════
+       FORMS
+    ══════════════════════════════════════════════════════════ */
+    #forms-section { position:relative; z-index:2; background:var(--cream); }
+    .form-block { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:100px 7% 80px; }
+    .form-block--donate { background:var(--cream); }
+    .form-block--return { background:#FDF8F0; }
+    .cant-take-block { background:var(--cream); padding:48px 7%; border-top:1px solid rgba(28,28,28,.06); border-bottom:1px solid rgba(28,28,28,.06); }
+    .cant-take-inner { max-width:720px; margin:0 auto; background:#fff; border-radius:16px; padding:32px 36px; border-left:4px solid var(--coral); box-shadow:0 4px 24px rgba(28,28,28,.05); }
+    .cant-take-list { list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+    .cant-take-list li { font-size:.84rem; color:var(--charcoal); line-height:1.7; padding-left:20px; position:relative; font-weight:500; }
+    .cant-take-list li::before { content:'✕'; position:absolute; left:0; color:var(--coral); font-size:.72rem; font-weight:700; top:1px; }
+    .panel-grid { display:grid; grid-template-columns:1fr 1fr; gap:64px; width:100%; max-width:1120px; align-items:start; }
+    .panel-label { font-size:.58rem; font-weight:700; letter-spacing:.35em; text-transform:uppercase; color:var(--coral); margin-bottom:20px; display:block; }
+    .panel-title { font-family:'Playfair Display',serif; font-size:clamp(2rem,3.4vw,3.4rem); font-weight:700; line-height:1.08; color:var(--charcoal); margin-bottom:20px; }
+    .panel-title em { font-style:italic; color:var(--gold); }
+    .panel-body { font-size:.9rem; line-height:1.85; color:var(--charcoal); max-width:380px; font-weight:500; opacity:0.75; }
+    .panel-form-wrap { background:#fff; border-radius:20px; padding:32px 28px; box-shadow:0 8px 48px rgba(28,28,28,.07),0 2px 12px rgba(28,28,28,.04); }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .form-group { margin-bottom:14px; }
+    .form-label { display:block; font-size:.58rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--charcoal); margin-bottom:6px; opacity:.7; }
+    .form-input,.form-select,.form-textarea { width:100%; background:#F7F3EC; border:1.5px solid transparent; border-radius:10px; padding:10px 13px; font-family:'Inter',sans-serif; font-size:.84rem; color:var(--charcoal); outline:none; transition:border-color .25s,background .25s; -webkit-appearance:none; appearance:none; font-weight:500; }
+    .form-input::placeholder { color:rgba(28,28,28,0.4); }
+    .form-input:focus,.form-select:focus,.form-textarea:focus { border-color:var(--gold); background:#fff; }
+    .form-select { cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8078' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 13px center; background-color:#F7F3EC; padding-right:34px; }
+    .form-select:focus { background-color:#fff; }
+    .form-textarea { resize:none; height:72px; }
+    .nominate-toggle { display:flex; align-items:center; gap:12px; cursor:pointer; margin-bottom:14px; user-select:none; }
+    .toggle-track { width:40px; height:22px; border-radius:11px; background:#E0D9D0; position:relative; transition:background .3s; flex-shrink:0; }
+    .toggle-track.on { background:var(--coral); }
+    .toggle-thumb { width:16px; height:16px; border-radius:50%; background:#fff; position:absolute; top:3px; left:3px; transition:transform .3s cubic-bezier(.34,1.56,.64,1); box-shadow:0 1px 4px rgba(0,0,0,.18); }
+    .toggle-track.on .toggle-thumb { transform:translateX(18px); }
+    .toggle-label { font-size:.76rem; font-weight:600; color:var(--charcoal); }
+    .nominee-fields { max-height:0; overflow:hidden; transition:max-height .4s cubic-bezier(.4,0,.2,1),opacity .3s; opacity:0; }
+    .nominee-fields.open { max-height:400px; opacity:1; }
+    .nominee-note { font-size:.7rem; color:var(--charcoal); line-height:1.55; margin-bottom:12px; padding:10px 13px; background:#FFF9F0; border-radius:8px; border-left:3px solid var(--gold-lt); font-weight:500; opacity:0.8; }
+    .anon-note { font-size:.7rem; color:var(--charcoal); line-height:1.6; padding:10px 14px; background:rgba(168,213,194,.2); border-radius:8px; border-left:3px solid var(--mint); margin-bottom:14px; font-weight:500; opacity:0.85; }
+    .btn-submit { width:100%; padding:12px 28px; border:none; border-radius:10px; background:var(--charcoal); color:var(--cream); font-family:'Inter',sans-serif; font-size:.6rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; cursor:pointer; transition:background .3s,transform .2s; margin-top:6px; }
+    .btn-submit:hover { background:var(--coral); transform:translateY(-1px); }
 
-/* Form panels */
-.fpanel{display:none;max-width:680px;margin:0 auto;animation:fadein .35s ease}
-.fpanel.show{display:block}
-@keyframes fadein{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.form-card{background:#fff;border-radius:var(--r-lg);padding:52px;box-shadow:0 8px 40px rgba(44,24,16,.1)}
-.form-title{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--charcoal);margin-bottom:8px}
-.form-sub{font-size:.9rem;color:var(--muted);font-weight:600;margin-bottom:40px;line-height:1.6}
+    /* ══════════════════════════════════════════════════════════
+       IN STOCK — MANUAL PREV/NEXT NAVIGATION
+    ══════════════════════════════════════════════════════════ */
+    #stock-section { position: relative; z-index: 2; }
 
-/* Fields */
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
-.frow.full{grid-template-columns:1fr}
-.fgroup{display:flex;flex-direction:column;gap:8px}
-.fgroup label{font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--brown)}
-.fgroup input,.fgroup select,.fgroup textarea{padding:14px 18px;border:2px solid rgba(244,100,92,.15);border-radius:var(--r);background:var(--cream);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:600;color:var(--text);outline:none;transition:border-color .25s;-webkit-appearance:none;appearance: none;}
-.fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus{border-color:var(--coral)}
-.fgroup textarea{resize:vertical;min-height:100px;line-height:1.6}
-.fgroup select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238C6B5A' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
+    .stock-sticky {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      background: var(--cream-dk);
+      display: flex;
+      flex-direction: column;
+    }
 
-/* Checkbox group */
-.check-group{display:flex;flex-direction:column;gap:12px}
-.check-item{display:flex;align-items:center;gap:12px;cursor:pointer}
-.check-item input[type=checkbox]{width:20px;height:20px;border:2px solid rgba(244,100,92,.3);border-radius:6px;accent-color:var(--coral);cursor:pointer}
-.check-item span{font-size:.92rem;font-weight:600;color:var(--text)}
+    /* FIX: nav no longer overlaps — top padding accounts for nav height */
+    .stock-topbar {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 100px 60px 0; /* extra top padding so nav doesn't overlap */
+      flex-shrink: 0;
+    }
+    .stock-label { font-size: .52rem; font-weight: 700; letter-spacing: .42em; text-transform: uppercase; color: var(--coral); display: block; margin-bottom: 8px; }
+    .stock-title { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 2.6vw, 2.6rem); font-weight: 700; line-height: 1.05; color: var(--charcoal); }
+    .stock-title em { font-style: italic; color: var(--gold); }
+    .stock-counter { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: rgba(28,28,28,.45); }
+    .stock-counter strong { color: var(--gold); font-weight: 900; }
+    .stock-contact { text-align: right; padding-top: 4px; }
+    .stock-contact-label { font-size:.54rem; color:var(--charcoal); letter-spacing:.12em; text-transform:uppercase; font-weight:600; opacity:0.6; }
+    .stock-contact-phone { font-size:.8rem; font-weight:700; color:var(--charcoal); letter-spacing:.04em; display:block; margin-top:4px; }
+    .stock-contact-wa { display:inline-flex; align-items:center; gap:7px; margin-top:8px; font-size:.55rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:#25D366; text-decoration:none; padding:5px 14px; border:1px solid rgba(37,211,102,.25); transition:background .25s,color .25s,border-color .25s; }
+    .stock-contact-wa:hover { background:#25D366; color:#fff; border-color:#25D366; }
+    .stock-contact-wa svg { width:13px; height:13px; fill:currentColor; }
 
-/* Toggle */
-.toggle-row{display:flex;align-items:center;gap:16px;padding:16px 0;border-top:1px solid rgba(244,100,92,.1)}
-.toggle-row span{font-size:.9rem;font-weight:700;color:var(--text);flex:1}
-.toggle{position:relative;width:48px;height:26px;flex-shrink:0}
-.toggle input{opacity:0;width:0;height:0}
-.toggle-slider{position:absolute;inset:0;background:rgba(244,100,92,.2);border-radius:99px;cursor:pointer;transition:.3s}
-.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:4px;bottom:4px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
-.toggle input:checked+.toggle-slider{background:var(--coral)}
-.toggle input:checked+.toggle-slider::before{transform:translateX(22px)}
+    .stock-stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 0;
+    }
+    .stock-track {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      will-change: transform;
+      transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+    .stock-card-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    .stock-card {
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      border-radius: 0;
+      background: var(--cream);
+      width: 200px; height: 300px;
+      transition: width 0.55s cubic-bezier(0.76, 0, 0.24, 1),
+                  height 0.55s cubic-bezier(0.76, 0, 0.24, 1),
+                  opacity 0.45s ease,
+                  box-shadow 0.45s ease;
+      opacity: 0.45;
+    }
+    .stock-card.is-active { width: 420px; height: 560px; opacity: 1; box-shadow: 0 20px 60px rgba(28,28,28,.22), 0 0 0 1px rgba(28,28,28,.06); }
+    .stock-card.is-adjacent { width: 260px; height: 380px; opacity: 0.65; }
+    .stock-card.is-active::after { content: ''; position: absolute; inset: 0; border: 1px solid rgba(194,148,90,.2); pointer-events: none; z-index: 10; }
+    .stock-card.is-active::before { content: ''; position: absolute; inset: 8px; border: 1px dashed rgba(28,28,28,.1); pointer-events: none; z-index: 10; }
+    .stock-card-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 0 24px 28px; z-index: 8; background: linear-gradient(to top, rgba(10,8,6,.95) 0%, rgba(10,8,6,.6) 55%, transparent 100%); pointer-events: none; opacity: 0; transform: translateY(8px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .stock-card.is-active .stock-card-info { opacity: 1; transform: translateY(0); }
+    .stock-card-mini-label { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; font-size: .5rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: rgba(28,28,28,.55); pointer-events: none; z-index: 8; transition: opacity 0.3s; }
+    .stock-card.is-active .stock-card-mini-label { opacity: 0; }
+    .sci-age { display:inline-block; margin-bottom:8px; padding:3px 10px; border:1px solid rgba(255,255,255,.2); font-size:.48rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:rgba(247,243,236,.75); }
+    .sci-name { font-weight:800; font-size:1.15rem; color:var(--cream); line-height:1.2; margin-bottom:12px; }
+    .sci-row { display:flex; align-items:baseline; justify-content:space-between; }
+    .sci-qty { font-family:'Playfair Display',serif; font-size:3.2rem; font-weight:900; line-height:1; color:var(--yellow); letter-spacing:-.04em; }
+    .sci-qty-label { font-size:.46rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:rgba(247,243,236,.55); margin-left:5px; }
+    .sci-status { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; background:rgba(247,243,236,.08); border:1px solid rgba(255,255,255,.08); font-size:.48rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:rgba(247,243,236,.85); }
+    .sci-dot { width:5px; height:5px; border-radius:50%; background:var(--mint); animation:blink 2s ease-in-out infinite; }
+    .sci-dot.low { background:var(--coral-lt); }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .stock-stage::before, .stock-stage::after { content: ''; position: absolute; top: 0; bottom: 0; width: 160px; z-index: 20; pointer-events: none; }
+    .stock-stage::before { left:0; background:linear-gradient(to right, var(--cream-dk) 20%, transparent); }
+    .stock-stage::after  { right:0; background:linear-gradient(to left, var(--cream-dk) 20%, transparent); }
 
-/* Submit btn */
-.fsubmit{width:100%;padding:18px;background:var(--coral);color:#fff;border:none;border-radius:99px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:32px;transition:background .25s,transform .2s}
-.fsubmit:hover{background:var(--coral-dk);transform:translateY(-2px)}
+    /* PREV/NEXT NAV BUTTONS */
+    .stock-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px 36px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .stock-item-label { font-family: 'Playfair Display', serif; font-size: .95rem; font-style: italic; color: var(--charcoal); transition: color 0.4s ease; min-width: 200px; font-weight:700; opacity:0.7; }
+    .stock-dots { display: flex; align-items: center; gap: 6px; }
+    .stock-dot { width: 3px; height: 3px; background: rgba(28,28,28,.2); transition: all .4s ease; cursor: pointer; }
+    .stock-dot.active { background: var(--gold); width: 28px; }
 
-/* Success message */
-.fsuccess{display:none;text-align:center;padding:40px;background:var(--mint);border-radius:var(--r);margin-top:20px}
-.fsuccess.show{display:block}
-.fsuccess h3{font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--brown);margin-bottom:10px}
-.fsuccess p{font-size:.95rem;font-weight:600;color:var(--muted)}
+    /* Nav buttons centered absolutely */
+    .stock-nav-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stock-nav-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(28,28,28,0.18);
+      background: rgba(247,243,236,0.9);
+      color: var(--charcoal);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.25s, border-color 0.25s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 10px rgba(28,28,28,0.06);
+      flex-shrink: 0;
+    }
+    .stock-nav-btn:hover:not(:disabled) {
+      background: var(--charcoal);
+      color: var(--cream);
+      border-color: var(--charcoal);
+      transform: scale(1.08);
+      box-shadow: 0 4px 18px rgba(28,28,28,0.16);
+    }
+    .stock-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .stock-nav-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* Item tag chips in Return form */
-.chip-group{display:flex;flex-wrap:wrap;gap:10px;padding:12px 0}
-.chip{padding:8px 18px;border-radius:99px;border:2px solid rgba(244,100,92,.25);background:var(--cream);font-size:.8rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif}
-.chip.selected{background:var(--coral);border-color:var(--coral);color:#fff}
+    /* ══════════════════════════════════════════════════════════
+       REVIEWS SECTION — Premium styled cards
+    ══════════════════════════════════════════════════════════ */
+    #reviews-section { position:relative; z-index:2; background: linear-gradient(to bottom, var(--cream) 0%, #FDF8F0 100%); padding:100px 7% 80px; }
+    .reviews-header { text-align:center; margin-bottom:70px; }
+    .reviews-header .panel-label { display:inline-block; margin-bottom:16px; }
+    .reviews-header .panel-title { margin-bottom:12px; }
+    .reviews-header p { font-size:.9rem; color:var(--charcoal); line-height:1.8; max-width:500px; margin:0 auto; font-weight:500; opacity:0.72; }
 
-/* ─── FOOTER ─── */
-footer{background:var(--charcoal);padding:80px 60px 40px;color:rgba(255,255,255,.7)}
-.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:60px;margin-bottom:60px}
-.f-brand{font-family:'Fredoka One',cursive;font-size:2.2rem;color:var(--coral);margin-bottom:14px}
-.f-tagline{font-family:'Caveat',cursive;font-size:1.2rem;color:rgba(255,255,255,.6);margin-bottom:24px}
-.f-contact a{color:var(--sunshine);text-decoration:none;font-weight:700;font-size:.95rem}
-.f-col h4{font-size:.68rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:20px}
-.f-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
-.f-col li a{text-decoration:none;color:rgba(255,255,255,.6);font-size:.88rem;font-weight:600;transition:color .25s}
-.f-col li a:hover{color:var(--coral-lt)}
-.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
-.fb-left{font-size:.78rem;color:rgba(255,255,255,.3);font-weight:600}
-.fb-church{font-family:'Caveat',cursive;font-size:1rem;color:rgba(255,255,255,.4)}
+    .reviews-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+      gap:24px;
+      max-width:1100px;
+      margin:0 auto 60px;
+      min-height:20px;
+    }
 
-/* Decorative floaters */
-.floater{position:absolute;pointer-events:none;animation:float 4s ease-in-out infinite;font-size:2rem;opacity:.22}
-@keyframes spin{to{transform:rotate(360deg)}}
+    /* PREMIUM review cards */
+    .review-card {
+      background:#fff;
+      border-radius:20px;
+      padding:28px 26px;
+      box-shadow: 0 2px 8px rgba(28,28,28,.04), 0 8px 32px rgba(28,28,28,.06);
+      position:relative;
+      overflow:hidden;
+      /* slide-in animation */
+      opacity: 0;
+      transform: translateY(28px);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .review-card.animate-in {
+      animation: card-slide-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes card-slide-in {
+      from { opacity:0; transform: translateY(32px) scale(0.97); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+    .review-card:hover {
+      box-shadow: 0 4px 20px rgba(28,28,28,.08), 0 16px 48px rgba(28,28,28,.10);
+      transform: translateY(-3px);
+    }
 
-/* ─── REVEAL ANIMATIONS ─── */
-.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease}
-.reveal.in{opacity:1;transform:translateY(0)}
+    /* Premium top accent — gradient bar */
+    .review-card::before {
+      content:'';
+      position:absolute;
+      top:0; left:0; right:0;
+      height:4px;
+      background: linear-gradient(90deg, var(--coral) 0%, var(--gold-lt) 50%, var(--yellow) 100%);
+      border-radius:20px 20px 0 0;
+    }
 
-/* ─── RESPONSIVE ─── */
-@media(max-width:900px){
-  nav{padding:16px 24px}
-  .nav-links{display:none}
-  .donate-info{grid-template-columns:1fr}
-  .footer-top{grid-template-columns:1fr;gap:36px}
-  .forms-section,.testi,.stats,.mission,.stock-header,.donate-info{padding-left:24px;padding-right:24px}
-  .form-card{padding:32px 24px}
-  .frow{grid-template-columns:1fr}
-  #pdots{display:none}
-}
-</style>
+    /* Decorative quote mark */
+    .review-card::after {
+      content: '\201C';
+      position: absolute;
+      top: 16px; right: 18px;
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      line-height: 1;
+      color: rgba(194,148,90,0.08);
+      font-style: italic;
+      pointer-events: none;
+    }
+
+    .review-stars { display:flex; gap:3px; margin-bottom:14px; }
+    .review-star { font-size:14px; }
+    .review-text {
+      font-size:.88rem;
+      line-height:1.8;
+      color:var(--charcoal);
+      margin-bottom:20px;
+      font-style:italic;
+      font-weight:500;
+      position: relative;
+      z-index: 1;
+    }
+    .review-meta { display:flex; align-items:center; gap:12px; padding-top:16px; border-top:1px solid rgba(28,28,28,.05); }
+    .review-avatar {
+      width:36px; height:36px;
+      border-radius:50%;
+      background: linear-gradient(135deg, var(--coral-lt), var(--gold));
+      display:flex; align-items:center; justify-content:center;
+      font-size:.65rem; font-weight:800; color:#fff;
+      flex-shrink:0;
+      box-shadow: 0 2px 8px rgba(194,148,90,0.3);
+    }
+    .review-name { font-size:.75rem; font-weight:700; color:var(--charcoal); letter-spacing:.02em; }
+    .review-author { font-size:.72rem; color:var(--charcoal); font-style:normal; margin-top:2px; opacity:0.6; font-weight:500; }
+    .review-role { font-size:.62rem; color:var(--charcoal); font-weight:500; opacity:0.6; }
+
+    .review-form-wrap {
+      max-width:640px;
+      margin:0 auto;
+      background:#fff;
+      border-radius:24px;
+      padding:40px 36px;
+      box-shadow: 0 4px 24px rgba(28,28,28,.06), 0 20px 60px rgba(28,28,28,.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .review-form-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--coral), var(--gold), var(--yellow));
+    }
+    .review-form-title { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; color:var(--charcoal); margin-bottom:6px; }
+    .review-form-sub { font-size:.82rem; color:var(--charcoal); margin-bottom:24px; line-height:1.6; font-weight:500; opacity:0.72; }
+    .star-picker { display:flex; gap:6px; margin-bottom:20px; }
+    .star-btn { background:none; border:none; font-size:24px; cursor:pointer; opacity:.25; transition:opacity .2s,transform .15s; filter:grayscale(1); }
+    .star-btn.lit { opacity:1; filter:none; transform:scale(1.18); }
+    .star-btn:hover { opacity:.7; }
+
+    /* Toast */
+    .toast { position:fixed; bottom:32px; right:32px; background:var(--charcoal); color:var(--cream); padding:16px 24px; border-radius:12px; font-size:.78rem; font-weight:600; z-index:9000; transform:translateY(80px); opacity:0; transition:all .4s cubic-bezier(.34,1.56,.64,1); pointer-events:none; max-width:320px; line-height:1.5; }
+    .toast.show { transform:translateY(0); opacity:1; }
+
+    /* ══ BABY CORNER SVG ILLUSTRATIONS ══ */
+    /* We draw them with canvas/inline SVG below */
+    .baby-illus-wrap {
+      position: fixed;
+      z-index: 6;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1.2s ease 2s;
+    }
+    .baby-illus-wrap.show { opacity: 1; }
+    .baby-illus-wrap canvas { display: block; }
+
+    #baby-tl { top: 72px; left: 0; display: none; }
+    #baby-tr { top: 58px; right: 0; }
+    #baby-bl { bottom: 80px; left: 0; display: none; }
+    #baby-br { bottom: 60px; right: 0; display: none; }
+
+    /* Responsive */
+    @media(max-width:768px){
+      nav { padding:14px 18px; }
+      .nav-menu { display:none; }
+      .overlay-inner,.overlay.right .overlay-inner,.overlay.center .overlay-inner { padding:0 6%; text-align:left; }
+      .overlay.right { align-items:flex-start; }
+      .overlay.center { align-items:flex-start; }
+      .overlay.center .ov-body { margin:0; text-align:left; }
+      .ov-title { font-size:clamp(2rem,7vw,2.8rem); }
+      .ov-body { font-size:.86rem; max-width:90%; }
+      #progress { display:none; }
+      .form-block { padding:70px 5% 60px; }
+      .panel-grid { grid-template-columns:1fr; gap:28px; }
+      .panel-title { font-size:clamp(1.8rem,5vw,2.4rem); }
+      .form-row { grid-template-columns:1fr; }
+      .panel-form-wrap { padding:24px 18px; }
+      .stock-topbar { padding:80px 16px 0; flex-wrap:wrap; gap:10px; }
+      .stock-title { font-size:1.4rem; }
+      .stock-contact { display:none; }
+      .stock-bottom { padding:0 16px 20px; }
+      .stock-item-label { font-size:.78rem; min-width:100px; }
+      .stock-card { width:100px; height:150px; }
+      .stock-card.is-active { width:230px; height:340px; }
+      .stock-card.is-adjacent { width:140px; height:210px; }
+      #reviews-section { padding:70px 5% 50px; }
+      .reviews-grid { grid-template-columns:1fr; }
+      .review-form-wrap { padding:28px 20px; }
+      .reviews-header .panel-title { font-size:1.8rem; }
+      #baby-tl, #baby-tr, #baby-bl, #baby-br { display: none; }
+    }
+    @media(max-width:480px){
+      nav { padding:12px 14px; }
+      .nav-cta-group { gap:6px; }
+      .nav-phone { display:none; }
+      .ov-title { font-size:1.9rem; }
+      .ov-link { font-size:.55rem; }
+      .panel-title { font-size:1.6rem; }
+      .btn-submit { font-size:.55rem; }
+      .stock-counter { display:none; }
+      .stock-dots { display:none; }
+      .sci-qty { font-size:2.2rem; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-  <div style="position:relative">
-    <div class="ld-brand">Baraka Box</div>
-    <div class="ld-sub">share the good stuff! 🎀</div>
+  <!-- ══ BABY CORNER ILLUSTRATIONS ══ -->
+  <div class="baby-illus-wrap" id="baby-tl"><canvas width="130" height="160" id="canvas-tl"></canvas></div>
+  <div class="baby-illus-wrap" id="baby-tr"><canvas width="110" height="145" id="canvas-tr"></canvas></div>
+  <div class="baby-illus-wrap" id="baby-bl"><canvas width="105" height="130" id="canvas-bl"></canvas></div>
+  <div class="baby-illus-wrap" id="baby-br"><canvas width="115" height="145" id="canvas-br"></canvas></div>
+
+  <!-- ══ LOADER ══ -->
+  <div id="loader">
+    <div class="loader-particles">
+      <div class="lp"></div><div class="lp"></div><div class="lp"></div>
+      <div class="lp"></div><div class="lp"></div><div class="lp"></div>
+      <div class="lp"></div><div class="lp"></div>
+    </div>
+    <div class="loader-scene">
+      <div class="lbox-item">🧸</div>
+      <div class="lbox-item">👶</div>
+      <div class="lbox-item">🍼</div>
+      <div class="lbox-stroller" id="loader-stroller">🛒</div>
+      <div class="lbox-glow" id="loader-glow"></div>
+      <div class="lbox-lid">
+        <svg viewBox="0 0 148 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="8" width="146" height="31" rx="3" fill="#C2945A" stroke="#A87840" stroke-width="1.5"/>
+          <rect x="1" y="8" width="146" height="12" rx="3" fill="#D4A870"/>
+          <rect x="59" y="1" width="30" height="10" rx="5" fill="#B07030" stroke="#A87840" stroke-width="1.5"/>
+          <line x1="74" y1="8" x2="74" y2="39" stroke="#E8736A" stroke-width="2.5" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="lbox-base">
+        <svg viewBox="0 0 140 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="138" height="88" rx="4" fill="#E8C48A" stroke="#C2945A" stroke-width="1.5"/>
+          <rect x="1" y="1" width="138" height="88" rx="4" fill="url(#boxGrad)"/>
+          <rect x="64" y="1" width="12" height="88" fill="#E8736A" opacity="0.35"/>
+          <rect x="20" y="24" width="100" height="42" rx="6" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+          <text x="70" y="52" text-anchor="middle" font-size="22" fill="rgba(232,115,106,0.7)">♡</text>
+          <defs><linearGradient id="boxGrad" x1="0" y1="0" x2="140" y2="90" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="rgba(255,255,255,0.15)"/><stop offset="1" stop-color="rgba(0,0,0,0.12)"/></linearGradient></defs>
+        </svg>
+      </div>
+    </div>
+    <div class="loader-brand">Baraka Box</div>
+    <div class="loader-track"><div id="loader-fill"></div></div>
+    <div class="loader-pct" id="loader-pct">0%</div>
   </div>
-  <div class="ld-track"><div class="ld-fill" id="ld-fill"></div></div>
-  <div style="position:fixed;inset:0;pointer-events:none">
-    <span class="ld-star" style="top:10%;left:8%;animation-delay:0s">⭐</span>
-    <span class="ld-star" style="top:70%;left:12%;animation-delay:1s">🌟</span>
-    <span class="ld-star" style="top:20%;right:10%;animation-delay:.5s">✨</span>
-    <span class="ld-star" style="top:75%;right:15%;animation-delay:1.5s">🎀</span>
+
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Floating baby items decoration -->
+  <div class="hero-floating-items" id="hero-floats" style="opacity: 0; transition: opacity 1.5s ease 0.5s;">
+    <span class="hero-float-item">🍼</span>
+    <span class="hero-float-item">🧸</span>
+    <span class="hero-float-item">👶</span>
+    <span class="hero-float-item">🧦</span>
+    <span class="hero-float-item">🎀</span>
+    <span class="hero-float-item">⭐</span>
   </div>
-</div>
 
-<!-- FIXED 3D CANVAS -->
-<canvas id="bg-canvas"></canvas>
+  <svg style="display:none"><symbol id="ico-wa" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.556 4.118 1.528 5.845L.057 23.213a.75.75 0 0 0 .92.92l5.368-1.471A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.695-.513-5.228-1.406l-.374-.216-3.876 1.061 1.061-3.877-.216-.374A9.956 9.956 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></symbol></svg>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-brand">Baraka <span>Box</span></div>
-  <ul class="nav-links">
-    <li><a href="#stock">Items</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#forms">Get Involved</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a href="#forms" class="nav-donate">Donate / Get Items ♥</a>
-</nav>
+  <nav>
+    <a class="nav-brand" href="javascript:void(0)" onclick="window._lenis?window._lenis.scrollTo(0,{duration:1.5}):window.scrollTo({top:0,behavior:'smooth'})" style="text-decoration:none;cursor:pointer;">Baraka Box</a>
+    <ul class="nav-menu">
+      <li><a onclick="scrollToId('forms-section')" href="javascript:void(0)">Donate</a></li>
+      <li><a onclick="scrollToId('return-block')" href="javascript:void(0)">Return</a></li>
+      <li><a onclick="scrollToId('stock-section')" href="javascript:void(0)">In Stock</a></li>
+      <li><a onclick="scrollToId('reviews-section')" href="javascript:void(0)">Reviews</a></li>
+    </ul>
+    <div class="nav-cta-group">
+      <a href="tel:0726499182" class="nav-phone">0726 499 182</a>
+      <a href="https://wa.me/254726499182" target="_blank" rel="noopener" class="nav-wa">
+        <svg viewBox="0 0 24 24"><use href="#ico-wa"/></svg>
+      </a>
+    </div>
+  </nav>
 
-<!-- ═══ 3D SCROLL ZONE ═══ -->
-<div id="scroll-container"></div>
-
-<!-- Overlay 1: Hero -->
-<div class="overlay" id="ov1">
-  <div class="ov-inner">
-    <div class="ov-tag">Emmanuel Baptist Church</div>
-    <h1 class="ov-h">Share the<br><em>Good Stuff!</em></h1>
-    <p class="ov-p">Babies grow fast. The things you once needed can be just what another family needs right now. Baraka Box is a shared space where mom and baby items find new homes.</p>
-    <a class="ov-cta" href="#forms">Donate or Receive →</a>
+  <!-- Hero -->
+  <div id="scroll-container">
+    <div class="overlay" id="ov1">
+      <div class="overlay-inner">
+        <span class="ov-label">Emmanuel Baptist Church, Nairobi</span>
+        <h1 class="ov-title">Share the<br><em>Good Stuff</em></h1>
+        <p class="ov-body">Babies grow fast. The things you once needed can be just what another family needs now. Baraka Box connects generous hearts with growing families.</p>
+        <a class="ov-link" href="javascript:void(0)" onclick="scrollToId('forms-section')">Give · Borrow · Return →</a>
+      </div>
+    </div>
+    <div class="overlay right" id="ov2">
+      <div class="overlay-inner">
+        <span class="ov-label">What We Accept</span>
+        <h2 class="ov-title">If You'd Give<br>It to a <em>Friend</em></h2>
+        <p class="ov-body">Clothes 0–24 months, blankets, car seats, strollers, feeding gear, nursing bras, baby gyms, toys, and more — gently used and given with love.</p>
+      </div>
+    </div>
+    <div class="overlay center" id="ov3">
+      <div class="overlay-inner" style="background:radial-gradient(ellipse at center,rgba(247,243,236,0.82) 30%,transparent 80%);padding:48px 56px;border-radius:20px;">
+        <span class="ov-label">Community First</span>
+        <h2 class="ov-title">Every Gift<br>Finds <em>Its Home</em></h2>
+        <p class="ov-body">7 families received gift bundles this quarter alone. Items are loaned, loved, and returned — creating a circle of care that keeps giving.</p>
+        <a class="ov-link" href="javascript:void(0)" onclick="scrollToId('forms-section')">Get Involved →</a>
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- Overlay 2: Items Detail -->
-<div class="overlay right" id="ov2">
-  <div class="ov-inner">
-    <div class="ov-tag">Items in Stock</div>
-    <h2 class="ov-h">Clothes,<br><em>Gear</em> &<br>So Much More</h2>
-    <p class="ov-p">From tiny onesies to car seats, nursing bras to baby carriers — every item donated with love, passed on with care.</p>
-  </div>
-</div>
+  <div id="scroll-hint"><div class="sh-line"></div><span class="sh-label">Scroll</span></div>
+  <div id="progress"><div class="p-dot active"></div><div class="p-dot"></div><div class="p-dot"></div></div>
 
-<!-- Overlay 3: Community -->
-<div class="overlay center" id="ov3">
-  <div class="ov-inner">
-    <div class="ov-tag">Community</div>
-    <h2 class="ov-h">7 families<br>blessed this<br><em>quarter</em></h2>
-    <p class="ov-p">And we're just getting started. Nominate a family, return items you've used, donate what you no longer need.</p>
-    <a class="ov-cta" href="#forms">Join the Circle →</a>
-  </div>
-</div>
-
-<!-- Scroll hint -->
-<div id="sh"><div class="sh-line"></div><span class="sh-txt">Scroll</span></div>
-
-<!-- Progress dots -->
-<div id="pdots">
-  <div class="pd on"></div>
-  <div class="pd"></div>
-  <div class="pd"></div>
-</div>
-
-<!-- ═══════════════════════════════════════════════ -->
-<!-- MAIN CONTENT (below scroll zone)               -->
-<!-- ═══════════════════════════════════════════════ -->
-<main>
-
-  <!-- MISSION -->
-  <section class="mission" id="about">
-    <div class="mission-floats">
-      <span class="mf" style="top:10%;left:5%;animation-delay:0s">👶</span>
-      <span class="mf" style="top:60%;left:3%;animation-delay:1s">🍼</span>
-      <span class="mf" style="top:20%;right:6%;animation-delay:.7s">⭐</span>
-      <span class="mf" style="top:70%;right:4%;animation-delay:1.8s">🎀</span>
-      <span class="mf" style="top:40%;left:50%;animation-delay:.4s">🌟</span>
-    </div>
-    <div class="mission-tag">Our Mission</div>
-    <h2 class="reveal">Babies grow fast.<br>Kindness doesn't have to.</h2>
-    <p class="reveal" style="margin-top:16px">Baraka Box is a shared space where mom and baby items find new homes — just like you'd share with a friend. Housed under Emmanuel Baptist Church, Nairobi.</p>
-  </section>
-
-  <!-- STATS -->
-  <section class="stats reveal">
-    <div class="stat-card reveal">
-      <div class="stat-icon">🚗</div>
-      <div class="stat-num">3</div>
-      <div class="stat-label">Car Seats Donated</div>
-    </div>
-    <div class="stat-card reveal">
-      <div class="stat-icon">👨‍👩‍👧</div>
-      <div class="stat-num">7</div>
-      <div class="stat-label">Families Blessed Q1 '26</div>
-    </div>
-    <div class="stat-card reveal">
-      <div class="stat-icon">👗</div>
-      <div class="stat-num">100s</div>
-      <div class="stat-label">Clothing Items (0–24 mo)</div>
-    </div>
-    <div class="stat-card reveal">
-      <div class="stat-icon">🤝</div>
-      <div class="stat-num">∞</div>
-      <div class="stat-label">Acts of Kindness</div>
-    </div>
-  </section>
-
-  <!-- ITEMS IN STOCK (Oryzo horizontal scroll) -->
-  <section class="stock-section" id="stock">
-    <div class="stock-header reveal">
-      <div class="tag">Currently Available</div>
-      <h2>Items in Stock</h2>
-      <p>A living collection of donated baby and mama essentials — scroll to explore what's available right now.</p>
-    </div>
-    <div class="stock-pin-outer" id="stock-pin">
-      <div class="stock-sticky">
-        <div class="stock-track" id="stock-track">
-          <div class="item-card featured">
-            <span class="ic-emoji">👗</span>
-            <div class="ic-name">Baby Clothing</div>
-            <div class="ic-label">In Stock</div>
-            <div class="ic-qty">Hundreds</div>
-            <span class="ic-tag">Ages 0–24 months</span>
-          </div>
-          <div class="item-card">
-            <span class="ic-emoji">🚗</span>
-            <div class="ic-name">Car Seats</div>
-            <div class="ic-label">Available</div>
-            <div class="ic-qty">3</div>
-            <span class="ic-tag">Infant & Toddler</span>
-          </div>
-          <div class="item-card">
-            <span class="ic-emoji">🍼</span>
-            <div class="ic-name">Food Warmers</div>
-            <div class="ic-label">Available</div>
-            <div class="ic-qty">2</div>
-            <span class="ic-tag">Electric</span>
-          </div>
-          <div class="item-card">
-            <span class="ic-emoji">🤱</span>
-            <div class="ic-name">Electric Pump</div>
-            <div class="ic-label">Available</div>
-            <div class="ic-qty">1</div>
-            <span class="ic-tag">Clean & Tested</span>
-          </div>
-          <div class="item-card">
-            <span class="ic-emoji">🛏️</span>
-            <div class="ic-name">Baby Bassinet</div>
-            <div class="ic-label">Available</div>
-            <div class="ic-qty">2</div>
-            <span class="ic-tag">Portable</span>
-          </div>
-          <div class="item-card featured" style="background:var(--sunshine)">
-            <span class="ic-emoji">🧸</span>
-            <div class="ic-name" style="color:var(--charcoal)">Blankets & Flannels</div>
-            <div class="ic-label" style="color:var(--brown)">Available</div>
-            <div class="ic-qty" style="color:var(--coral)">Many</div>
-            <span class="ic-tag" style="background:rgba(244,100,92,.2);color:var(--coral-dk)">Soft & Warm</span>
-          </div>
-          <div class="item-card">
-            <span class="ic-emoji">🛁</span>
-            <div class="ic-name">Wash Basins</div>
-            <div class="ic-label">Available</div>
-            <div class="ic-qty">4</div>
-            <span class="ic-tag">Baby Sized</span>
-          </div>
-          <div class="item-card">
-            <span class="ic-emoji">🎒</span>
-            <div class="ic-name">Baby Carriers</div>
-            <div class="ic-label">Available</div>
-            <div class="ic-qty">3</div>
-            <span class="ic-tag">Multiple Styles</span>
-          </div>
-          <div class="item-card">
-            <span class="ic-emoji">🎮</span>
-            <div class="ic-name">Baby Gym</div>
-            <div class="ic-label">Available</div>
-            <div class="ic-qty">1</div>
-            <span class="ic-tag">0–12 months</span>
-          </div>
-          <div class="item-card" style="background:var(--sky)">
-            <span class="ic-emoji">📚</span>
-            <div class="ic-name">Baby Books</div>
-            <div class="ic-label">Available</div>
-            <div class="ic-qty">20+</div>
-            <span class="ic-tag">Board Books</span>
-          </div>
-          <!-- Donate card -->
-          <div class="item-card" style="background:var(--coral);flex:0 0 280px;display:flex;flex-direction:column;justify-content:center">
-            <span class="ic-emoji">💝</span>
-            <div class="ic-name" style="color:#fff;font-size:1.6rem">Have something<br>to donate?</div>
-            <a href="#forms" class="ov-cta" style="margin-top:24px;display:inline-block;background:#fff;color:var(--coral);pointer-events:all">Add an Item →</a>
+  <!-- FORMS -->
+  <section id="forms-section">
+    <div class="form-block form-block--donate">
+      <div class="panel-grid">
+        <div class="panel-info">
+          <span class="panel-label">Give Something Good</span>
+          <h2 class="panel-title">Donate<br>an <em>Item</em></h2>
+          <p class="panel-body">Got baby gear gathering dust? Pass it on. All donations are handled with full anonymity — your name is never shared without your consent.</p>
+          <div style="margin-top:28px;padding-top:24px;border-top:1px solid rgba(28,28,28,.08);">
+            <p style="font-size:.74rem;color:var(--charcoal);line-height:1.7;font-weight:500;opacity:0.75;">Items are collected at <strong style="color:var(--charcoal);opacity:1;">Emmanuel Baptist Church</strong>. Reach Muthoni at <strong style="color:var(--charcoal);opacity:1;">0726 499 182</strong>.</p>
+            <a href="https://wa.me/254726499182" target="_blank" rel="noopener"
+               style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#25D366;text-decoration:none;padding:8px 16px;border:1.5px solid rgba(37,211,102,.3);border-radius:30px;transition:background .25s,color .25s;"
+               onmouseover="this.style.background='#25D366';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='#25D366'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><use href="#ico-wa"/></svg>
+              WhatsApp Muthoni
+            </a>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- WHAT YOU CAN DONATE -->
-  <section class="donate-info" id="guidelines">
-    <div class="di-col can reveal">
-      <h3>✅ What You Can Pass On</h3>
-      <p style="margin-bottom:20px;font-size:.9rem;color:var(--muted);font-weight:600">If you'd give it to a friend, it's perfect for Baraka Box!</p>
-      <div class="di-box">
-        <ul>
-          <li>Baby Essentials (0–2 yrs): Clothes, blankets, shoes, cots, strollers</li>
-          <li>Maternity Wear & Support: Dresses, belly bands, nursing bras</li>
-          <li>Feeding & Care: Bottles, sterilizers, bibs, breast pumps</li>
-          <li>Play & Learning: Toys, books, baby gyms</li>
-          <li>Bath & Hygiene: Towels, baby bathtubs, unopened toiletries</li>
-        </ul>
-      </div>
-    </div>
-    <div class="di-col cant reveal">
-      <h3>❌ What We Can't Take</h3>
-      <p style="margin-bottom:20px;font-size:.9rem;color:var(--muted);font-weight:600">We keep it safe and high-quality for all families.</p>
-      <div class="di-box">
-        <ul>
-          <li>Used pacifiers, expired food/formula, broken or unsafe items</li>
-          <li>Torn or tattered clothes, shoes, and books</li>
-        </ul>
-      </div>
-      <div style="margin-top:32px;background:var(--coral);color:#fff;padding:28px;border-radius:var(--r);text-align:center">
-        <div style="font-family:'Caveat',cursive;font-size:1.4rem;margin-bottom:8px">Need help deciding?</div>
-        <div style="font-size:.85rem;font-weight:600;opacity:.85">Reach out to Muthoni India</div>
-        <a href="tel:0726499182" style="display:block;font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--sunshine);text-decoration:none;margin-top:8px">0726 499 182</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="testi" id="testimonials">
-    <div class="testi-header reveal">
-      <div class="tag">Community Voices</div>
-      <h2>What Families Say</h2>
-    </div>
-    <div class="testi-grid">
-      <div class="tq reveal">
-        <p class="tq-text">"I had been looking for that exact item. To find it here — and then be able to return it for another mum — meant so much."</p>
-        <div class="tq-author">— Baraka Box Recipient</div>
-      </div>
-      <div class="tq reveal">
-        <p class="tq-text">"I had so many things at home I wasn't using anymore, but they meant a lot to me from when I first became a mum. It made me so happy knowing they would go to another family, especially within this community."</p>
-        <div class="tq-author">— Baraka Box Donor</div>
-      </div>
-      <div class="tq reveal" style="background:var(--sunshine)">
-        <p class="tq-text">"The Gawana donation drive during Christmas was amazing. Baraka Box made it so easy to give. We'll definitely be back!"</p>
-        <div class="tq-author">— Community Member</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ FORMS SECTION ═══ -->
-  <section class="forms-section" id="forms">
-    <div class="forms-header reveal">
-      <div class="tag">Get Involved</div>
-      <h2>Join the Circle of Giving</h2>
-      <p>Whether donating, nominating a family, or returning borrowed items — every act keeps the cycle going.</p>
-    </div>
-
-    <!-- Tab Switcher -->
-    <div class="ftabs">
-      <button class="ftab active" onclick="showForm('donate')">💝 Donate Items</button>
-      <button class="ftab" onclick="showForm('receive')">🎁 Receive / Nominate</button>
-      <button class="ftab" onclick="showForm('return')">🔄 Return Items</button>
-    </div>
-
-    <!-- FORM 1: DONATE -->
-    <div class="fpanel show" id="form-donate">
-      <div class="form-card">
-        <div class="form-title">Donate Items 💝</div>
-        <div class="form-sub">Drop off gently used baby and mama items. Tell us what you have and we'll coordinate the handover.</div>
-        <div class="frow">
-          <div class="fgroup">
-            <label>Your Name</label>
-            <input type="text" placeholder="Jane Wanjiku">
-          </div>
-          <div class="fgroup">
-            <label>Phone Number</label>
-            <input type="tel" placeholder="0712 345 678">
-          </div>
-        </div>
-        <div class="frow full">
-          <div class="fgroup">
-            <label>Email (optional)</label>
-            <input type="email" placeholder="jane@email.com">
-          </div>
-        </div>
-        <div class="frow full">
-          <div class="fgroup">
-            <label>Items You're Donating</label>
-            <textarea placeholder="e.g. 3 baby onesies (3-6 months), 1 baby carrier, nursing bras size M..."></textarea>
-          </div>
-        </div>
-        <div class="frow">
-          <div class="fgroup">
-            <label>Condition</label>
-            <select>
-              <option value="">Select condition…</option>
-              <option>Like new – barely used</option>
-              <option>Good – clean and functional</option>
-              <option>Fair – some wear but fine</option>
-            </select>
-          </div>
-          <div class="fgroup">
-            <label>Preferred Drop-off</label>
-            <select>
-              <option value="">Select…</option>
-              <option>Sunday at church</option>
-              <option>Weekday arranged pickup</option>
-              <option>I'll contact Muthoni directly</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Nominate toggle -->
-        <div class="toggle-row">
-          <span>Would you also like to nominate a family to receive items?</span>
-          <label class="toggle">
-            <input type="checkbox" id="nom-toggle" onchange="toggleNominate()">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-
-        <!-- Nominate sub-form (hidden by default) -->
-        <div id="nominate-fields" style="display:none;margin-top:20px;padding:24px;background:var(--warm);border-radius:var(--r)">
-          <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--coral);margin-bottom:20px">🎁 Nominate a Family</div>
-          <div class="frow">
-            <div class="fgroup">
-              <label>Family / Mum's Name</label>
-              <input type="text" placeholder="Name of person you're nominating">
+        <div class="panel-form-wrap">
+          <div class="anon-note">🔒 Your information is kept private. We only share your details if you choose to nominate someone.</div>
+          <form id="donate-form" onsubmit="handleDonate(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Your Name (optional)</label>
+                <input class="form-input" type="text" placeholder="Or leave blank to donate anonymously">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone (optional)</label>
+                <input class="form-input" type="tel" placeholder="So we can confirm receipt">
+              </div>
             </div>
-            <div class="fgroup">
-              <label>Their Contact</label>
-              <input type="tel" placeholder="Phone number">
-            </div>
-          </div>
-          <div class="frow full">
-            <div class="fgroup">
-              <label>What do they need? (optional)</label>
-              <textarea placeholder="Describe what items would help them most…" style="min-height:80px"></textarea>
-            </div>
-          </div>
-          <div class="frow full">
-            <div class="fgroup">
-              <label>Your relationship to them</label>
-              <select>
-                <option value="">Select…</option>
-                <option>Friend</option>
-                <option>Family member</option>
-                <option>Church member</option>
-                <option>Neighbour</option>
-                <option>Other</option>
+            <div class="form-group">
+              <label class="form-label">Item(s) You're Donating</label>
+              <select class="form-select" required>
+                <option value="">Select a category…</option>
+                <option>Baby clothes (0–6 months)</option><option>Baby clothes (6–12 months)</option>
+                <option>Baby clothes (12–24 months)</option><option>Blankets & flannels</option>
+                <option>Baby shoes</option><option>Bibs</option><option>Baby books</option>
+                <option>Belly bands / postpartum support</option><option>Baby bathtub / towels</option>
+                <option>Car seat</option><option>Stroller / pram</option>
+                <option>Feeding items (bottles, steriliser…)</option><option>Nursing / maternity wear</option>
+                <option>Baby carrier</option><option>Bassinet / cot</option>
+                <option>Toys & learning items</option><option>Electric pump</option><option>Other</option>
               </select>
             </div>
-          </div>
-        </div>
-
-        <button class="fsubmit" onclick="submitForm('donate')">Submit Donation 💝</button>
-        <div class="fsuccess" id="suc-donate">
-          <h3>Asante Sana! 🌟</h3>
-          <p>We've received your donation details. Muthoni will reach out to arrange the drop-off. You're amazing!</p>
+            <div class="form-group">
+              <label class="form-label">Additional Details</label>
+              <textarea class="form-textarea" placeholder="Describe the items, condition, quantity…"></textarea>
+            </div>
+            <div class="nominate-toggle" onclick="toggleNominate()">
+              <div class="toggle-track" id="toggle-track"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Nominate someone to receive this</span>
+            </div>
+            <div class="nominee-fields" id="nominee-fields">
+              <div class="nominee-note">You can nominate a friend, neighbour, or family member. We'll reach out on your behalf — discreetly.</div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Nominee's Name</label>
+                  <input class="form-input" type="text" placeholder="e.g. Amina Hassan">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Nominee's Phone</label>
+                  <input class="form-input" type="tel" placeholder="07XX XXX XXX">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Why they'd benefit (optional)</label>
+                <textarea class="form-textarea" placeholder="Any context that helps us serve them well…"></textarea>
+              </div>
+            </div>
+            <button class="btn-submit" type="submit">Submit Donation ✦</button>
+          </form>
         </div>
       </div>
     </div>
 
-    <!-- FORM 2: RECEIVE / NOMINATE -->
-    <div class="fpanel" id="form-receive">
-      <div class="form-card">
-        <div class="form-title">Request or Nominate 🎁</div>
-        <div class="form-sub">Request items for yourself or nominate a family in your community who would benefit. All requests are handled with care and discretion.</div>
-
-        <div class="frow full">
-          <div class="fgroup">
-            <label>This request is for</label>
-            <select onchange="toggleForWho(this)">
-              <option value="self">Myself / My family</option>
-              <option value="other">Someone I'm nominating</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- For self -->
-        <div id="self-fields">
-          <div class="frow">
-            <div class="fgroup">
-              <label>Your Name</label>
-              <input type="text" placeholder="Your name">
-            </div>
-            <div class="fgroup">
-              <label>Phone Number</label>
-              <input type="tel" placeholder="0712 345 678">
-            </div>
-          </div>
-          <div class="frow">
-            <div class="fgroup">
-              <label>Baby's Age</label>
-              <select>
-                <option value="">Select…</option>
-                <option>Expecting (due soon)</option>
-                <option>0–3 months</option>
-                <option>3–6 months</option>
-                <option>6–12 months</option>
-                <option>12–24 months</option>
-                <option>2 years+</option>
-              </select>
-            </div>
-            <div class="fgroup">
-              <label>Church / Area</label>
-              <input type="text" placeholder="e.g. Emmanuel Baptist, Westlands">
-            </div>
-          </div>
-        </div>
-
-        <!-- For other (hidden by default) -->
-        <div id="other-fields" style="display:none">
-          <div style="background:var(--warm);padding:20px;border-radius:var(--r);margin-bottom:20px">
-            <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--coral);margin-bottom:4px">About the person you're nominating</div>
-          </div>
-          <div class="frow">
-            <div class="fgroup">
-              <label>Their Name</label>
-              <input type="text" placeholder="Name of mum / family">
-            </div>
-            <div class="fgroup">
-              <label>Their Contact</label>
-              <input type="tel" placeholder="Their phone number">
-            </div>
-          </div>
-          <div class="frow">
-            <div class="fgroup">
-              <label>Your Name (nominator)</label>
-              <input type="text" placeholder="Your name">
-            </div>
-            <div class="fgroup">
-              <label>Your Phone</label>
-              <input type="tel" placeholder="Your phone">
-            </div>
-          </div>
-        </div>
-
-        <div class="frow full" style="margin-top:8px">
-          <div class="fgroup">
-            <label>Items Needed</label>
-            <div class="chip-group" id="need-chips">
-              <span class="chip" onclick="toggleChip(this)">👗 Clothing</span>
-              <span class="chip" onclick="toggleChip(this)">🚗 Car Seat</span>
-              <span class="chip" onclick="toggleChip(this)">🛏️ Bassinet</span>
-              <span class="chip" onclick="toggleChip(this)">🍼 Feeding items</span>
-              <span class="chip" onclick="toggleChip(this)">🤱 Breast pump</span>
-              <span class="chip" onclick="toggleChip(this)">🎒 Baby carrier</span>
-              <span class="chip" onclick="toggleChip(this)">🧸 Blankets</span>
-              <span class="chip" onclick="toggleChip(this)">🛁 Bath items</span>
-              <span class="chip" onclick="toggleChip(this)">📚 Books & Toys</span>
-              <span class="chip" onclick="toggleChip(this)">👙 Maternity wear</span>
-            </div>
-            <textarea placeholder="Or describe anything specific you need…" style="margin-top:12px"></textarea>
-          </div>
-        </div>
-
-        <button class="fsubmit" onclick="submitForm('receive')">Submit Request 🎁</button>
-        <div class="fsuccess" id="suc-receive">
-          <h3>We Got You! 🎀</h3>
-          <p>Muthoni will be in touch to arrange your gift bundle. Welcome to the Baraka Box family!</p>
-        </div>
+    <div class="cant-take-block">
+      <div class="cant-take-inner">
+        <span class="panel-label" style="color:var(--coral);">Please Note</span>
+        <h3 style="font-family:'Playfair Display',serif;font-size:clamp(1.25rem,3vw,1.75rem);color:var(--charcoal);margin:8px 0 18px;">What We <em style="color:var(--coral);font-style:italic;">Can't</em> Accept</h3>
+        <ul class="cant-take-list">
+          <li>Used pacifiers or teethers</li>
+          <li>Expired baby food, formula, or medication</li>
+          <li>Broken, cracked, or unsafe items (car seats past expiry, recalled products)</li>
+          <li>Torn, heavily stained, or tattered clothing, shoes, or books</li>
+        </ul>
+        <p style="font-size:.74rem;color:var(--charcoal);margin-top:14px;line-height:1.7;font-weight:500;opacity:0.72;">If you're unsure, please reach out to <strong style="color:var(--charcoal);opacity:1;">Muthoni India</strong> on <strong style="color:var(--charcoal);opacity:1;">0726 499 182</strong> before dropping anything off.</p>
       </div>
     </div>
 
-    <!-- FORM 3: RETURN -->
-    <div class="fpanel" id="form-return">
-      <div class="form-card">
-        <div class="form-title">Return Items 🔄</div>
-        <div class="form-sub">Returning items you received from Baraka Box? That's the spirit! Your returned items go straight to another family in need.</div>
-        <div class="frow">
-          <div class="fgroup">
-            <label>Your Name</label>
-            <input type="text" placeholder="Jane Wanjiku">
+    <div class="form-block form-block--return" id="return-block">
+      <div class="panel-grid">
+        <div class="panel-info">
+          <span class="panel-label">Close the Circle</span>
+          <h2 class="panel-title">Return<br>an <em>Item</em></h2>
+          <p class="panel-body">Your little one has grown and you're done with something you borrowed? Wonderful. Returns are handled quietly — no questions asked.</p>
+          <div style="margin-top:28px;padding:20px;background:#fff;border-radius:14px;border-left:3px solid var(--gold-lt);">
+            <p style="font-size:.74rem;color:var(--charcoal);line-height:1.75;font-weight:500;opacity:0.78;"><strong style="color:var(--charcoal);opacity:1;display:block;margin-bottom:6px;">What happens next?</strong>Once we receive your return, items are inspected, cleaned where needed, and added back to stock for the next family.</p>
           </div>
-          <div class="fgroup">
-            <label>Phone Number</label>
-            <input type="tel" placeholder="0712 345 678">
+          <div style="margin-top:18px;">
+            <p style="font-size:.72rem;color:var(--charcoal);line-height:1.7;font-style:italic;font-weight:500;opacity:0.65;">"It made me so happy knowing they would go to another family."</p>
           </div>
         </div>
-        <div class="frow full">
-          <div class="fgroup">
-            <label>Items You're Returning</label>
-            <div class="chip-group">
-              <span class="chip" onclick="toggleChip(this)">👗 Clothing</span>
-              <span class="chip" onclick="toggleChip(this)">🚗 Car Seat</span>
-              <span class="chip" onclick="toggleChip(this)">🛏️ Bassinet/Cot</span>
-              <span class="chip" onclick="toggleChip(this)">🍼 Feeding items</span>
-              <span class="chip" onclick="toggleChip(this)">🤱 Breast pump</span>
-              <span class="chip" onclick="toggleChip(this)">🎒 Baby carrier</span>
-              <span class="chip" onclick="toggleChip(this)">🧸 Blankets</span>
-              <span class="chip" onclick="toggleChip(this)">🛁 Bath items</span>
-              <span class="chip" onclick="toggleChip(this)">📚 Books & Toys</span>
+        <div class="panel-form-wrap">
+          <div class="anon-note">🔒 Returns are anonymous. You don't need to provide your name if you'd prefer not to.</div>
+          <form id="return-form" onsubmit="handleReturn(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Your Name (optional)</label>
+                <input class="form-input" type="text" placeholder="Or leave blank">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone (optional)</label>
+                <input class="form-input" type="tel" placeholder="07XX XXX XXX">
+              </div>
             </div>
-            <textarea placeholder="Please describe the items and their current condition…" style="margin-top:12px"></textarea>
-          </div>
-        </div>
-        <div class="frow">
-          <div class="fgroup">
-            <label>Condition on Return</label>
-            <select>
-              <option value="">Select…</option>
-              <option>Excellent – like new</option>
-              <option>Good – clean, some wear</option>
-              <option>Fair – functional, more wear</option>
-            </select>
-          </div>
-          <div class="fgroup">
-            <label>How long did you have it?</label>
-            <select>
-              <option value="">Select…</option>
-              <option>Less than 1 month</option>
-              <option>1–3 months</option>
-              <option>3–6 months</option>
-              <option>6–12 months</option>
-              <option>Over a year</option>
-            </select>
-          </div>
-        </div>
-        <div class="frow full">
-          <div class="fgroup">
-            <label>Message (optional)</label>
-            <textarea placeholder="Any feedback, gratitude, or message for the next family? 💕"></textarea>
-          </div>
-        </div>
-        <div class="frow full">
-          <div class="fgroup">
-            <label>Return Arrangement</label>
-            <select>
-              <option value="">Select…</option>
-              <option>Sunday at church</option>
-              <option>Weekday arranged drop-off</option>
-              <option>I'll contact Muthoni directly</option>
-            </select>
-          </div>
-        </div>
-        <button class="fsubmit" onclick="submitForm('return')">Return Items 🔄</button>
-        <div class="fsuccess" id="suc-return">
-          <h3>Karibu! Thank You! 🌟</h3>
-          <p>Your returned items will bless another family. You've kept the circle of giving alive — asante sana!</p>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Item(s) Returning</label>
+                <select class="form-select" required>
+                  <option value="">Select…</option>
+                  <option>Baby clothes bundle</option><option>Blankets & flannels</option>
+                  <option>Baby shoes</option><option>Bibs</option><option>Baby books</option>
+                  <option>Belly bands / postpartum support</option><option>Baby bathtub / towels</option>
+                  <option>Car seat</option><option>Stroller / pram</option>
+                  <option>Feeding items</option><option>Nursing / maternity wear</option>
+                  <option>Baby carrier</option><option>Bassinet / cot</option>
+                  <option>Toys & learning items</option><option>Electric pump</option><option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Condition</label>
+                <select class="form-select">
+                  <option value="">Select…</option>
+                  <option>As received — excellent</option><option>Good — minor wear</option>
+                  <option>Fair — some use visible</option><option>Needs minor repair</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Anything to note?</label>
+              <textarea class="form-textarea" placeholder="Any damage, missing parts, or notes for the next family…"></textarea>
+            </div>
+            <button class="btn-submit" type="submit">Submit Return ✦</button>
+          </form>
         </div>
       </div>
     </div>
   </section>
 
-</main>
+  <!-- IN STOCK — MANUAL NAV -->
+  <section id="stock-section">
+    <div class="stock-sticky" id="stock-sticky">
+      <div class="stock-topbar">
+        <div>
+          <span class="stock-label">Current Inventory</span>
+          <h2 class="stock-title">What's <em>In Stock</em></h2>
+        </div>
+        <div style="display:flex;align-items:center;gap:48px;">
+          <div class="stock-counter"><strong id="stock-active-num">01</strong> / <span id="stock-total-num">12</span></div>
+          <div class="stock-contact">
+            <span class="stock-contact-label">Request an item</span>
+            <span class="stock-contact-phone">0726 499 182</span><br>
+            <a href="https://wa.me/254726499182" target="_blank" rel="noopener" class="stock-contact-wa">
+              <svg viewBox="0 0 24 24"><use href="#ico-wa"/></svg> WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
 
-<!-- FOOTER -->
-<footer id="contact">
-  <div class="footer-top">
-    <div>
-      <div class="f-brand">Baraka Box 🎀</div>
-      <div class="f-tagline">share the good stuff!</div>
-      <div class="f-contact">
-        <div style="font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px">Contact</div>
-        <div style="margin-bottom:6px;font-size:.9rem;font-weight:600">Muthoni India</div>
-        <a href="tel:0726499182">0726 499 182</a>
+      <div class="stock-stage" id="stock-stage">
+        <div class="stock-track" id="stock-track"></div>
+      </div>
+
+      <div class="stock-bottom">
+        <div class="stock-item-label" id="stock-item-label">Car Seats</div>
+        <div class="stock-nav-center">
+          <button class="stock-nav-btn" id="stock-prev" onclick="stockNav(-1)" aria-label="Previous">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="stock-dots" id="stock-dots"></div>
+          <button class="stock-nav-btn" id="stock-next" onclick="stockNav(1)" aria-label="Next">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
       </div>
     </div>
-    <div class="f-col">
-      <h4>Navigate</h4>
-      <ul>
-        <li><a href="#stock">Items in Stock</a></li>
-        <li><a href="#about">About Baraka Box</a></li>
-        <li><a href="#forms">Donate Items</a></li>
-        <li><a href="#forms">Receive Items</a></li>
-        <li><a href="#forms">Return Items</a></li>
-      </ul>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviews-section">
+    <div class="reviews-header">
+      <span class="panel-label">From Our Community</span>
+      <h2 class="panel-title" style="font-family:'Playfair Display',serif;">What Families<br>Are <em style="font-style:italic;color:var(--gold)">Saying</em></h2>
+      <p>Every word shared here helps another family trust in the circle of care.</p>
     </div>
-    <div class="f-col">
-      <h4>What We Accept</h4>
-      <ul>
-        <li><a href="#">Baby Clothing (0–2 yrs)</a></li>
-        <li><a href="#">Maternity Wear</a></li>
-        <li><a href="#">Feeding Equipment</a></li>
-        <li><a href="#">Toys & Books</a></li>
-        <li><a href="#">Bath & Hygiene</a></li>
-      </ul>
+    <div class="reviews-grid" id="reviews-grid">
+      <!-- seed reviews -->
     </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="fb-left">© 2026 Baraka Box — All blessings reserved 🌟</div>
-    <div class="fb-church">Housed under Emmanuel Baptist Church, Nairobi</div>
-  </div>
-</footer>
+    <div class="review-form-wrap">
+      <p class="review-form-title">Leave a Review</p>
+      <p class="review-form-sub">Your review is anonymous by default — your name is optional.</p>
+      <div class="anon-note" style="margin-bottom:20px;">🔒 Reviews are published anonymously unless you choose to include your name.</div>
+      <form id="review-form" onsubmit="handleReview(event)">
+        <div class="star-picker" id="star-picker">
+          <button type="button" class="star-btn" onclick="setStars(1)">⭐</button>
+          <button type="button" class="star-btn" onclick="setStars(2)">⭐</button>
+          <button type="button" class="star-btn" onclick="setStars(3)">⭐</button>
+          <button type="button" class="star-btn" onclick="setStars(4)">⭐</button>
+          <button type="button" class="star-btn" onclick="setStars(5)">⭐</button>
+        </div>
+        <input type="hidden" id="review-stars-val" value="0">
+        <div class="form-row" style="margin-bottom:14px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Your Name (optional)</label>
+            <input class="form-input" type="text" id="review-name" placeholder="e.g. Faith N., or leave blank">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Your Role</label>
+            <select class="form-select" id="review-role">
+              <option value="">Select…</option>
+              <option>Received an item</option>
+              <option>Donated an item</option>
+              <option>Returned an item</option>
+              <option>Nominated someone</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Review</label>
+          <textarea class="form-textarea" id="review-text" style="height:90px;" placeholder="Share your experience — what did Baraka Box mean to you?" required></textarea>
+        </div>
+        <button class="btn-submit" type="submit">Submit Review ✦</button>
+      </form>
+    </div>
+  </section>
 
-<!-- THREE.JS IMPORT MAP -->
-<script type="importmap">
-{
-  "imports": {
-    "three":         "https://unpkg.com/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-  }
-}
-</script>
+  <div class="toast" id="toast"></div>
 
-<script type="module">
-import * as THREE from 'three';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+  <script type="importmap">
+  { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+  </script>
 
-// ── GSAP + LENIS ──────────────────────────────────────────────────
-gsap.registerPlugin(ScrollTrigger);
-const lenis = new Lenis({ duration:1.4, easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)), smoothWheel:true });
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add(t=>lenis.raf(t*1000));
-gsap.ticker.lagSmoothing(0);
+  <script type="module">
+    import * as THREE from 'three';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-// ── RENDERER ──────────────────────────────────────────────────────
-const canvas = document.getElementById('bg-canvas');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, powerPreference:'high-performance' });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.2;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    gsap.registerPlugin(ScrollTrigger);
 
-// ── SCENE + CAMERA ────────────────────────────────────────────────
-const scene = new THREE.Scene();
-scene.background = new THREE.Color('#FFF8F0');
-scene.fog = new THREE.FogExp2('#FFF8F0', 0.04);
-const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.01, 100);
-const cam = { px:0, py:2.2, pz:7, tx:0, ty:0.8, tz:0, fov:50 };
+    const lenis = new Lenis({ duration:1.4, easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)), smoothWheel:true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(time => lenis.raf(time*1000));
+    gsap.ticker.lagSmoothing(0);
+    window._lenis = lenis;
 
-// ── ENVIRONMENT ───────────────────────────────────────────────────
-const pmrem  = new THREE.PMREMGenerator(renderer);
-scene.environment = pmrem.fromScene(new RoomEnvironment(renderer)).texture;
+    const canvas = document.getElementById('bg-canvas');
+    const renderer = new THREE.WebGLRenderer({canvas, antialias:true, powerPreference:'high-performance'});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
 
-// ── LIGHTS ────────────────────────────────────────────────────────
-scene.add(new THREE.AmbientLight(0xfff4ee, 0.8));
-const key = new THREE.DirectionalLight(0xfff0e8, 3.5);
-key.position.set(4, 8, 5); key.castShadow=true;
-key.shadow.mapSize.set(2048,2048);
-scene.add(key);
-const fill = new THREE.DirectionalLight(0xffddcc, 1.5);
-fill.position.set(-5, 4, 2); scene.add(fill);
-const coral = new THREE.PointLight(0xF4645C, 1.8, 18);
-coral.position.set(3, 3, 0); scene.add(coral);
-const sunshine = new THREE.PointLight(0xFFD166, 1.4, 15);
-sunshine.position.set(-3, 2, 4); scene.add(sunshine);
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#F7F3EC');
+    scene.fog = new THREE.Fog('#F7F3EC', 14, 28);
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.01, 100);
+    const cam = {px:3.5,py:1.6,pz:5.5,tx:0,ty:.55,tz:0,fov:45};
 
-// ── FLOOR ─────────────────────────────────────────────────────────
-const flr = new THREE.Mesh(new THREE.PlaneGeometry(40,40), new THREE.ShadowMaterial({opacity:.06}));
-flr.rotation.x=-Math.PI/2; flr.receiveShadow=true; scene.add(flr);
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    pmrem.compileEquirectangularShader();
+    scene.environment = pmrem.fromScene(new RoomEnvironment(renderer)).texture;
 
-// ── PROCEDURAL BABY-ITEM MODEL ────────────────────────────────────
-// A charming "gift box" model made from primitives
-const group = new THREE.Group();
+    scene.add(new THREE.AmbientLight(0xfff4e0, .45));
+    const key = new THREE.DirectionalLight(0xfffce8, 3.2);
+    key.position.set(5,7,4); key.castShadow=true;
+    key.shadow.mapSize.set(2048,2048);
+    Object.assign(key.shadow.camera,{near:.5,far:20,left:-4,right:4,top:4,bottom:-4});
+    key.shadow.bias=-.002; scene.add(key);
+    const fill = new THREE.DirectionalLight(0xc8dfff,1.2); fill.position.set(-4,3,3); scene.add(fill);
+    const rim  = new THREE.DirectionalLight(0xffe4b0,2.0); rim.position.set(0,4,-6); scene.add(rim);
+    const fl = new THREE.Mesh(new THREE.PlaneGeometry(30,30),new THREE.ShadowMaterial({opacity:.10}));
+    fl.rotation.x=-Math.PI/2; fl.receiveShadow=true; scene.add(fl);
+    const bC=document.createElement('canvas'); bC.width=bC.height=512;
+    const bc=bC.getContext('2d'),bg=bc.createRadialGradient(256,256,0,256,256,230);
+    bg.addColorStop(0,'rgba(18,9,0,.55)');bg.addColorStop(.35,'rgba(18,9,0,.22)');
+    bg.addColorStop(.7,'rgba(18,9,0,.06)');bg.addColorStop(1,'rgba(0,0,0,0)');
+    bc.fillStyle=bg;bc.fillRect(0,0,512,512);
+    const cs=new THREE.Mesh(new THREE.PlaneGeometry(3.6,2.6),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(bC),transparent:true,depthWrite:false,opacity:.65}));
+    cs.rotation.x=-Math.PI/2;cs.position.y=.002;scene.add(cs);
 
-const boxMat  = new THREE.MeshStandardMaterial({ color:0xF4645C, roughness:.35, metalness:.05, envMapIntensity:1.6 });
-const lidMat  = new THREE.MeshStandardMaterial({ color:0xD94840, roughness:.3,  metalness:.05, envMapIntensity:1.6 });
-const ribbonH = new THREE.MeshStandardMaterial({ color:0xFFD166, roughness:.2,  metalness:.1,  envMapIntensity:2 });
-const starMat = new THREE.MeshStandardMaterial({ color:0xFFD166, roughness:.15, metalness:.3,  envMapIntensity:2 });
-const heartMat= new THREE.MeshStandardMaterial({ color:0xFF8A84, roughness:.4,  metalness:0,   envMapIntensity:1 });
-
-// Main box body
-const body = new THREE.Mesh(new THREE.BoxGeometry(2.4, 2, 2.4), boxMat);
-body.position.y=1; body.castShadow=true; group.add(body);
-
-// Lid
-const lid = new THREE.Mesh(new THREE.BoxGeometry(2.5, .45, 2.5), lidMat);
-lid.position.y=2.22; lid.castShadow=true; group.add(lid);
-
-// Ribbon horizontal
-const rh = new THREE.Mesh(new THREE.BoxGeometry(2.52, .28, .36), ribbonH);
-rh.position.y=1; group.add(rh);
-const rv = new THREE.Mesh(new THREE.BoxGeometry(.36, 2.52, .36), ribbonH);
-rv.position.y=1.26; rv.rotation.x=0; group.add(rv);
-
-// Ribbon on lid
-const rlh = new THREE.Mesh(new THREE.BoxGeometry(2.55, .46, .38), ribbonH);
-rlh.position.y=2.22; group.add(rlh);
-const rlv = new THREE.Mesh(new THREE.BoxGeometry(.38, .46, 2.55), ribbonH);
-rlv.position.y=2.22; group.add(rlv);
-
-// Bow loop left
-function bowLoop(x, isLeft) {
-  const loop = new THREE.Mesh(new THREE.TorusGeometry(.32, .09, 8, 20, Math.PI), ribbonH);
-  loop.position.set(x, 2.6, 0);
-  loop.rotation.z = isLeft ? Math.PI/4 : -Math.PI/4;
-  loop.castShadow=true;
-  group.add(loop);
-}
-bowLoop(-.22, true); bowLoop(.22, false);
-
-// Center knot
-const knot = new THREE.Mesh(new THREE.SphereGeometry(.14, 12, 12), ribbonH);
-knot.position.set(0, 2.58, 0); group.add(knot);
-
-// Stars scattered around
-function addStar(x,y,z,s) {
-  const sg = new THREE.OctahedronGeometry(s);
-  const sm = new THREE.Mesh(sg, starMat);
-  sm.position.set(x,y,z);
-  sm.rotation.set(Math.random(),Math.random(),Math.random());
-  sm.castShadow=true;
-  group.add(sm);
-}
-addStar(-2,3,0.5,0.22); addStar(2.3,2.8,-0.3,0.18);
-addStar(0.5,3.5,-1,0.15); addStar(-1.5,1.5,1.5,0.12);
-addStar(1.8,0.8,-1.6,0.14); addStar(-0.8,3.2,1.2,0.1);
-
-// Floating heart
-const hg = new THREE.SphereGeometry(.18, 12, 12);
-const heart = new THREE.Mesh(hg, heartMat);
-heart.position.set(1.5, 3.6, .5); heart.castShadow=true; group.add(heart);
-
-// Contact shadow
-const blobCanvas = document.createElement('canvas');
-blobCanvas.width = blobCanvas.height = 512;
-const bc = blobCanvas.getContext('2d');
-const bg = bc.createRadialGradient(256,256,0,256,256,220);
-bg.addColorStop(0,'rgba(244,100,92,0.5)');
-bg.addColorStop(.5,'rgba(244,100,92,0.15)');
-bg.addColorStop(1,'rgba(0,0,0,0)');
-bc.fillStyle=bg; bc.fillRect(0,0,512,512);
-const shadow = new THREE.Mesh(
-  new THREE.PlaneGeometry(4,4),
-  new THREE.MeshBasicMaterial({ map:new THREE.CanvasTexture(blobCanvas), transparent:true, depthWrite:false, opacity:.5 })
-);
-shadow.rotation.x=-Math.PI/2; shadow.position.y=.001; scene.add(shadow);
-group.position.y = 0;
-scene.add(group);
-
-// ── KEYFRAMES ─────────────────────────────────────────────────────
-const KF = [
-  { p:0.00, pos:[ 0, 2.2, 7.0], tgt:[0, 1.0, 0], fov:50 },
-  { p:0.28, pos:[ 0, 2.2, 7.0], tgt:[0, 1.0, 0], fov:50 },
-  { p:0.36, pos:[ 1.5, 2.8, 3.2], tgt:[0, 2.4, 0], fov:30 },  // zoom into bow/ribbon
-  { p:0.64, pos:[ 1.5, 2.8, 3.2], tgt:[0, 2.4, 0], fov:30 },
-  { p:0.72, pos:[-3.5, 1.8,-4.5], tgt:[0, 1.2, 0], fov:44 },  // side reveal
-  { p:1.00, pos:[-4.0, 2.0,-5.0], tgt:[0, 1.0, 0], fov:44 },
-];
-const lerp = (a,b,t)=>a+(b-a)*t;
-const ss   = t=>t*t*(3-2*t);
-const cl   = v=>Math.max(0,Math.min(1,v));
-
-function applyKF(p) {
-  let k0=KF[0], k1=KF[KF.length-1];
-  for(let i=0;i<KF.length-1;i++) {
-    if(p>=KF[i].p&&p<=KF[i+1].p){k0=KF[i];k1=KF[i+1];break;}
-  }
-  const span=k1.p-k0.p;
-  const t=span<1e-4?0:ss(cl((p-k0.p)/span));
-  cam.px=lerp(k0.pos[0],k1.pos[0],t);
-  cam.py=lerp(k0.pos[1],k1.pos[1],t);
-  cam.pz=lerp(k0.pos[2],k1.pos[2],t);
-  cam.tx=lerp(k0.tgt[0],k1.tgt[0],t);
-  cam.ty=lerp(k0.tgt[1],k1.tgt[1],t);
-  cam.tz=lerp(k0.tgt[2],k1.tgt[2],t);
-  cam.fov=lerp(k0.fov,k1.fov,t);
-  autoRot = p < 0.28;
-}
-
-let autoRot = true;
-
-// ── SCROLL TRIGGERS ───────────────────────────────────────────────
-function initScroll() {
-  document.getElementById('loader').classList.add('out');
-
-  ScrollTrigger.create({
-    trigger:'#scroll-container', start:'top top', end:'bottom bottom',
-    onUpdate(s) { applyKF(s.progress); syncDots(s.progress); }
-  });
-
-  // Overlay 1
-  gsap.timeline({ scrollTrigger:{ trigger:'#scroll-container', start:'top top', end:'33% top', scrub:1.2 } })
-    .fromTo('#ov1',{opacity:0,y:40},{opacity:1,y:0,duration:.28,ease:'power2.out'})
-    .to('#ov1',{opacity:0,y:-30,duration:.22,ease:'power2.in'},.72);
-
-  // Overlay 2
-  gsap.timeline({ scrollTrigger:{ trigger:'#scroll-container', start:'30% top', end:'68% top', scrub:1.2 } })
-    .fromTo('#ov2',{opacity:0,x:50},{opacity:1,x:0,duration:.28,ease:'power2.out'})
-    .to('#ov2',{opacity:0,x:-40,duration:.22,ease:'power2.in'},.72);
-
-  // Overlay 3
-  gsap.timeline({ scrollTrigger:{ trigger:'#scroll-container', start:'67% top', end:'100% bottom', scrub:1.2 } })
-    .fromTo('#ov3',{opacity:0,y:40},{opacity:1,y:0,duration:.35,ease:'power2.out'});
-
-  // Scroll hint fade
-  gsap.to('#sh',{ opacity:0, pointerEvents:'none',
-    scrollTrigger:{ trigger:'#scroll-container', start:'8% top', end:'18% top', scrub:true }
-  });
-}
-
-// ── LOADER ────────────────────────────────────────────────────────
-let prog = 0;
-const lf = document.getElementById('ld-fill');
-function fakeLoad() {
-  prog += Math.random() * 18;
-  lf.style.width = Math.min(prog, 95) + '%';
-  if(prog < 95) setTimeout(fakeLoad, 120);
-}
-fakeLoad();
-setTimeout(() => { lf.style.width='100%'; setTimeout(initScroll, 350); }, 1600);
-
-// ── PROGRESS DOTS ─────────────────────────────────────────────────
-const dots = [...document.querySelectorAll('.pd')];
-function syncDots(p) {
-  const i = p<.34?0:p<.68?1:2;
-  dots.forEach((d,j)=>d.classList.toggle('on',j===i));
-}
-
-// ── RENDER LOOP ───────────────────────────────────────────────────
-let t = 0;
-function tick() {
-  requestAnimationFrame(tick);
-  t += 0.008;
-  if(autoRot) {
-    group.rotation.y += 0.004;
-    // floating stars pulse
-    const s = 1 + Math.sin(t*1.5)*.03;
-    group.children.forEach((c,i)=>{ if(i>8) c.position.y += Math.sin(t+i)*.002; });
-  }
-  // Heart bob always
-  heart.position.y = 3.6 + Math.sin(t*2)*.12;
-  coral.position.x  = 3 + Math.sin(t)*.5;
-  sunshine.position.x = -3 + Math.cos(t*.7)*.5;
-  camera.position.set(cam.px,cam.py,cam.pz);
-  if(Math.abs(camera.fov-cam.fov)>.01){ camera.fov=cam.fov; camera.updateProjectionMatrix(); }
-  camera.lookAt(cam.tx,cam.ty,cam.tz);
-  renderer.render(scene,camera);
-}
-tick();
-
-window.addEventListener('resize',()=>{
-  camera.aspect=window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth,window.innerHeight);
-});
-</script>
-
-<!-- ─── HORIZONTAL STOCK SCROLL ─── -->
-<script>
-gsap.registerPlugin(ScrollTrigger);
-window.addEventListener('load', () => {
-  const track = document.getElementById('stock-track');
-  const pin   = document.getElementById('stock-pin');
-  if(!track || !pin) return;
-
-  const getScrollWidth = ()=> track.scrollWidth - window.innerWidth + 120;
-
-  let ctx = gsap.context(()=>{
-    gsap.to(track, {
-      x: ()=> -getScrollWidth(),
-      ease:'none',
-      scrollTrigger:{
-        trigger: pin,
-        start: 'top 80px',
-        end: ()=> `+=${getScrollWidth() * 1.2}`,
-        scrub: 1,
-        pin: '.stock-sticky',
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-      }
+    let autoRotate = true;
+    let mouseX = 0, mouseY = 0, targetMX = 0, targetMY = 0;
+    window.addEventListener('mousemove', e => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
     });
-  });
-});
 
-// ─── REVEAL ON SCROLL ───────────────────────────────────────────
-function revealOnScroll() {
-  const els = document.querySelectorAll('.reveal');
-  const io  = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if(e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, {threshold:.15});
-  els.forEach(el=>io.observe(el));
-}
-document.addEventListener('DOMContentLoaded', revealOnScroll);
+    // ── Baby Crib (procedural) ──────────────────────────────────────
+    const mWood  = new THREE.MeshStandardMaterial({color:0xC4955A,roughness:.6,metalness:.03});
+    const mWoodDk= new THREE.MeshStandardMaterial({color:0x8B5E2A,roughness:.72,metalness:.01});
+    const mMatt  = new THREE.MeshStandardMaterial({color:0xF5EDE0,roughness:.85,metalness:.0});
+    const pramModel = new THREE.Group();
+    function cb(geo,mat,px=0,py=0,pz=0,rx=0,ry=0,rz=0){
+      const m=new THREE.Mesh(geo,mat);m.position.set(px,py,pz);m.rotation.set(rx,ry,rz);
+      m.castShadow=true;m.receiveShadow=true;pramModel.add(m);
+    }
+    // Legs
+    [[-0.6,-0.35],[0.6,-0.35],[-0.6,0.35],[0.6,0.35]].forEach(([x,z])=>
+      cb(new THREE.CylinderGeometry(.03,.036,.26,10),mWoodDk,x,.13,z));
+    // Bottom frame
+    cb(new THREE.BoxGeometry(1.32,.05,.05),mWood,0,.26,-0.35);
+    cb(new THREE.BoxGeometry(1.32,.05,.05),mWood,0,.26, 0.35);
+    cb(new THREE.BoxGeometry(.05,.05,.76),mWood,-0.61,.26,0);
+    cb(new THREE.BoxGeometry(.05,.05,.76),mWood, 0.61,.26,0);
+    // Mattress
+    cb(new THREE.BoxGeometry(1.16,.1,.66),mMatt,0,.335,0);
+    // Corner posts + finials
+    const pH=1.0;
+    [[-0.62,-0.37],[0.62,-0.37],[-0.62,0.37],[0.62,0.37]].forEach(([x,z])=>{
+      cb(new THREE.BoxGeometry(.066,pH,.066),mWoodDk,x,.26+pH/2,z);
+      cb(new THREE.SphereGeometry(.058,10,6),mWoodDk,x,.26+pH+.044,z);
+    });
+    // Top rails
+    cb(new THREE.BoxGeometry(1.32,.055,.055),mWood,0,.26+pH,-0.37);
+    cb(new THREE.BoxGeometry(1.32,.055,.055),mWood,0,.26+pH, 0.37);
+    cb(new THREE.BoxGeometry(.055,.055,.8),mWood,-0.62,.26+pH,0);
+    cb(new THREE.BoxGeometry(.055,.055,.8),mWood, 0.62,.26+pH,0);
+    // Front/back slats
+    const sH=pH-.06;
+    for(let i=0;i<9;i++){const x=-0.56+(i/8)*1.12;
+      cb(new THREE.CylinderGeometry(.019,.019,sH,8),mWood,x,.26+sH/2+.03,-0.37);
+      cb(new THREE.CylinderGeometry(.019,.019,sH,8),mWood,x,.26+sH/2+.03, 0.37);}
+    // Side slats
+    for(let i=0;i<5;i++){const z=-0.3+(i/4)*.6;
+      cb(new THREE.CylinderGeometry(.019,.019,sH,8),mWood,-0.62,.26+sH/2+.03,z);
+      cb(new THREE.CylinderGeometry(.019,.019,sH,8),mWood, 0.62,.26+sH/2+.03,z);}
+    pramModel.position.set(0,-4,0);
+    pramModel.scale.set(0.01,0.01,0.01);
+    scene.add(pramModel);
 
-// ─── FORM LOGIC ─────────────────────────────────────────────────
-function showForm(id) {
-  document.querySelectorAll('.fpanel').forEach(p=>p.classList.remove('show'));
-  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('form-'+id).classList.add('show');
-  const idx = {donate:0,receive:1,return:2}[id];
-  document.querySelectorAll('.ftab')[idx].classList.add('active');
-  document.getElementById('forms').scrollIntoView({behavior:'smooth',block:'start'});
-}
-window.showForm = showForm;
+    const partGeo=new THREE.BufferGeometry();
+    const partPos=new Float32Array(80*3);
+    for(let i=0;i<80;i++){partPos[i*3]=(Math.random()-.5)*7;partPos[i*3+1]=Math.random()*4-.5;partPos[i*3+2]=(Math.random()-.5)*4;}
+    partGeo.setAttribute('position',new THREE.BufferAttribute(partPos,3));
+    const particles=new THREE.Points(partGeo,new THREE.PointsMaterial({color:0xF5D87A,size:.04,sizeAttenuation:true,transparent:true,opacity:.6,depthWrite:false}));
+    scene.add(particles);
 
-function toggleNominate() {
-  const on = document.getElementById('nom-toggle').checked;
-  document.getElementById('nominate-fields').style.display = on ? 'block' : 'none';
-}
-window.toggleNominate = toggleNominate;
+    // FIX: Camera keyframes keep pram BEHIND text — pram is in background, text is z-index:10 overlay
+    // The actual fix: pram position is centered, text overlays on z-index:10.
+    // We push pram further back / to side during ov1 so it doesn't obscure text.
+    const KF=[
+      {p:.00,pos:[4.2,1.9,5.8],tgt:[0,.55,0],fov:45},   // pram to the right side, text on left
+      {p:.28,pos:[4.2,1.9,5.8],tgt:[0,.55,0],fov:45},
+      {p:.35,pos:[1.4,.9,2.4],tgt:[.2,.65,.2],fov:30},
+      {p:.65,pos:[1.4,.9,2.4],tgt:[.2,.65,.2],fov:30},
+      {p:.72,pos:[-2,1.8,-3.2],tgt:[0,.82,0],fov:40},
+      {p:1.00,pos:[-2.6,2.0,-3.8],tgt:[0,.78,0],fov:40},
+    ];
+    const lerp=(a,b,t)=>a+(b-a)*t,cl=v=>Math.max(0,Math.min(1,v)),ss=t=>t*t*(3-2*t);
+    function applyKF(p){
+      let k0=KF[0],k1=KF[KF.length-1];
+      for(let i=0;i<KF.length-1;i++){if(p>=KF[i].p&&p<=KF[i+1].p){k0=KF[i];k1=KF[i+1];break;}}
+      const span=k1.p-k0.p,t=span<1e-4?0:ss(cl((p-k0.p)/span));
+      cam.px=lerp(k0.pos[0],k1.pos[0],t);cam.py=lerp(k0.pos[1],k1.pos[1],t);cam.pz=lerp(k0.pos[2],k1.pos[2],t);
+      cam.tx=lerp(k0.tgt[0],k1.tgt[0],t);cam.ty=lerp(k0.tgt[1],k1.tgt[1],t);cam.tz=lerp(k0.tgt[2],k1.tgt[2],t);
+      cam.fov=lerp(k0.fov,k1.fov,t);autoRotate=p<.28;
+    }
+    const pDots=[...document.querySelectorAll('.p-dot')];
+    function syncDots(p){const i=p<.34?0:p<.68?1:2;pDots.forEach((d,j)=>d.classList.toggle('active',j===i));}
 
-function toggleForWho(sel) {
-  document.getElementById('self-fields').style.display  = sel.value==='self'  ? 'block':'none';
-  document.getElementById('other-fields').style.display = sel.value==='other' ? 'block':'none';
-}
-window.toggleForWho = toggleForWho;
+    function initHero(){
+      ScrollTrigger.create({trigger:'#scroll-container',start:'top top',end:'bottom bottom',onUpdate(s){applyKF(s.progress);syncDots(s.progress);}});
 
-function toggleChip(el) { el.classList.toggle('selected'); }
-window.toggleChip = toggleChip;
+      // FIX: ov1 fades out via scroll only — does NOT re-appear.
+      // It's pre-shown (opacity:1) with elements revealed after loader.
+      gsap.timeline({scrollTrigger:{trigger:'#scroll-container',start:'top top',end:'33% top',scrub:1.2,immediateRender:false}})
+        .to('#ov1',{opacity:0,y:-28,duration:.22,ease:'power2.in',immediateRender:false});
 
-function submitForm(id) {
-  const suc = document.getElementById('suc-'+id);
-  suc.classList.add('show');
-  suc.scrollIntoView({behavior:'smooth',block:'nearest'});
-  document.querySelector(`#form-${id} .fsubmit`).style.display='none';
-}
-window.submitForm = submitForm;
-</script>
+      // Enhanced overlay 2 with subtle rotation and scale
+      gsap.timeline({scrollTrigger:{trigger:'#scroll-container',start:'29% top',end:'68% top',scrub:1.2}})
+        .fromTo('#ov2',{opacity:0,x:60,scale:0.98,rotateY:3},{opacity:1,x:0,scale:1,rotateY:0,duration:.28,ease:'power2.out'})
+        .to('#ov2',{opacity:0,x:-50,scale:0.98,rotateY:-2,duration:.22,ease:'power2.in'},.72);
+      // Enhanced overlay 3 with scale and subtle blur-in effect
+      gsap.timeline({scrollTrigger:{trigger:'#scroll-container',start:'67% top',end:'100% bottom',scrub:1.2}})
+        .fromTo('#ov3',{opacity:0,y:45,scale:0.96},{opacity:1,y:0,scale:1,duration:.35,ease:'power2.out'});
+      gsap.to('#scroll-hint',{opacity:0,pointerEvents:'none',scrollTrigger:{trigger:'#scroll-container',start:'8% top',end:'15% top',scrub:true}});
+      // Fade out floating items when scrolling
+      gsap.to('#hero-floats',{opacity:0,scrollTrigger:{trigger:'#scroll-container',start:'25% top',end:'40% top',scrub:true}});
+    }
+
+    window._revealHero = function() {
+      const els = document.querySelectorAll('#ov1 .ov-label, #ov1 .ov-title, #ov1 .ov-body, #ov1 .ov-link');
+      els.forEach(el => el.classList.add('revealed'));
+    };
+
+    /* ══ STOCK — MANUAL NAV (no scroll dependency) ══ */
+    window._currentStockIdx = 0;
+
+    window.stockNav = function(dir) {
+      const items = window._stockItems || [];
+      const n = items.length;
+      if (!n) return;
+      window._currentStockIdx = Math.max(0, Math.min(n - 1, window._currentStockIdx + dir));
+      window._setStockActive(window._currentStockIdx);
+    };
+
+    window._setStockActive = function(idx) {
+      const items = window._stockItems || [];
+      const n = items.length;
+      const track = document.getElementById('stock-track');
+      if (!track) return;
+      const cards = [...track.querySelectorAll('.stock-card')];
+
+      cards.forEach((card, i) => {
+        card.classList.remove('is-active','is-adjacent');
+        const diff = Math.abs(i - idx);
+        if (diff === 0) card.classList.add('is-active');
+        else if (diff === 1) card.classList.add('is-adjacent');
+      });
+
+      const item = items[idx];
+      if (item) {
+        document.getElementById('stock-item-label').textContent = item.name;
+        document.getElementById('stock-active-num').textContent = String(idx+1).padStart(2,'0');
+      }
+
+      document.querySelectorAll('.stock-dot').forEach((d, i) =>
+        d.classList.toggle('active', i === idx));
+
+      // Update button states
+      const prevBtn = document.getElementById('stock-prev');
+      const nextBtn = document.getElementById('stock-next');
+      if (prevBtn) prevBtn.disabled = (idx === 0);
+      if (nextBtn) nextBtn.disabled = (idx === n - 1);
+
+      // Animate track position
+      const mob = window.innerWidth < 768;
+      const ACTIVE_W = mob ? 230 : 420;
+      const ADJ_W    = mob ? 140 : 260;
+      const SMALL_W  = mob ? 100 : 200;
+      const GAP      = mob ? 4   : 4;
+      const viewW = window.innerWidth;
+
+      let x = 0;
+      cards.forEach((card, i) => {
+        if (i < idx) {
+          const isAdj = i === idx - 1;
+          x += (isAdj ? ADJ_W : SMALL_W) + GAP;
+        }
+      });
+      const centerOffset = ADJ_W + GAP;
+      track.style.transform = `translateY(-50%) translateX(${centerOffset - x}px)`;
+    };
+
+    function initStock() {
+      const track = document.getElementById('stock-track');
+      if (!track) return;
+      const mob = window.innerWidth < 768;
+      const ACTIVE_W = mob ? 230 : 420;
+      const viewW = window.innerWidth;
+      const ADJ_W0 = mob ? 140 : 260, GAP0 = 4;
+      const startX = ADJ_W0 + GAP0;
+      track.style.transform = `translateY(-50%) translateX(${startX}px)`;
+
+      window._currentStockIdx = 0;
+      window._setStockActive(0);
+
+      // Dot clicks
+      document.getElementById('stock-dots').addEventListener('click', e => {
+        const dot = e.target.closest('.stock-dot');
+        if (!dot) return;
+        const idx = parseInt(dot.dataset.idx, 10);
+        window._currentStockIdx = idx;
+        window._setStockActive(idx);
+      });
+    }
+
+    // Canvas starts hidden
+    gsap.set('#bg-canvas',{opacity:0,scale:1.12});
+    cam.pz=13; cam.py=4.0; cam.fov=58; camera.fov=58; camera.updateProjectionMatrix();
+    pramModel.position.set(0,-4,0);
+    pramModel.scale.set(0.01, 0.01, 0.01);
+
+    initHero();
+    window._hygraphPromise.then(hygraphItems => {
+      window._buildStock(hygraphItems);
+      setTimeout(() => { initStock(); }, 400);
+    });
+
+    const clk = new THREE.Clock();
+    (function tick(){
+      requestAnimationFrame(tick);
+      const t=clk.getElapsedTime();
+      targetMX += (mouseX - targetMX) * 0.04;
+      targetMY += (mouseY - targetMY) * 0.04;
+      // Enhanced floating animation - gentle bobbing motion
+      pramModel.position.y = pramModel._baseY !== undefined
+        ? pramModel._baseY + Math.sin(t*0.8)*0.08 + Math.sin(t*1.3)*0.03
+        : pramModel.position.y;
+      // Slower, more graceful auto-rotation
+      if(autoRotate) pramModel.rotation.y += .003;
+      // Gentle tilt based on time and mouse
+      pramModel.rotation.z = Math.sin(t*.5)*.025 + targetMY*.08;
+      pramModel.rotation.x = Math.sin(t*.4)*.015 + targetMY*.04;
+      // Smooth mouse follow when emerged
+      if(pramModel._emerged) {
+        pramModel.position.x += (targetMX * 0.3 - pramModel.position.x) * 0.05;
+        pramModel.position.z = Math.sin(t*0.6)*0.05;
+      }
+      // Enhanced particle movement - more organic swirling
+      particles.rotation.y = t * 0.05;
+      particles.rotation.x = Math.sin(t * 0.15) * 0.08;
+      particles.rotation.z = Math.sin(t * 0.1) * 0.03;
+      // Subtle scale pulsing
+      const pScale = 1 + Math.sin(t * 0.3) * 0.05;
+      particles.scale.set(pScale, pScale, pScale);
+      camera.position.set(cam.px,cam.py,cam.pz);
+      if(Math.abs(camera.fov-cam.fov)>.01){camera.fov=cam.fov;camera.updateProjectionMatrix();}
+      camera.lookAt(cam.tx,cam.ty,cam.tz);
+      renderer.render(scene,camera);
+    })();
+
+    window.addEventListener('resize',()=>{
+      camera.aspect=window.innerWidth/window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth,window.innerHeight);
+    });
+
+    // Loader logic
+    let pct = 0;
+    const t2 = setInterval(() => {
+      pct = Math.min(pct + 7, 100);
+      document.getElementById('loader-fill').style.width = pct + '%';
+      document.getElementById('loader-pct').textContent = pct + '%';
+
+      if (pct >= 100) {
+        clearInterval(t2);
+        setTimeout(() => {
+          const strollerEl = document.getElementById('loader-stroller');
+          const glowEl = document.getElementById('loader-glow');
+          strollerEl.classList.add('emerge');
+          glowEl.classList.add('emerge');
+        }, 200);
+
+        setTimeout(() => {
+          document.getElementById('loader').classList.add('fade-out');
+          gsap.to('#bg-canvas', {opacity:1, scale:1, duration:2.4, ease:'power3.out', delay:.15});
+          gsap.to(cam, {pz:5.5, py:1.8, fov:45, duration:2.8, ease:'power3.inOut', delay:.1});
+          gsap.to(pramModel.position, {
+            y: 0, duration: 1.8, ease: 'back.out(1.4)', delay: 0.6,
+            onStart: () => { pramModel._baseY = 0; pramModel._emerged = true; }
+          });
+          gsap.to(pramModel.scale, {
+            x: 1, y: 1, z: 1, duration: 1.6, ease: 'back.out(1.2)', delay: 0.5
+          });
+          // Hero text reveals ONCE after pram appears
+          setTimeout(() => { 
+            window._revealHero(); 
+            // Add hero-active class for enhanced animations
+            document.getElementById('ov1').classList.add('hero-active');
+            // Show floating baby items
+            document.getElementById('hero-floats').style.opacity = '1';
+          }, 900);
+          // Show baby corner illustrations
+          setTimeout(() => {
+            document.querySelectorAll('.baby-illus-wrap').forEach(el => el.classList.add('show'));
+          }, 1800);
+        }, 1400);
+      }
+    }, 50);
+  </script>
+
+  <script>
+    /* ══ Baby corner illustrations — drawn on canvas ══ */
+    function drawBabyGirl(canvas) {
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Decorative ribbon top-right (blue squiggle)
+      ctx.strokeStyle = '#90C8E0';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(w * 0.7, 0);
+      ctx.bezierCurveTo(w * 0.85, h * 0.05, w * 0.95, h * 0.12, w * 0.88, h * 0.18);
+      ctx.bezierCurveTo(w * 0.82, h * 0.24, w * 0.72, h * 0.2, w * 0.78, h * 0.26);
+      ctx.stroke();
+
+      // Body — coral romper
+      ctx.fillStyle = '#F4917E';
+      ctx.beginPath();
+      ctx.ellipse(w * 0.5, h * 0.62, w * 0.34, h * 0.28, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Legs
+      ctx.fillStyle = '#FBBDA8';
+      ctx.beginPath();
+      ctx.ellipse(w * 0.38, h * 0.82, w * 0.1, h * 0.12, -0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(w * 0.62, h * 0.82, w * 0.1, h * 0.12, 0.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Stars on romper
+      ctx.fillStyle = '#F5D87A';
+      [[0.38, 0.6], [0.55, 0.65], [0.62, 0.58]].forEach(([x, y]) => {
+        ctx.beginPath();
+        ctx.arc(w * x, h * y, 5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Arms
+      ctx.fillStyle = '#FBBDA8';
+      ctx.beginPath();
+      ctx.ellipse(w * 0.22, h * 0.52, w * 0.1, h * 0.16, -0.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(w * 0.78, h * 0.5, w * 0.1, h * 0.16, 0.6, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Head
+      ctx.fillStyle = '#FBBDA8';
+      ctx.beginPath();
+      ctx.ellipse(w * 0.5, h * 0.3, w * 0.28, h * 0.26, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Hair — pink fluffy
+      ctx.fillStyle = '#F4917E';
+      ctx.beginPath();
+      ctx.ellipse(w * 0.5, h * 0.12, w * 0.26, h * 0.14, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Flower on head
+      ctx.fillStyle = '#F5D87A';
+      for (let i = 0; i < 6; i++) {
+        const angle = (i / 6) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.ellipse(w * 0.52 + Math.cos(angle) * 10, h * 0.1 + Math.sin(angle) * 7, 7, 5, angle, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(w * 0.52, h * 0.1, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Face
+      ctx.fillStyle = '#5C3018';
+      ctx.beginPath(); ctx.ellipse(w*0.42, h*0.28, 3, 3.5, 0, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(w*0.58, h*0.28, 3, 3.5, 0, 0, Math.PI*2); ctx.fill();
+
+      // Cheeks
+      ctx.fillStyle = 'rgba(240,130,100,0.4)';
+      ctx.beginPath(); ctx.ellipse(w*0.38, h*0.32, 7, 5, 0, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(w*0.62, h*0.32, 7, 5, 0, 0, Math.PI*2); ctx.fill();
+
+      // Mouth
+      ctx.fillStyle = '#E8736A';
+      ctx.beginPath();
+      ctx.arc(w * 0.5, h * 0.34, 6, 0.1, Math.PI - 0.1);
+      ctx.fill();
+    }
+
+    function drawBabySleeping(canvas) {
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Star top-left
+      ctx.fillStyle = '#F5D87A';
+      ctx.beginPath();
+      const sx = w * 0.15, sy = h * 0.08, sr = 10;
+      for (let i = 0; i < 10; i++) {
+        const angle = (i / 10) * Math.PI * 2 - Math.PI / 2;
+        const r2 = i % 2 === 0 ? sr : sr * 0.45;
+        const x = sx + Math.cos(angle) * r2;
+        const y = sy + Math.sin(angle) * r2;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.closePath(); ctx.fill();
+
+      // Pillow
+      ctx.fillStyle = 'rgba(230,230,235,0.9)';
+      ctx.beginPath();
+      ctx.ellipse(w * 0.72, h * 0.32, w * 0.28, h * 0.22, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Body — mint/yellow outfit
+      ctx.fillStyle = '#B8DDD0';
+      ctx.beginPath();
+      ctx.ellipse(w * 0.5, h * 0.72, w * 0.38, h * 0.22, -0.3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Top — yellow
+      ctx.fillStyle = '#F5D87A';
+      ctx.beginPath();
+      ctx.ellipse(w * 0.46, h * 0.58, w * 0.28, h * 0.18, -0.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Little bears on outfit
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      [[0.38, 0.56], [0.52, 0.54]].forEach(([x, y]) => {
+        ctx.beginPath(); ctx.arc(w*x, h*y, 6, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(w*(x-0.04), h*(y-0.04), 3, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(w*(x+0.04), h*(y-0.04), 3, 0, Math.PI*2); ctx.fill();
+      });
+
+      // Head — sleeping
+      ctx.fillStyle = '#FBBDA8';
+      ctx.beginPath();
+      ctx.ellipse(w * 0.35, h * 0.38, w * 0.3, h * 0.26, -0.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Rosy cheeks
+      ctx.fillStyle = 'rgba(240,100,80,0.35)';
+      ctx.beginPath(); ctx.ellipse(w*0.28, h*0.42, 11, 7, 0, 0, Math.PI*2); ctx.fill();
+
+      // Closed eye and smile
+      ctx.strokeStyle = '#8B4513';
+      ctx.lineWidth = 2; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(w*0.32, h*0.35, 6, 0.2, Math.PI-0.2); ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(w*0.26, h*0.44); ctx.quadraticCurveTo(w*0.31, h*0.47, w*0.36, h*0.44);
+      ctx.stroke();
+
+      // Fist
+      ctx.fillStyle = '#FBBDA8';
+      ctx.beginPath();
+      ctx.ellipse(w * 0.12, h * 0.48, w * 0.1, h * 0.09, -0.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#E09080'; ctx.lineWidth = 1.2;
+      for(let i=0;i<3;i++){
+        ctx.beginPath(); ctx.moveTo(w*0.08+i*8, h*0.44); ctx.lineTo(w*0.08+i*8, h*0.43); ctx.stroke();
+      }
+    }
+
+    function drawBabySmall(canvas, variant) {
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      if (variant === 'bl') {
+        // Small cute bear toy
+        ctx.fillStyle = '#E8C48A';
+        ctx.beginPath(); ctx.ellipse(w*0.5, h*0.55, w*0.35, h*0.35, 0, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(w*0.32, h*0.28, w*0.16, h*0.15, -0.3, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(w*0.68, h*0.28, w*0.16, h*0.15, 0.3, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#D4A870';
+        ctx.beginPath(); ctx.ellipse(w*0.5, h*0.6, w*0.2, h*0.18, 0, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#5C3018';
+        ctx.beginPath(); ctx.arc(w*0.42, h*0.5, 4, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(w*0.58, h*0.5, 4, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#333';
+        ctx.beginPath(); ctx.arc(w*0.5, h*0.57, 5, 0, Math.PI*2); ctx.fill();
+        // little bow
+        ctx.fillStyle = '#E8736A';
+        ctx.beginPath(); ctx.moveTo(w*0.42, h*0.28); ctx.lineTo(w*0.5, h*0.32); ctx.lineTo(w*0.58, h*0.28); ctx.lineTo(w*0.5, h*0.24); ctx.closePath(); ctx.fill();
+      } else {
+        // Small star + rattle
+        ctx.strokeStyle = '#A8D5C2';
+        ctx.lineWidth = 3; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(w*0.5, h*0.08); ctx.lineTo(w*0.5, h*0.45); ctx.stroke();
+        ctx.fillStyle = '#F5D87A';
+        ctx.beginPath();
+        for (let i=0;i<10;i++) {
+          const angle=(i/10)*Math.PI*2-Math.PI/2;
+          const r2 = i%2===0?w*0.22:w*0.1;
+          const x=w*0.5+Math.cos(angle)*r2, y=h*0.08+Math.sin(angle)*r2;
+          i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+        }
+        ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#E8736A';
+        ctx.beginPath(); ctx.arc(w*0.5, h*0.54, w*0.22, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        ctx.beginPath(); ctx.arc(w*0.42, h*0.48, w*0.07, 0, Math.PI*2); ctx.fill();
+      }
+    }
+
+    // Draw all corner illustrations
+    drawBabyGirl(document.getElementById('canvas-tl'));
+    drawBabySleeping(document.getElementById('canvas-tr'));
+    drawBabySmall(document.getElementById('canvas-bl'), 'bl');
+    drawBabySmall(document.getElementById('canvas-br'), 'br');
+
+    /* ══ Stock items ══ */
+    const stockItems=[
+      {name:'Car Seats',qty:3,age:null,level:'good',imageUrl:'https://loremflickr.com/480/640/baby,car,seat?lock=11'},
+      {name:'Clothes 0–6 months',qty:40,age:'0–6m',level:'good',imageUrl:'https://loremflickr.com/480/640/newborn,baby,clothes?lock=22'},
+      {name:'Clothes 6–12 months',qty:28,age:'6–12m',level:'good',imageUrl:'https://loremflickr.com/480/640/baby,infant,clothes?lock=33'},
+      {name:'Clothes 12–24 months',qty:15,age:'12–24m',level:'good',imageUrl:'https://loremflickr.com/480/640/toddler,baby,clothes?lock=44'},
+      {name:'Baby Food Warmers',qty:4,age:null,level:'good',imageUrl:'https://loremflickr.com/480/640/baby,bottle,warmer?lock=55'},
+      {name:'Electric Pump',qty:1,age:null,level:'low',imageUrl:'https://loremflickr.com/480/640/breast,pump,electric?lock=66'},
+      {name:'Baby Bassinets',qty:2,age:null,level:'low',imageUrl:'https://loremflickr.com/480/640/baby,bassinet,crib?lock=77'},
+      {name:'Blankets & Flannels',qty:20,age:null,level:'good',imageUrl:'https://loremflickr.com/480/640/baby,blanket,soft?lock=88'},
+      {name:'Wash Basins',qty:5,age:null,level:'good',imageUrl:'https://loremflickr.com/480/640/baby,bath,basin?lock=99'},
+      {name:'Baby Carriers',qty:3,age:null,level:'good',imageUrl:'https://loremflickr.com/480/640/baby,carrier,sling?lock=100'},
+      {name:'Maternity Wear',qty:8,age:null,level:'good',imageUrl:'https://loremflickr.com/480/640/maternity,pregnancy,fashion?lock=111'},
+      {name:'Toys & Baby Gyms',qty:6,age:null,level:'good',imageUrl:'https://loremflickr.com/480/640/baby,toy,play?lock=122'},
+    ];
+    window._stockItems = stockItems;
+
+    window._hygraphPromise = fetch('https://ap-south-1.cdn.hygraph.com/content/cmot17o9m00h807vx93664awc/master',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({query:'{ stocks { stockName stockImage { url } } }'})
+    }).then(r=>r.json()).then(d=>{
+      if(d?.errors) console.warn('[Hygraph errors]', JSON.stringify(d.errors));
+      return d?.data?.stocks || [];
+    }).catch(e=>{ console.error('[Hygraph fetch failed]', e); return []; });
+
+    window._buildStock = function(hygraphItems){
+      const track=document.getElementById('stock-track');
+      const dotsEl=document.getElementById('stock-dots');
+      if(!track)return;
+      const items=hygraphItems.length>0
+        ? hygraphItems.map(h=>({name:h.stockName||'Item',qty:null,age:null,level:'good',imageUrl:h.stockImage?.[0]?.url||''}))
+        : stockItems;
+      window._stockItems=items;
+      track.innerHTML='';
+      items.forEach((item,i)=>{
+        const card=document.createElement('div');
+        card.className='stock-card';
+        if(i===0)card.classList.add('is-active');
+        else if(i===1)card.classList.add('is-adjacent');
+        const img=document.createElement('img');
+        img.className='stock-card-img';
+        img.src=item.imageUrl||'https://picsum.photos/seed/'+encodeURIComponent(item.name)+'/480/640';
+        img.alt=item.name;
+        const info=document.createElement('div');
+        info.className='stock-card-info';
+        info.innerHTML=`${item.age?`<span class="sci-age">${item.age}</span>`:''}
+          <div class="sci-name">${item.name}</div>
+          <div class="sci-row">
+            <div>${item.qty!=null?`<span class="sci-qty">${item.qty}</span><span class="sci-qty-label">in stock</span>`:''}</div>
+            <div class="sci-status"><span class="sci-dot ${item.level==='low'?'low':''}"></span>${item.level==='low'?'Low Stock':'Available'}</div>
+          </div>`;
+        const mini=document.createElement('div');
+        mini.className='stock-card-mini-label';
+        mini.textContent=item.name;
+        card.appendChild(img);card.appendChild(info);card.appendChild(mini);
+        // clicking a non-active card navigates to it
+        card.addEventListener('click', () => {
+          const cards = [...track.querySelectorAll('.stock-card')];
+          const idx = cards.indexOf(card);
+          if (idx >= 0) { window._currentStockIdx = idx; window._setStockActive(idx); }
+        });
+        track.appendChild(card);
+      });
+      dotsEl.innerHTML=items.map((_,i)=>
+        `<div class="stock-dot${i===0?' active':''}" data-idx="${i}"></div>`
+      ).join('');
+      document.getElementById('stock-total-num').textContent=String(items.length).padStart(2,'0');
+    };
+
+    /* ══ Seed reviews with animation ══ */
+    function addReviewCard(data, prepend, delay) {
+      const grid = document.getElementById('reviews-grid');
+      const empty = grid.querySelector('.reviews-empty'); if(empty) empty.remove();
+      const initials = data.name === 'Anonymous' ? '✦' : data.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+      const stars = '⭐'.repeat(data.stars || 5);
+      const card = document.createElement('div');
+      card.className = 'review-card';
+      card.innerHTML = `
+        <div class="review-stars">${[...stars].map(s=>`<span class="review-star">${s}</span>`).join('')}</div>
+        <p class="review-text">"${data.text}"</p>
+        <div class="review-meta">
+          <div class="review-avatar">${initials}</div>
+          <div>
+            <div class="review-name">${data.name}</div>
+            <div class="review-author">${data.role}</div>
+          </div>
+        </div>`;
+      if (prepend) grid.prepend(card); else grid.appendChild(card);
+      setTimeout(() => {
+        card.style.animationDelay = '0ms';
+        card.classList.add('animate-in');
+      }, delay || 0);
+    }
+
+    // Seed the initial reviews with staggered slide-in
+    const seedReviews = [
+      { name: 'A Grateful Mum', role: 'Received an item · Nairobi', stars: 5, text: 'I had been looking for a good stroller for weeks and everything was so expensive. A friend told me about Baraka Box and I thought, let me try. And there it was. Waiting for us. It felt like it had been kept just for my baby.' },
+      { name: 'A Donor', role: 'Donated an item · Emmanuel Baptist', stars: 5, text: 'I had so many things at home I wasn\'t using anymore — my baby had outgrown everything so fast. Donating through Baraka Box felt right. Knowing another family is using those things now… it gives them a second life.' },
+    ];
+    seedReviews.forEach((r, i) => addReviewCard(r, false, i * 200));
+
+    /* ══ Utility ══ */
+    function scrollToId(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}
+    function toggleNominate(){document.getElementById('toggle-track').classList.toggle('on');document.getElementById('nominee-fields').classList.toggle('open');}
+    function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),4000);}
+
+    function handleDonate(e){
+      e.preventDefault();
+      const f=e.target;
+      const inputs=f.querySelectorAll('input[type="text"],input[type="tel"]');
+      const name=inputs[0].value.trim()||'Anonymous';
+      const phone=inputs[1].value.trim()||'Not provided';
+      const item=f.querySelector('select').value||'Not specified';
+      const details=f.querySelector('textarea').value.trim()||'None';
+      const isNom=document.getElementById('toggle-track').classList.contains('on');
+      let msg=`*Baraka Box — Donation*\n\nFrom: ${name}\nPhone: ${phone}\nItem: ${item}\nDetails: ${details}`;
+      if(isNom){
+        const nomInputs=document.getElementById('nominee-fields').querySelectorAll('input');
+        const nomName=nomInputs[0]?.value.trim()||'';
+        const nomPhone=nomInputs[1]?.value.trim()||'';
+        const nomWhy=document.getElementById('nominee-fields').querySelector('textarea')?.value.trim()||'';
+        msg+=`\n\n*Nomination:*\nFor: ${nomName}\nPhone: ${nomPhone}\nReason: ${nomWhy}`;
+      }
+      window.open('https://wa.me/254726499182?text='+encodeURIComponent(msg),'_blank');
+      showToast('✦ Opening WhatsApp to send your donation request to Muthoni…');
+      e.target.reset();
+      document.getElementById('toggle-track').classList.remove('on');
+      document.getElementById('nominee-fields').classList.remove('open');
+    }
+
+    function handleReturn(e){
+      e.preventDefault();
+      const f=e.target;
+      const inputs=f.querySelectorAll('input');
+      const name=inputs[0]?.value.trim()||'Anonymous';
+      const phone=inputs[1]?.value.trim()||'Not provided';
+      const selects=f.querySelectorAll('select');
+      const item=selects[0]?.value||'Not specified';
+      const condition=selects[1]?.value||'Not specified';
+      const notes=f.querySelector('textarea')?.value.trim()||'None';
+      const msg=`*Baraka Box — Return*\n\nFrom: ${name}\nPhone: ${phone}\nItem: ${item}\nCondition: ${condition}\nNotes: ${notes}`;
+      window.open('https://wa.me/254726499182?text='+encodeURIComponent(msg),'_blank');
+      showToast('✦ Opening WhatsApp to send your return to Muthoni… 🌿');
+      e.target.reset();
+    }
+
+    let selectedStars=0;
+    function setStars(n){selectedStars=n;document.getElementById('review-stars-val').value=n;document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('lit',i<n));}
+
+    function handleReview(e){
+      e.preventDefault();
+      if(selectedStars===0){showToast('Please select a star rating first.');return;}
+      const name=document.getElementById('review-name').value.trim()||'Anonymous';
+      const role=document.getElementById('review-role').value||'Community member';
+      const text=document.getElementById('review-text').value.trim();
+      addReviewCard({ name, role, stars: selectedStars, text }, true, 0);
+      e.target.reset(); setStars(0);
+      showToast('✦ Thank you for sharing your experience!');
+      document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'});
+    }
+  </script>
 </body>
 </html>
