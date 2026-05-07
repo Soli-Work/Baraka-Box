@@ -183,7 +183,7 @@
     .form-input,.form-select,.form-textarea{width:100%;background:#F7F3EC;border:1.5px solid transparent;border-radius:10px;padding:10px 13px;font-family:'Inter',sans-serif;font-size:.84rem;color:var(--charcoal);outline:none;transition:border-color .25s,background .25s;-webkit-appearance:none;appearance:none;font-weight:500}
     .form-input::placeholder{color:rgba(28,28,28,.4)}
     .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold);background:#fff}
-    .form-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8078' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;background-color:#F7F3EC;padding-right:34px}
+    .form-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8078' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C%2Fsvg%3E");background-repeat:no-repeat;background-position:right 13px center;background-color:#F7F3EC;padding-right:34px}
     .form-select:focus{background-color:#fff}
     .form-textarea{resize:none;height:72px}
     .nominate-toggle{display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:14px;user-select:none}
@@ -269,8 +269,114 @@
     .review-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--coral-lt),var(--gold));display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 2px 8px rgba(194,148,90,.3)}
     .review-name{font-size:.75rem;font-weight:700;color:var(--charcoal);letter-spacing:.02em}
     .review-author{font-size:.72rem;color:var(--charcoal);font-style:normal;margin-top:2px;opacity:.6;font-weight:500}
-    .review-form-wrap{max-width:640px;margin:0 auto;background:#fff;border-radius:24px;padding:40px 36px;box-shadow:0 4px 24px rgba(28,28,28,.06),0 20px 60px rgba(28,28,28,.08);position:relative;overflow:hidden}
-    .review-form-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--coral),var(--gold),var(--yellow))}
+
+    /* ══ Review CTA Button ══ */
+    .review-cta-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    .review-cta-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 13px;
+      padding: 18px 48px;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--coral) 0%, var(--gold) 65%, var(--yellow) 100%);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 0 6px 28px rgba(232,115,106,.38), 0 2px 8px rgba(194,148,90,.2);
+      transition: transform .28s cubic-bezier(.34,1.56,.64,1), box-shadow .28s ease;
+    }
+    .review-cta-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.2) 0%, transparent 60%);
+      border-radius: inherit;
+    }
+    .review-cta-btn:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 16px 44px rgba(232,115,106,.48), 0 4px 16px rgba(194,148,90,.3);
+    }
+    .review-cta-btn:active { transform: scale(.98); }
+    .review-cta-btn .btn-star {
+      font-size: 1.1rem;
+      animation: star-pulse 2.4s ease-in-out infinite;
+      display: inline-block;
+      line-height: 1;
+    }
+    @keyframes star-pulse {
+      0%,100% { transform: rotate(0deg) scale(1); }
+      40%      { transform: rotate(14deg) scale(1.25); }
+      60%      { transform: rotate(-6deg) scale(1.15); }
+    }
+    /* Ripple pulse ring around button */
+    .review-cta-btn .btn-pulse {
+      position: absolute;
+      inset: -6px;
+      border-radius: 56px;
+      border: 2px solid rgba(232,115,106,.45);
+      animation: btn-pulse-ring 2.2s ease-out infinite;
+      pointer-events: none;
+    }
+    .review-cta-btn .btn-pulse-2 {
+      position: absolute;
+      inset: -6px;
+      border-radius: 56px;
+      border: 2px solid rgba(194,148,90,.3);
+      animation: btn-pulse-ring 2.2s ease-out infinite .8s;
+      pointer-events: none;
+    }
+    @keyframes btn-pulse-ring {
+      0%   { transform: scale(1);    opacity: .8; }
+      65%  { transform: scale(1.08); opacity: 0; }
+      100% { transform: scale(1.08); opacity: 0; }
+    }
+
+    /* Review form — hidden by default, revealed on button click */
+    .review-form-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 24px;
+      padding: 40px 36px;
+      box-shadow: 0 4px 24px rgba(28,28,28,.06), 0 20px 60px rgba(28,28,28,.08);
+      position: relative;
+      overflow: hidden;
+      /* collapsed state */
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      transition:
+        max-height .7s cubic-bezier(.4,0,.2,1),
+        opacity .45s ease,
+        padding .5s ease,
+        margin-top .4s ease;
+      margin-top: 0;
+    }
+    .review-form-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--coral), var(--gold), var(--yellow));
+    }
+    .review-form-wrap.open {
+      max-height: 900px;
+      opacity: 1;
+      padding: 40px 36px;
+      margin-top: 40px;
+    }
     .review-form-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--charcoal);margin-bottom:6px}
     .review-form-sub{font-size:.82rem;color:var(--charcoal);margin-bottom:24px;line-height:1.6;font-weight:500;opacity:.72}
     .star-picker{display:flex;gap:6px;margin-bottom:20px}
@@ -331,7 +437,7 @@
       .stock-card.is-adjacent{width:140px;height:210px}
       #reviews-section{padding:70px 5% 50px}
       .reviews-grid{grid-template-columns:1fr}
-      .review-form-wrap{padding:28px 20px}
+      .review-form-wrap.open{padding:28px 20px}
       .reviews-header .panel-title{font-size:1.8rem}
       #baby-tl,#baby-tr,#baby-bl,#baby-br{display:none}
       .admin-entry-row{flex-direction:column;gap:4px}
@@ -347,16 +453,17 @@
       .stock-counter{display:none}
       .stock-dots{display:none}
       .sci-qty{font-size:2.2rem}
+      .review-cta-btn{padding:16px 32px;font-size:.6rem}
     }
   </style>
 </head>
 <body>
 
   <!-- Baby corners -->
-  <div class="baby-illus-wrap" id="baby-tl"><canvas width="130" height="160" id="canvas-tl"></canvas></div>
+  <!-- <div class="baby-illus-wrap" id="baby-tl"><canvas width="130" height="160" id="canvas-tl"></canvas></div>
   <div class="baby-illus-wrap" id="baby-tr"><canvas width="110" height="145" id="canvas-tr"></canvas></div>
   <div class="baby-illus-wrap" id="baby-bl"><canvas width="105" height="130" id="canvas-bl"></canvas></div>
-  <div class="baby-illus-wrap" id="baby-br"><canvas width="115" height="145" id="canvas-br"></canvas></div>
+  <div class="baby-illus-wrap" id="baby-br"><canvas width="115" height="145" id="canvas-br"></canvas></div> -->
 
   <!-- LOADER -->
   <div id="loader">
@@ -657,7 +764,19 @@
       <p>Every word shared here helps another family trust in the circle of care.</p>
     </div>
     <div class="reviews-grid" id="reviews-grid"></div>
-    <div class="review-form-wrap">
+
+    <!-- Animated CTA button -->
+    <div class="review-cta-wrap">
+      <button class="review-cta-btn" id="review-cta-btn" onclick="toggleReviewForm()" aria-expanded="false">
+        <span class="btn-pulse"></span>
+        <span class="btn-pulse-2"></span>
+        <span class="btn-star">⭐</span>
+        <span id="review-cta-label">Leave a Review</span>
+      </button>
+    </div>
+
+    <!-- Review form — hidden until button is clicked -->
+    <div class="review-form-wrap" id="review-form-wrap">
       <p class="review-form-title">Leave a Review</p>
       <p class="review-form-sub">Your review is anonymous by default — your name is optional.</p>
       <div class="anon-note" style="margin-bottom:20px">🔒 Reviews are published anonymously unless you choose to include your name.</div>
@@ -843,6 +962,25 @@
       document.getElementById('nav-hamburger').classList.remove('open');
       document.getElementById('nav-drawer').classList.remove('open');
       document.body.style.overflow = '';
+    }
+
+    /* ── Review form toggle ── */
+    function toggleReviewForm() {
+      const wrap  = document.getElementById('review-form-wrap');
+      const btn   = document.getElementById('review-cta-btn');
+      const label = document.getElementById('review-cta-label');
+      const isOpen = wrap.classList.contains('open');
+
+      wrap.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      label.textContent = isOpen ? 'Leave a Review' : 'Close Form';
+
+      if (!isOpen) {
+        // slight delay so CSS transition has started, then scroll smoothly
+        setTimeout(() => {
+          wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 80);
+      }
     }
 
     /* ── Stock ── */
@@ -1076,6 +1214,11 @@
       window.open('https://wa.me/254726499182?text=' + encodeURIComponent(waMsg), '_blank');
       showToast('✦ Review saved & sent to Muthoni!');
       e.target.reset(); setStars(0);
+      // close the form after submission
+      const wrap = document.getElementById('review-form-wrap');
+      const label = document.getElementById('review-cta-label');
+      wrap.classList.remove('open');
+      label.textContent = 'Leave a Review';
       document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'});
     }
   </script>
@@ -1273,7 +1416,7 @@
     const particles=new THREE.Points(partGeo,new THREE.PointsMaterial({color:0xF5D87A,size:.04,sizeAttenuation:true,transparent:true,opacity:.6,depthWrite:false}));
     scene.add(particles);
 
-    /* Camera keyframes — tighter scroll = 300vh container */
+    /* Camera keyframes */
     const KF = [
       { p:0.00, pos:[3.0,1.6,5.2], tgt:[0.6,0.7,0], fov:44 },
       { p:0.28, pos:[3.0,1.6,5.2], tgt:[0.6,0.7,0], fov:44 },
@@ -1300,16 +1443,13 @@
     window.addEventListener('mousemove',e=>{mouseX=(e.clientX/window.innerWidth-.5)*2;mouseY=(e.clientY/window.innerHeight-.5)*2;});
 
     function initHero() {
-      // ov1 EXIT
       gsap.timeline({scrollTrigger:{trigger:'#scroll-container',start:'top top',end:'30% top',scrub:1.4,immediateRender:false}})
         .to('#ov1',{opacity:0,y:-32,ease:'power2.in',immediateRender:false});
 
-      // ov2 ENTRY + EXIT
       gsap.timeline({scrollTrigger:{trigger:'#scroll-container',start:'29% top',end:'66% top',scrub:1.4}})
         .fromTo('#ov2',{opacity:0,x:60},{opacity:1,x:0,duration:.3,ease:'power2.out'})
         .to('#ov2',{opacity:0,x:-48,duration:.25,ease:'power2.in'},.7);
 
-      // ov3 ENTRY — starts at 64% so "Community First" fully visible before end
       gsap.timeline({scrollTrigger:{trigger:'#scroll-container',start:'65% top',end:'100% bottom',scrub:1.4}})
         .fromTo('#ov3',{opacity:0,y:42},{opacity:1,y:0,duration:.35,ease:'power2.out'});
 
