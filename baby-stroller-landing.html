@@ -23,7 +23,6 @@
       --coral-lt: #F4A49F;
       --yellow:   #F5D87A;
       --mint:     #A8D5C2;
-      /* Newsletter brand colors */
       --nb-coral: #E8736A;
       --nb-gold:  #C2945A;
       --nb-cream: #FDF8F0;
@@ -31,39 +30,22 @@
     html { scroll-behavior: auto; }
     body { font-family:'Inter',-apple-system,sans-serif; background:var(--cream); overflow-x:hidden; -webkit-font-smoothing:antialiased; }
 
-    /* ══ CORNER BABY ILLUSTRATIONS ══ */
-    .baby-corner {
+    /* ══════════════════════════════════════════════════════════
+       BABY CORNER ILLUSTRATIONS
+    ══════════════════════════════════════════════════════════ */
+    .baby-illus-wrap {
       position: fixed;
-      z-index: 5;
+      z-index: 6;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 1s ease;
+      transition: opacity 1.2s ease 2s;
     }
-    .baby-corner.visible { opacity: 1; }
-    .baby-corner img { width: 100%; height: 100%; object-fit: contain; }
-
-    .baby-tl {
-      top: 80px; left: -10px;
-      width: 120px; height: 150px;
-      transform: rotate(-8deg);
-    }
-    .baby-tr {
-      top: 60px; right: -8px;
-      width: 100px; height: 130px;
-      transform: rotate(10deg);
-    }
-    .baby-bl {
-      bottom: 120px; left: -8px;
-      width: 100px; height: 120px;
-      transform: rotate(6deg);
-      opacity: 0;
-    }
-    .baby-br {
-      bottom: 100px; right: -6px;
-      width: 110px; height: 140px;
-      transform: rotate(-5deg);
-      opacity: 0;
-    }
+    .baby-illus-wrap.show { opacity: 1; }
+    .baby-illus-wrap canvas { display: block; }
+    #baby-tl { top: 72px; left: 0; display: none; }
+    #baby-tr { top: 58px; right: 0; }
+    #baby-bl { bottom: 80px; left: 0; display: none; }
+    #baby-br { bottom: 60px; right: 0; display: none; }
 
     /* ══════════════════════════════════════════════════════════
        ANIMATED LOADER
@@ -167,12 +149,7 @@
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(28,28,28,0.06);
     }
-    .nav-brand {
-      font-size:.72rem; font-weight:800; letter-spacing:.28em; text-transform:uppercase;
-      /* Newsletter coral/gold color for brand */
-      color: var(--nb-coral);
-      text-shadow: none;
-    }
+    .nav-brand { font-size:.72rem; font-weight:800; letter-spacing:.28em; text-transform:uppercase; color: var(--nb-coral); text-shadow: none; }
     .nav-menu { list-style:none; display:flex; gap:40px; }
     .nav-menu a { font-size:.62rem; font-weight:600; letter-spacing:.15em; text-decoration:none; text-transform:uppercase; color:var(--charcoal); opacity:.55; transition:opacity .3s; cursor:pointer; }
     .nav-menu a:hover { opacity:1; }
@@ -185,12 +162,21 @@
 
     /* ── Hero ── */
     #scroll-container { position:relative; z-index:1; height:500vh; }
-    .overlay { position:fixed; inset:0; z-index:10; display:flex; flex-direction:column; justify-content:center; pointer-events:none; opacity:0; will-change:opacity,transform; }
-    .overlay-inner { padding:0 9%; max-width:680px; }
+
+    /* ─ All overlays are fixed, full-viewport, pointer-events managed ─ */
+    .overlay {
+      position:fixed; inset:0; z-index:10;
+      display:flex; flex-direction:column; justify-content:center;
+      pointer-events:none;
+      opacity:0;
+      will-change:opacity,transform;
+    }
+    .overlay-inner { padding:0 9%; max-width:620px; }
     .overlay.right { align-items:flex-end; }
     .overlay.right .overlay-inner { text-align:right; padding:0 9%; }
     .overlay.center { align-items:center; }
     .overlay.center .overlay-inner { text-align:center; }
+
     .ov-label { font-size:.6rem; font-weight:700; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); margin-bottom:18px; display:block; }
     .ov-title { font-family:'Playfair Display',serif; font-size:clamp(2.8rem,5.5vw,5.5rem); font-weight:700; line-height:1.05; color:var(--charcoal); margin-bottom:26px; }
     .ov-title em { font-style:italic; color:var(--gold); }
@@ -200,21 +186,23 @@
     .ov-link { display:inline-flex; align-items:center; gap:10px; margin-top:40px; font-size:.62rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--charcoal); text-decoration:none; padding-bottom:5px; border-bottom:1px solid rgba(28,28,28,.4); pointer-events:all; cursor:pointer; transition:border-color .3s; }
     .ov-link:hover { border-color:var(--charcoal); }
 
-    /* FIX: ov1 only animates in ONCE — no duplicate display */
-    #ov1 { opacity:1; }
-    #ov1 .ov-label { opacity:0; transform:translateY(16px); }
-    #ov1 .ov-title { opacity:0; transform:translateY(28px); }
-    #ov1 .ov-body { opacity:0; transform:translateY(20px); }
-    #ov1 .ov-link { opacity:0; transform:translateY(16px); }
-
-    #ov1 .ov-label.revealed { animation: ov-el-in 0.7s cubic-bezier(.22,1,.36,1) forwards; }
-    #ov1 .ov-title.revealed { animation: ov-el-in 0.9s cubic-bezier(.22,1,.36,1) forwards; animation-delay:0.12s; }
-    #ov1 .ov-body.revealed  { animation: ov-el-in 0.8s cubic-bezier(.22,1,.36,1) forwards; animation-delay:0.26s; }
-    #ov1 .ov-link.revealed  { animation: ov-el-in 0.7s cubic-bezier(.22,1,.36,1) forwards; animation-delay:0.42s; }
-
-    @keyframes ov-el-in {
-      from { opacity:0; transform:translateY(24px); }
-      to   { opacity:1; transform:translateY(0); }
+    /*
+     * FIX #2: ov1 starts fully hidden (opacity:0, children at their start states).
+     * The loader reveal triggers a one-time JS animation via GSAP.
+     * No CSS "revealed" class trick — we let GSAP handle it cleanly.
+     * ov1 is NOT controlled by ScrollTrigger for its entry — only for its EXIT.
+     */
+    #ov1 {
+      opacity: 1; /* wrapper visible — children handle their own reveal */
+      /* Left-aligned, vertically centered */
+      align-items: flex-start;
+    }
+    #ov1 .ov-label,
+    #ov1 .ov-title,
+    #ov1 .ov-body,
+    #ov1 .ov-link {
+      opacity: 0;
+      transform: translateY(28px);
     }
 
     #progress { position:fixed; right:32px; top:50%; transform:translateY(-50%); z-index:100; display:flex; flex-direction:column; gap:14px; }
@@ -222,8 +210,8 @@
     .p-dot.active { opacity:1; background:var(--gold); height:24px; border-radius:3px; }
 
     #scroll-hint { position:fixed; bottom:36px; left:50%; transform:translateX(-50%); z-index:100; display:flex; flex-direction:column; align-items:center; gap:10px; }
-    .sh-line { width:1px; height:44px; background:linear-gradient(to bottom,var(--charcoal),transparent); opacity:.25; animation:pulse 2s ease-in-out infinite; }
-    @keyframes pulse { 0%,100%{opacity:.15} 50%{opacity:.4} }
+    .sh-line { width:1px; height:44px; background:linear-gradient(to bottom,var(--charcoal),transparent); opacity:.25; animation:sh-pulse 2s ease-in-out infinite; }
+    @keyframes sh-pulse { 0%,100%{opacity:.15} 50%{opacity:.4} }
     .sh-label { font-size:.55rem; letter-spacing:.25em; text-transform:uppercase; color:var(--charcoal); opacity:.55; font-weight:600; }
 
     /* ══════════════════════════════════════════════════════════
@@ -267,29 +255,11 @@
     .btn-submit:hover { background:var(--coral); transform:translateY(-1px); }
 
     /* ══════════════════════════════════════════════════════════
-       IN STOCK — MANUAL PREV/NEXT NAVIGATION
+       IN STOCK
     ══════════════════════════════════════════════════════════ */
     #stock-section { position: relative; z-index: 2; }
-
-    .stock-sticky {
-      position: relative;
-      min-height: 100vh;
-      overflow: hidden;
-      background: var(--cream-dk);
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* FIX: nav no longer overlaps — top padding accounts for nav height */
-    .stock-topbar {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      padding: 100px 60px 0; /* extra top padding so nav doesn't overlap */
-      flex-shrink: 0;
-    }
+    .stock-sticky { position: relative; min-height: 100vh; overflow: hidden; background: var(--cream-dk); display: flex; flex-direction: column; }
+    .stock-topbar { position: relative; z-index: 10; display: flex; align-items: flex-start; justify-content: space-between; padding: 100px 60px 0; flex-shrink: 0; }
     .stock-label { font-size: .52rem; font-weight: 700; letter-spacing: .42em; text-transform: uppercase; color: var(--coral); display: block; margin-bottom: 8px; }
     .stock-title { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 2.6vw, 2.6rem); font-weight: 700; line-height: 1.05; color: var(--charcoal); }
     .stock-title em { font-style: italic; color: var(--gold); }
@@ -301,41 +271,10 @@
     .stock-contact-wa { display:inline-flex; align-items:center; gap:7px; margin-top:8px; font-size:.55rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:#25D366; text-decoration:none; padding:5px 14px; border:1px solid rgba(37,211,102,.25); transition:background .25s,color .25s,border-color .25s; }
     .stock-contact-wa:hover { background:#25D366; color:#fff; border-color:#25D366; }
     .stock-contact-wa svg { width:13px; height:13px; fill:currentColor; }
-
-    .stock-stage {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      padding: 0;
-    }
-    .stock-track {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      position: absolute;
-      left: 0; top: 50%;
-      transform: translateY(-50%);
-      will-change: transform;
-      transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
-    }
+    .stock-stage { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 0; }
+    .stock-track { display: flex; align-items: center; gap: 4px; position: absolute; left: 0; top: 50%; transform: translateY(-50%); will-change: transform; transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1); }
     .stock-card-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-    .stock-card {
-      flex-shrink: 0;
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      border-radius: 0;
-      background: var(--cream);
-      width: 200px; height: 300px;
-      transition: width 0.55s cubic-bezier(0.76, 0, 0.24, 1),
-                  height 0.55s cubic-bezier(0.76, 0, 0.24, 1),
-                  opacity 0.45s ease,
-                  box-shadow 0.45s ease;
-      opacity: 0.45;
-    }
+    .stock-card { flex-shrink: 0; position: relative; overflow: hidden; cursor: pointer; border-radius: 0; background: var(--cream); width: 200px; height: 300px; transition: width 0.55s cubic-bezier(0.76, 0, 0.24, 1), height 0.55s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.45s ease, box-shadow 0.45s ease; opacity: 0.45; }
     .stock-card.is-active { width: 420px; height: 560px; opacity: 1; box-shadow: 0 20px 60px rgba(28,28,28,.22), 0 0 0 1px rgba(28,28,28,.06); }
     .stock-card.is-adjacent { width: 260px; height: 380px; opacity: 0.65; }
     .stock-card.is-active::after { content: ''; position: absolute; inset: 0; border: 1px solid rgba(194,148,90,.2); pointer-events: none; z-index: 10; }
@@ -356,165 +295,41 @@
     .stock-stage::before, .stock-stage::after { content: ''; position: absolute; top: 0; bottom: 0; width: 160px; z-index: 20; pointer-events: none; }
     .stock-stage::before { left:0; background:linear-gradient(to right, var(--cream-dk) 20%, transparent); }
     .stock-stage::after  { right:0; background:linear-gradient(to left, var(--cream-dk) 20%, transparent); }
-
-    /* PREV/NEXT NAV BUTTONS */
-    .stock-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 60px 36px;
-      flex-shrink: 0;
-      position: relative;
-    }
+    .stock-bottom { display: flex; align-items: center; justify-content: space-between; padding: 0 60px 36px; flex-shrink: 0; position: relative; }
     .stock-item-label { font-family: 'Playfair Display', serif; font-size: .95rem; font-style: italic; color: var(--charcoal); transition: color 0.4s ease; min-width: 200px; font-weight:700; opacity:0.7; }
     .stock-dots { display: flex; align-items: center; gap: 6px; }
     .stock-dot { width: 3px; height: 3px; background: rgba(28,28,28,.2); transition: all .4s ease; cursor: pointer; }
     .stock-dot.active { background: var(--gold); width: 28px; }
-
-    /* Nav buttons centered absolutely */
-    .stock-nav-center {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .stock-nav-btn {
-      width: 44px; height: 44px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(28,28,28,0.18);
-      background: rgba(247,243,236,0.9);
-      color: var(--charcoal);
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.25s, border-color 0.25s, transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 10px rgba(28,28,28,0.06);
-      flex-shrink: 0;
-    }
-    .stock-nav-btn:hover:not(:disabled) {
-      background: var(--charcoal);
-      color: var(--cream);
-      border-color: var(--charcoal);
-      transform: scale(1.08);
-      box-shadow: 0 4px 18px rgba(28,28,28,0.16);
-    }
-    .stock-nav-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
+    .stock-nav-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; }
+    .stock-nav-btn { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid rgba(28,28,28,0.18); background: rgba(247,243,236,0.9); color: var(--charcoal); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.25s, border-color 0.25s, transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 10px rgba(28,28,28,0.06); flex-shrink: 0; }
+    .stock-nav-btn:hover:not(:disabled) { background: var(--charcoal); color: var(--cream); border-color: var(--charcoal); transform: scale(1.08); box-shadow: 0 4px 18px rgba(28,28,28,0.16); }
+    .stock-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     .stock-nav-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
     /* ══════════════════════════════════════════════════════════
-       REVIEWS SECTION — Premium styled cards
+       REVIEWS
     ══════════════════════════════════════════════════════════ */
     #reviews-section { position:relative; z-index:2; background: linear-gradient(to bottom, var(--cream) 0%, #FDF8F0 100%); padding:100px 7% 80px; }
     .reviews-header { text-align:center; margin-bottom:70px; }
     .reviews-header .panel-label { display:inline-block; margin-bottom:16px; }
     .reviews-header .panel-title { margin-bottom:12px; }
     .reviews-header p { font-size:.9rem; color:var(--charcoal); line-height:1.8; max-width:500px; margin:0 auto; font-weight:500; opacity:0.72; }
-
-    .reviews-grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-      gap:24px;
-      max-width:1100px;
-      margin:0 auto 60px;
-      min-height:20px;
-    }
-
-    /* PREMIUM review cards */
-    .review-card {
-      background:#fff;
-      border-radius:20px;
-      padding:28px 26px;
-      box-shadow: 0 2px 8px rgba(28,28,28,.04), 0 8px 32px rgba(28,28,28,.06);
-      position:relative;
-      overflow:hidden;
-      /* slide-in animation */
-      opacity: 0;
-      transform: translateY(28px);
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-    }
-    .review-card.animate-in {
-      animation: card-slide-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-    @keyframes card-slide-in {
-      from { opacity:0; transform: translateY(32px) scale(0.97); }
-      to   { opacity:1; transform: translateY(0) scale(1); }
-    }
-    .review-card:hover {
-      box-shadow: 0 4px 20px rgba(28,28,28,.08), 0 16px 48px rgba(28,28,28,.10);
-      transform: translateY(-3px);
-    }
-
-    /* Premium top accent — gradient bar */
-    .review-card::before {
-      content:'';
-      position:absolute;
-      top:0; left:0; right:0;
-      height:4px;
-      background: linear-gradient(90deg, var(--coral) 0%, var(--gold-lt) 50%, var(--yellow) 100%);
-      border-radius:20px 20px 0 0;
-    }
-
-    /* Decorative quote mark */
-    .review-card::after {
-      content: '\201C';
-      position: absolute;
-      top: 16px; right: 18px;
-      font-family: 'Playfair Display', serif;
-      font-size: 5rem;
-      line-height: 1;
-      color: rgba(194,148,90,0.08);
-      font-style: italic;
-      pointer-events: none;
-    }
-
+    .reviews-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; max-width:1100px; margin:0 auto 60px; min-height:20px; }
+    .review-card { background:#fff; border-radius:20px; padding:28px 26px; box-shadow: 0 2px 8px rgba(28,28,28,.04), 0 8px 32px rgba(28,28,28,.06); position:relative; overflow:hidden; opacity: 0; transform: translateY(28px); transition: box-shadow 0.3s ease, transform 0.3s ease; }
+    .review-card.animate-in { animation: card-slide-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    @keyframes card-slide-in { from { opacity:0; transform: translateY(32px) scale(0.97); } to { opacity:1; transform: translateY(0) scale(1); } }
+    .review-card:hover { box-shadow: 0 4px 20px rgba(28,28,28,.08), 0 16px 48px rgba(28,28,28,.10); transform: translateY(-3px); }
+    .review-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background: linear-gradient(90deg, var(--coral) 0%, var(--gold-lt) 50%, var(--yellow) 100%); border-radius:20px 20px 0 0; }
+    .review-card::after { content: '\201C'; position: absolute; top: 16px; right: 18px; font-family: 'Playfair Display', serif; font-size: 5rem; line-height: 1; color: rgba(194,148,90,0.08); font-style: italic; pointer-events: none; }
     .review-stars { display:flex; gap:3px; margin-bottom:14px; }
     .review-star { font-size:14px; }
-    .review-text {
-      font-size:.88rem;
-      line-height:1.8;
-      color:var(--charcoal);
-      margin-bottom:20px;
-      font-style:italic;
-      font-weight:500;
-      position: relative;
-      z-index: 1;
-    }
+    .review-text { font-size:.88rem; line-height:1.8; color:var(--charcoal); margin-bottom:20px; font-style:italic; font-weight:500; position: relative; z-index: 1; }
     .review-meta { display:flex; align-items:center; gap:12px; padding-top:16px; border-top:1px solid rgba(28,28,28,.05); }
-    .review-avatar {
-      width:36px; height:36px;
-      border-radius:50%;
-      background: linear-gradient(135deg, var(--coral-lt), var(--gold));
-      display:flex; align-items:center; justify-content:center;
-      font-size:.65rem; font-weight:800; color:#fff;
-      flex-shrink:0;
-      box-shadow: 0 2px 8px rgba(194,148,90,0.3);
-    }
+    .review-avatar { width:36px; height:36px; border-radius:50%; background: linear-gradient(135deg, var(--coral-lt), var(--gold)); display:flex; align-items:center; justify-content:center; font-size:.65rem; font-weight:800; color:#fff; flex-shrink:0; box-shadow: 0 2px 8px rgba(194,148,90,0.3); }
     .review-name { font-size:.75rem; font-weight:700; color:var(--charcoal); letter-spacing:.02em; }
     .review-author { font-size:.72rem; color:var(--charcoal); font-style:normal; margin-top:2px; opacity:0.6; font-weight:500; }
-    .review-role { font-size:.62rem; color:var(--charcoal); font-weight:500; opacity:0.6; }
-
-    .review-form-wrap {
-      max-width:640px;
-      margin:0 auto;
-      background:#fff;
-      border-radius:24px;
-      padding:40px 36px;
-      box-shadow: 0 4px 24px rgba(28,28,28,.06), 0 20px 60px rgba(28,28,28,.08);
-      position: relative;
-      overflow: hidden;
-    }
-    .review-form-wrap::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--coral), var(--gold), var(--yellow));
-    }
+    .review-form-wrap { max-width:640px; margin:0 auto; background:#fff; border-radius:24px; padding:40px 36px; box-shadow: 0 4px 24px rgba(28,28,28,.06), 0 20px 60px rgba(28,28,28,.08); position: relative; overflow: hidden; }
+    .review-form-wrap::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--coral), var(--gold), var(--yellow)); }
     .review-form-title { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; color:var(--charcoal); margin-bottom:6px; }
     .review-form-sub { font-size:.82rem; color:var(--charcoal); margin-bottom:24px; line-height:1.6; font-weight:500; opacity:0.72; }
     .star-picker { display:flex; gap:6px; margin-bottom:20px; }
@@ -526,22 +341,8 @@
     .toast { position:fixed; bottom:32px; right:32px; background:var(--charcoal); color:var(--cream); padding:16px 24px; border-radius:12px; font-size:.78rem; font-weight:600; z-index:9000; transform:translateY(80px); opacity:0; transition:all .4s cubic-bezier(.34,1.56,.64,1); pointer-events:none; max-width:320px; line-height:1.5; }
     .toast.show { transform:translateY(0); opacity:1; }
 
-    /* ══ BABY CORNER SVG ILLUSTRATIONS ══ */
-    /* We draw them with canvas/inline SVG below */
-    .baby-illus-wrap {
-      position: fixed;
-      z-index: 6;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 1.2s ease 2s;
-    }
-    .baby-illus-wrap.show { opacity: 1; }
-    .baby-illus-wrap canvas { display: block; }
-
-    #baby-tl { top: 72px; left: 0; display: none; }
-    #baby-tr { top: 58px; right: 0; }
-    #baby-bl { bottom: 80px; left: 0; display: none; }
-    #baby-br { bottom: 60px; right: 0; display: none; }
+    /* ── SECOND PANEL: text appears on scroll (ov2 body) ── */
+    /* ov2 and ov3 are purely scroll-driven, zero initial state */
 
     /* Responsive */
     @media(max-width:768px){
@@ -589,13 +390,13 @@
 </head>
 <body>
 
-  <!-- ══ BABY CORNER ILLUSTRATIONS ══ -->
+  <!-- Baby corner illustrations -->
   <div class="baby-illus-wrap" id="baby-tl"><canvas width="130" height="160" id="canvas-tl"></canvas></div>
   <div class="baby-illus-wrap" id="baby-tr"><canvas width="110" height="145" id="canvas-tr"></canvas></div>
   <div class="baby-illus-wrap" id="baby-bl"><canvas width="105" height="130" id="canvas-bl"></canvas></div>
   <div class="baby-illus-wrap" id="baby-br"><canvas width="115" height="145" id="canvas-br"></canvas></div>
 
-  <!-- ══ LOADER ══ -->
+  <!-- LOADER -->
   <div id="loader">
     <div class="loader-particles">
       <div class="lp"></div><div class="lp"></div><div class="lp"></div>
@@ -652,8 +453,9 @@
     </div>
   </nav>
 
-  <!-- Hero -->
+  <!-- Hero scroll container -->
   <div id="scroll-container">
+    <!-- Panel 1: Slide in on load, exits on first scroll -->
     <div class="overlay" id="ov1">
       <div class="overlay-inner">
         <span class="ov-label">Emmanuel Baptist Church, Nairobi</span>
@@ -662,6 +464,8 @@
         <a class="ov-link" href="javascript:void(0)" onclick="scrollToId('forms-section')">Give · Borrow · Return →</a>
       </div>
     </div>
+
+    <!-- Panel 2: What We Accept — scroll-driven entry -->
     <div class="overlay right" id="ov2">
       <div class="overlay-inner">
         <span class="ov-label">What We Accept</span>
@@ -669,6 +473,8 @@
         <p class="ov-body">Clothes 0–24 months, blankets, car seats, strollers, feeding gear, nursing bras, baby gyms, toys, and more — gently used and given with love.</p>
       </div>
     </div>
+
+    <!-- Panel 3: Community First — scroll-driven entry -->
     <div class="overlay center" id="ov3">
       <div class="overlay-inner" style="background:radial-gradient(ellipse at center,rgba(247,243,236,0.82) 30%,transparent 80%);padding:48px 56px;border-radius:20px;">
         <span class="ov-label">Community First</span>
@@ -832,7 +638,7 @@
     </div>
   </section>
 
-  <!-- IN STOCK — MANUAL NAV -->
+  <!-- IN STOCK -->
   <section id="stock-section">
     <div class="stock-sticky" id="stock-sticky">
       <div class="stock-topbar">
@@ -878,9 +684,7 @@
       <h2 class="panel-title" style="font-family:'Playfair Display',serif;">What Families<br>Are <em style="font-style:italic;color:var(--gold)">Saying</em></h2>
       <p>Every word shared here helps another family trust in the circle of care.</p>
     </div>
-    <div class="reviews-grid" id="reviews-grid">
-      <!-- seed reviews -->
-    </div>
+    <div class="reviews-grid" id="reviews-grid"></div>
     <div class="review-form-wrap">
       <p class="review-form-title">Leave a Review</p>
       <p class="review-form-sub">Your review is anonymous by default — your name is optional.</p>
@@ -931,14 +735,21 @@
 
     gsap.registerPlugin(ScrollTrigger);
 
-    const lenis = new Lenis({ duration:1.4, easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)), smoothWheel:true });
+    /* ══ Lenis smooth scroll — feeds into GSAP ticker ══ */
+    const lenis = new Lenis({
+      duration: 1.6,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 0.9,
+    });
     lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add(time => lenis.raf(time*1000));
+    gsap.ticker.add(time => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
     window._lenis = lenis;
 
+    /* ══ Three.js renderer ══ */
     const canvas = document.getElementById('bg-canvas');
-    const renderer = new THREE.WebGLRenderer({canvas, antialias:true, powerPreference:'high-performance'});
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
@@ -950,30 +761,190 @@
     const scene = new THREE.Scene();
     scene.background = new THREE.Color('#F7F3EC');
     scene.fog = new THREE.Fog('#F7F3EC', 14, 28);
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.01, 100);
-    const cam = {px:3.5,py:1.6,pz:5.5,tx:0,ty:.55,tz:0,fov:45};
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 100);
+    const cam = { px: 3.5, py: 1.6, pz: 5.5, tx: 0, ty: 0.55, tz: 0, fov: 45 };
 
     const pmrem = new THREE.PMREMGenerator(renderer);
     pmrem.compileEquirectangularShader();
     scene.environment = pmrem.fromScene(new RoomEnvironment(renderer)).texture;
 
-    scene.add(new THREE.AmbientLight(0xfff4e0, .45));
+    scene.add(new THREE.AmbientLight(0xfff4e0, 0.45));
     const key = new THREE.DirectionalLight(0xfffce8, 3.2);
-    key.position.set(5,7,4); key.castShadow=true;
-    key.shadow.mapSize.set(2048,2048);
-    Object.assign(key.shadow.camera,{near:.5,far:20,left:-4,right:4,top:4,bottom:-4});
-    key.shadow.bias=-.002; scene.add(key);
-    const fill = new THREE.DirectionalLight(0xc8dfff,1.2); fill.position.set(-4,3,3); scene.add(fill);
-    const rim  = new THREE.DirectionalLight(0xffe4b0,2.0); rim.position.set(0,4,-6); scene.add(rim);
-    const fl = new THREE.Mesh(new THREE.PlaneGeometry(30,30),new THREE.ShadowMaterial({opacity:.10}));
-    fl.rotation.x=-Math.PI/2; fl.receiveShadow=true; scene.add(fl);
-    const bC=document.createElement('canvas'); bC.width=bC.height=512;
-    const bc=bC.getContext('2d'),bg=bc.createRadialGradient(256,256,0,256,256,230);
-    bg.addColorStop(0,'rgba(18,9,0,.55)');bg.addColorStop(.35,'rgba(18,9,0,.22)');
-    bg.addColorStop(.7,'rgba(18,9,0,.06)');bg.addColorStop(1,'rgba(0,0,0,0)');
-    bc.fillStyle=bg;bc.fillRect(0,0,512,512);
-    const cs=new THREE.Mesh(new THREE.PlaneGeometry(3.6,2.6),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(bC),transparent:true,depthWrite:false,opacity:.65}));
-    cs.rotation.x=-Math.PI/2;cs.position.y=.002;scene.add(cs);
+    key.position.set(5, 7, 4); key.castShadow = true;
+    key.shadow.mapSize.set(2048, 2048);
+    Object.assign(key.shadow.camera, { near: 0.5, far: 20, left: -4, right: 4, top: 4, bottom: -4 });
+    key.shadow.bias = -0.002; scene.add(key);
+    const fill = new THREE.DirectionalLight(0xc8dfff, 1.2); fill.position.set(-4, 3, 3); scene.add(fill);
+    const rim  = new THREE.DirectionalLight(0xffe4b0, 2.0); rim.position.set(0, 4, -6); scene.add(rim);
+
+    const fl = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({ opacity: 0.10 }));
+    fl.rotation.x = -Math.PI / 2; fl.receiveShadow = true; scene.add(fl);
+
+    /* ── Shadow blob ── */
+    const bC = document.createElement('canvas'); bC.width = bC.height = 512;
+    const bc = bC.getContext('2d'), bg = bc.createRadialGradient(256, 256, 0, 256, 256, 230);
+    bg.addColorStop(0, 'rgba(18,9,0,.55)'); bg.addColorStop(.35, 'rgba(18,9,0,.22)');
+    bg.addColorStop(.7, 'rgba(18,9,0,.06)'); bg.addColorStop(1, 'rgba(0,0,0,0)');
+    bc.fillStyle = bg; bc.fillRect(0, 0, 512, 512);
+    const cs = new THREE.Mesh(
+      new THREE.PlaneGeometry(3.6, 2.6),
+      new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(bC), transparent: true, depthWrite: false, opacity: 0.65 })
+    );
+    cs.rotation.x = -Math.PI / 2; cs.position.y = 0.002; scene.add(cs);
+
+    /* ══════════════════════════════════════════════════════════
+       3D OBJECT: BABY MOBILE
+       A hanging mobile with colourful shapes on arms —
+       naturally sways, rotates slowly, responds beautifully to scroll.
+    ══════════════════════════════════════════════════════════ */
+    const mobileGroup = new THREE.Group();
+    scene.add(mobileGroup);
+
+    // Materials
+    const matCoral  = new THREE.MeshStandardMaterial({ color: 0xE8736A, roughness: 0.35, metalness: 0.0 });
+    const matGold   = new THREE.MeshStandardMaterial({ color: 0xC2945A, roughness: 0.3,  metalness: 0.25 });
+    const matMint   = new THREE.MeshStandardMaterial({ color: 0xA8D5C2, roughness: 0.4,  metalness: 0.0 });
+    const matYellow = new THREE.MeshStandardMaterial({ color: 0xF5D87A, roughness: 0.3,  metalness: 0.1 });
+    const matWood   = new THREE.MeshStandardMaterial({ color: 0xC4955A, roughness: 0.65, metalness: 0.02 });
+    const matWire   = new THREE.MeshStandardMaterial({ color: 0xB0A090, roughness: 0.5,  metalness: 0.3 });
+    const matCream  = new THREE.MeshStandardMaterial({ color: 0xF5EDE0, roughness: 0.8,  metalness: 0.0 });
+
+    // Top hook / ceiling mount
+    const hook = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.18, 10), matWood);
+    hook.position.set(0, 1.8, 0); hook.castShadow = true; mobileGroup.add(hook);
+
+    // Main vertical string from hook to crossbar
+    const mainStr = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.55, 6), matWire);
+    mainStr.position.set(0, 1.27, 0); mobileGroup.add(mainStr);
+
+    // Top crossbar (horizontal arm — wood dowel)
+    const crossTop = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 2.0, 10), matWood);
+    crossTop.rotation.z = Math.PI / 2;
+    crossTop.position.set(0, 1.0, 0); crossTop.castShadow = true; mobileGroup.add(crossTop);
+
+    // Second crossbar (slightly lower, perpendicular in Z)
+    const crossMid = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 1.4, 10), matWood);
+    crossMid.rotation.x = Math.PI / 2;
+    crossMid.position.set(0, 0.62, 0); crossMid.castShadow = true; mobileGroup.add(crossMid);
+
+    // String connecting crossbars
+    const midStr = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.38, 6), matWire);
+    midStr.position.set(0, 0.81, 0); mobileGroup.add(midStr);
+
+    // Helper: create a dangling string + shape
+    function addDangle(parent, xOff, zOff, strLen, shape, mat, extraRot) {
+      const g = new THREE.Group();
+      g.position.set(xOff, 0, zOff);
+      parent.add(g);
+
+      const str = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, strLen, 6), matWire);
+      str.position.set(0, -strLen / 2, 0); g.add(str);
+
+      const obj = new THREE.Mesh(shape, mat);
+      obj.position.set(0, -strLen - 0.14, 0);
+      if (extraRot) obj.rotation.set(...extraRot);
+      obj.castShadow = true;
+      g.add(obj);
+
+      g._swingPhase = Math.random() * Math.PI * 2;
+      g._swingAmp   = 0.04 + Math.random() * 0.04;
+      g._swingSpeed = 0.6 + Math.random() * 0.5;
+      return g;
+    }
+
+    // Shapes hung from top crossbar
+    const topCross = new THREE.Group();
+    topCross.position.set(0, 1.0, 0);
+    mobileGroup.add(topCross);
+
+    // Star shape (approximated with a lathe / TorusKnot as stand-in — use octahedron for star feel)
+    const star1 = addDangle(topCross, -0.85, 0, 0.55, new THREE.OctahedronGeometry(0.14, 0), matYellow, [0, Math.PI / 4, 0]);
+    const ball1 = addDangle(topCross,  0.85, 0, 0.45, new THREE.SphereGeometry(0.12, 14, 10), matCoral, null);
+    const tri1  = addDangle(topCross, -0.42, 0, 0.70, new THREE.TetrahedronGeometry(0.13), matMint, [0.3, 0.5, 0]);
+    const dia1  = addDangle(topCross,  0.42, 0, 0.60, new THREE.OctahedronGeometry(0.12), matGold, [0, 0, Math.PI / 4]);
+
+    // Shapes hung from mid crossbar
+    const midCross = new THREE.Group();
+    midCross.position.set(0, 0.62, 0);
+    mobileGroup.add(midCross);
+
+    const cyl1  = addDangle(midCross,  0, -0.60, 0.50, new THREE.CylinderGeometry(0.08, 0.08, 0.18, 14), matCream, null);
+    const sph2  = addDangle(midCross,  0,  0.60, 0.42, new THREE.SphereGeometry(0.10, 12, 8), matMint, null);
+    const box1  = addDangle(midCross,  0,  0,    0.65, new THREE.BoxGeometry(0.16, 0.16, 0.16), matCoral, [Math.PI/5, Math.PI/4, 0]);
+
+    // Tiny ring at bottom center
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.10, 0.025, 8, 20), matGold);
+    ring.position.set(0, 0.30, 0);
+    ring.castShadow = true;
+    mobileGroup.add(ring);
+
+    // Collect all swinging dangles for animation
+    const dangles = [star1, ball1, tri1, dia1, cyl1, sph2, box1];
+
+    // Start mobile off-screen below, small
+    mobileGroup.position.set(0.6, -5, 0);
+    mobileGroup.scale.set(0.01, 0.01, 0.01);
+    mobileGroup._baseY = 0.05;
+    mobileGroup._emerged = false;
+
+    /* Floating particles */
+    const partGeo = new THREE.BufferGeometry();
+    const partPos = new Float32Array(80 * 3);
+    for (let i = 0; i < 80; i++) {
+      partPos[i*3]   = (Math.random() - 0.5) * 7;
+      partPos[i*3+1] = Math.random() * 4 - 0.5;
+      partPos[i*3+2] = (Math.random() - 0.5) * 4;
+    }
+    partGeo.setAttribute('position', new THREE.BufferAttribute(partPos, 3));
+    const particles = new THREE.Points(partGeo, new THREE.PointsMaterial({
+      color: 0xF5D87A, size: 0.04, sizeAttenuation: true,
+      transparent: true, opacity: 0.6, depthWrite: false
+    }));
+    scene.add(particles);
+
+    /* ══ Camera keyframes ══
+       FIX #1 — Object is placed CENTER-RIGHT so no white space.
+       Text panels are left-aligned, object floats center-right.
+       cam.tx is the lookAt target X — we tilt left to frame the object right of center.
+    */
+    const KF = [
+      // Panel 1: camera slightly left-of-center, looking at mobile which is at x=+0.6
+      { p: 0.00, pos: [3.0, 1.6, 5.2], tgt: [0.6, 0.7, 0], fov: 44 },
+      { p: 0.28, pos: [3.0, 1.6, 5.2], tgt: [0.6, 0.7, 0], fov: 44 },
+      // Panel 2: orbit around right, closer
+      { p: 0.35, pos: [1.2, 0.8, 2.2], tgt: [0.2, 0.8, 0.1], fov: 30 },
+      { p: 0.65, pos: [1.2, 0.8, 2.2], tgt: [0.2, 0.8, 0.1], fov: 30 },
+      // Panel 3: dramatic overhead / front
+      { p: 0.72, pos: [-1.8, 1.6, -2.8], tgt: [0, 0.9, 0], fov: 40 },
+      { p: 1.00, pos: [-2.2, 1.8, -3.2], tgt: [0, 0.85, 0], fov: 40 },
+    ];
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const cl   = v => Math.max(0, Math.min(1, v));
+    const ss   = t => t * t * (3 - 2 * t);
+
+    function applyKF(p) {
+      let k0 = KF[0], k1 = KF[KF.length - 1];
+      for (let i = 0; i < KF.length - 1; i++) {
+        if (p >= KF[i].p && p <= KF[i+1].p) { k0 = KF[i]; k1 = KF[i+1]; break; }
+      }
+      const span = k1.p - k0.p;
+      const t = span < 1e-4 ? 0 : ss(cl((p - k0.p) / span));
+      cam.px  = lerp(k0.pos[0], k1.pos[0], t);
+      cam.py  = lerp(k0.pos[1], k1.pos[1], t);
+      cam.pz  = lerp(k0.pos[2], k1.pos[2], t);
+      cam.tx  = lerp(k0.tgt[0], k1.tgt[0], t);
+      cam.ty  = lerp(k0.tgt[1], k1.tgt[1], t);
+      cam.tz  = lerp(k0.tgt[2], k1.tgt[2], t);
+      cam.fov = lerp(k0.fov, k1.fov, t);
+    }
+
+    const pDots = [...document.querySelectorAll('.p-dot')];
+    function syncDots(p) {
+      const i = p < 0.34 ? 0 : p < 0.68 ? 1 : 2;
+      pDots.forEach((d, j) => d.classList.toggle('active', j === i));
+    }
 
     let autoRotate = true;
     let mouseX = 0, mouseY = 0, targetMX = 0, targetMY = 0;
@@ -982,101 +953,78 @@
       mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
     });
 
-    // ── Baby Crib (procedural) ──────────────────────────────────────
-    const mWood  = new THREE.MeshStandardMaterial({color:0xC4955A,roughness:.6,metalness:.03});
-    const mWoodDk= new THREE.MeshStandardMaterial({color:0x8B5E2A,roughness:.72,metalness:.01});
-    const mMatt  = new THREE.MeshStandardMaterial({color:0xF5EDE0,roughness:.85,metalness:.0});
-    const pramModel = new THREE.Group();
-    function cb(geo,mat,px=0,py=0,pz=0,rx=0,ry=0,rz=0){
-      const m=new THREE.Mesh(geo,mat);m.position.set(px,py,pz);m.rotation.set(rx,ry,rz);
-      m.castShadow=true;m.receiveShadow=true;pramModel.add(m);
-    }
-    // Legs
-    [[-0.6,-0.35],[0.6,-0.35],[-0.6,0.35],[0.6,0.35]].forEach(([x,z])=>
-      cb(new THREE.CylinderGeometry(.03,.036,.26,10),mWoodDk,x,.13,z));
-    // Bottom frame
-    cb(new THREE.BoxGeometry(1.32,.05,.05),mWood,0,.26,-0.35);
-    cb(new THREE.BoxGeometry(1.32,.05,.05),mWood,0,.26, 0.35);
-    cb(new THREE.BoxGeometry(.05,.05,.76),mWood,-0.61,.26,0);
-    cb(new THREE.BoxGeometry(.05,.05,.76),mWood, 0.61,.26,0);
-    // Mattress
-    cb(new THREE.BoxGeometry(1.16,.1,.66),mMatt,0,.335,0);
-    // Corner posts + finials
-    const pH=1.0;
-    [[-0.62,-0.37],[0.62,-0.37],[-0.62,0.37],[0.62,0.37]].forEach(([x,z])=>{
-      cb(new THREE.BoxGeometry(.066,pH,.066),mWoodDk,x,.26+pH/2,z);
-      cb(new THREE.SphereGeometry(.058,10,6),mWoodDk,x,.26+pH+.044,z);
-    });
-    // Top rails
-    cb(new THREE.BoxGeometry(1.32,.055,.055),mWood,0,.26+pH,-0.37);
-    cb(new THREE.BoxGeometry(1.32,.055,.055),mWood,0,.26+pH, 0.37);
-    cb(new THREE.BoxGeometry(.055,.055,.8),mWood,-0.62,.26+pH,0);
-    cb(new THREE.BoxGeometry(.055,.055,.8),mWood, 0.62,.26+pH,0);
-    // Front/back slats
-    const sH=pH-.06;
-    for(let i=0;i<9;i++){const x=-0.56+(i/8)*1.12;
-      cb(new THREE.CylinderGeometry(.019,.019,sH,8),mWood,x,.26+sH/2+.03,-0.37);
-      cb(new THREE.CylinderGeometry(.019,.019,sH,8),mWood,x,.26+sH/2+.03, 0.37);}
-    // Side slats
-    for(let i=0;i<5;i++){const z=-0.3+(i/4)*.6;
-      cb(new THREE.CylinderGeometry(.019,.019,sH,8),mWood,-0.62,.26+sH/2+.03,z);
-      cb(new THREE.CylinderGeometry(.019,.019,sH,8),mWood, 0.62,.26+sH/2+.03,z);}
-    pramModel.position.set(0,-4,0);
-    pramModel.scale.set(0.01,0.01,0.01);
-    scene.add(pramModel);
+    /* ══ Hero scroll animations ══
+       FIX #2 — ov1 is ONLY animated by the loader reveal (one time).
+       It exits on first scroll via ScrollTrigger.
+       ov1's ENTRY is purely via GSAP timeline (triggered after loader).
+       ov2 and ov3 are purely scroll-driven.
+    */
+    function initHero() {
+      // ov1 EXIT: fade out + slide up as user starts scrolling
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: '#scroll-container',
+          start: 'top top',
+          end: '30% top',
+          scrub: 1.4,
+          immediateRender: false,
+        }
+      })
+      .to('#ov1', { opacity: 0, y: -32, ease: 'power2.in', immediateRender: false });
 
-    const partGeo=new THREE.BufferGeometry();
-    const partPos=new Float32Array(80*3);
-    for(let i=0;i<80;i++){partPos[i*3]=(Math.random()-.5)*7;partPos[i*3+1]=Math.random()*4-.5;partPos[i*3+2]=(Math.random()-.5)*4;}
-    partGeo.setAttribute('position',new THREE.BufferAttribute(partPos,3));
-    const particles=new THREE.Points(partGeo,new THREE.PointsMaterial({color:0xF5D87A,size:.04,sizeAttenuation:true,transparent:true,opacity:.6,depthWrite:false}));
-    scene.add(particles);
+      // ov2 ENTRY + EXIT
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: '#scroll-container',
+          start: '29% top',
+          end: '68% top',
+          scrub: 1.4,
+        }
+      })
+      .fromTo('#ov2', { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' })
+      .to('#ov2',   { opacity: 0, x: -48, duration: 0.25, ease: 'power2.in' }, 0.7);
 
-    // FIX: Camera keyframes keep pram BEHIND text — pram is in background, text is z-index:10 overlay
-    // The actual fix: pram position is centered, text overlays on z-index:10.
-    // We push pram further back / to side during ov1 so it doesn't obscure text.
-    const KF=[
-      {p:.00,pos:[4.2,1.9,5.8],tgt:[0,.55,0],fov:45},   // pram to the right side, text on left
-      {p:.28,pos:[4.2,1.9,5.8],tgt:[0,.55,0],fov:45},
-      {p:.35,pos:[1.4,.9,2.4],tgt:[.2,.65,.2],fov:30},
-      {p:.65,pos:[1.4,.9,2.4],tgt:[.2,.65,.2],fov:30},
-      {p:.72,pos:[-2,1.8,-3.2],tgt:[0,.82,0],fov:40},
-      {p:1.00,pos:[-2.6,2.0,-3.8],tgt:[0,.78,0],fov:40},
-    ];
-    const lerp=(a,b,t)=>a+(b-a)*t,cl=v=>Math.max(0,Math.min(1,v)),ss=t=>t*t*(3-2*t);
-    function applyKF(p){
-      let k0=KF[0],k1=KF[KF.length-1];
-      for(let i=0;i<KF.length-1;i++){if(p>=KF[i].p&&p<=KF[i+1].p){k0=KF[i];k1=KF[i+1];break;}}
-      const span=k1.p-k0.p,t=span<1e-4?0:ss(cl((p-k0.p)/span));
-      cam.px=lerp(k0.pos[0],k1.pos[0],t);cam.py=lerp(k0.pos[1],k1.pos[1],t);cam.pz=lerp(k0.pos[2],k1.pos[2],t);
-      cam.tx=lerp(k0.tgt[0],k1.tgt[0],t);cam.ty=lerp(k0.tgt[1],k1.tgt[1],t);cam.tz=lerp(k0.tgt[2],k1.tgt[2],t);
-      cam.fov=lerp(k0.fov,k1.fov,t);autoRotate=p<.28;
-    }
-    const pDots=[...document.querySelectorAll('.p-dot')];
-    function syncDots(p){const i=p<.34?0:p<.68?1:2;pDots.forEach((d,j)=>d.classList.toggle('active',j===i));}
+      // ov3 ENTRY
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: '#scroll-container',
+          start: '67% top',
+          end: '100% bottom',
+          scrub: 1.4,
+        }
+      })
+      .fromTo('#ov3', { opacity: 0, y: 42 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' });
 
-    function initHero(){
-      ScrollTrigger.create({trigger:'#scroll-container',start:'top top',end:'bottom bottom',onUpdate(s){applyKF(s.progress);syncDots(s.progress);}});
+      // Scroll hint fades
+      gsap.to('#scroll-hint', {
+        opacity: 0, pointerEvents: 'none',
+        scrollTrigger: { trigger: '#scroll-container', start: '8% top', end: '16% top', scrub: true }
+      });
 
-      // FIX: ov1 fades out via scroll only — does NOT re-appear.
-      // It's pre-shown (opacity:1) with elements revealed after loader.
-      gsap.timeline({scrollTrigger:{trigger:'#scroll-container',start:'top top',end:'33% top',scrub:1.2,immediateRender:false}})
-        .to('#ov1',{opacity:0,y:-28,duration:.22,ease:'power2.in',immediateRender:false});
-
-      gsap.timeline({scrollTrigger:{trigger:'#scroll-container',start:'29% top',end:'68% top',scrub:1.2}})
-        .fromTo('#ov2',{opacity:0,x:50},{opacity:1,x:0,duration:.28,ease:'power2.out'})
-        .to('#ov2',{opacity:0,x:-40,duration:.22,ease:'power2.in'},.72);
-      gsap.timeline({scrollTrigger:{trigger:'#scroll-container',start:'67% top',end:'100% bottom',scrub:1.2}})
-        .fromTo('#ov3',{opacity:0,y:38},{opacity:1,y:0,duration:.35,ease:'power2.out'});
-      gsap.to('#scroll-hint',{opacity:0,pointerEvents:'none',scrollTrigger:{trigger:'#scroll-container',start:'8% top',end:'15% top',scrub:true}});
+      // Camera scroll
+      ScrollTrigger.create({
+        trigger: '#scroll-container',
+        start: 'top top',
+        end: 'bottom bottom',
+        onUpdate(s) { applyKF(s.progress); syncDots(s.progress); autoRotate = s.progress < 0.28; }
+      });
     }
 
+    /* ══ One-time hero reveal (called after loader) ══
+       FIX #2 — this runs once, staggered, using GSAP directly.
+       No CSS class toggling, no risk of double-play.
+    */
     window._revealHero = function() {
-      const els = document.querySelectorAll('#ov1 .ov-label, #ov1 .ov-title, #ov1 .ov-body, #ov1 .ov-link');
-      els.forEach(el => el.classList.add('revealed'));
+      // Ensure #ov1 is at opacity:1 (it already is in CSS)
+      // Animate each child element in sequence
+      const tl = gsap.timeline({ delay: 0.1 });
+      tl.to('#ov1 .ov-label', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' })
+        .to('#ov1 .ov-title',  { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, '-=0.5')
+        .to('#ov1 .ov-body',   { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.55')
+        .to('#ov1 .ov-link',   { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.45');
     };
 
-    /* ══ STOCK — MANUAL NAV (no scroll dependency) ══ */
+    /* ══ Stock section ══ */
     window._currentStockIdx = 0;
 
     window.stockNav = function(dir) {
@@ -1095,7 +1043,7 @@
       const cards = [...track.querySelectorAll('.stock-card')];
 
       cards.forEach((card, i) => {
-        card.classList.remove('is-active','is-adjacent');
+        card.classList.remove('is-active', 'is-adjacent');
         const diff = Math.abs(i - idx);
         if (diff === 0) card.classList.add('is-active');
         else if (diff === 1) card.classList.add('is-adjacent');
@@ -1104,25 +1052,21 @@
       const item = items[idx];
       if (item) {
         document.getElementById('stock-item-label').textContent = item.name;
-        document.getElementById('stock-active-num').textContent = String(idx+1).padStart(2,'0');
+        document.getElementById('stock-active-num').textContent = String(idx + 1).padStart(2, '0');
       }
 
       document.querySelectorAll('.stock-dot').forEach((d, i) =>
         d.classList.toggle('active', i === idx));
 
-      // Update button states
       const prevBtn = document.getElementById('stock-prev');
       const nextBtn = document.getElementById('stock-next');
       if (prevBtn) prevBtn.disabled = (idx === 0);
       if (nextBtn) nextBtn.disabled = (idx === n - 1);
 
-      // Animate track position
       const mob = window.innerWidth < 768;
-      const ACTIVE_W = mob ? 230 : 420;
-      const ADJ_W    = mob ? 140 : 260;
-      const SMALL_W  = mob ? 100 : 200;
-      const GAP      = mob ? 4   : 4;
-      const viewW = window.innerWidth;
+      const ADJ_W = mob ? 140 : 260;
+      const SMALL_W = mob ? 100 : 200;
+      const GAP = 4;
 
       let x = 0;
       cards.forEach((card, i) => {
@@ -1139,16 +1083,10 @@
       const track = document.getElementById('stock-track');
       if (!track) return;
       const mob = window.innerWidth < 768;
-      const ACTIVE_W = mob ? 230 : 420;
-      const viewW = window.innerWidth;
       const ADJ_W0 = mob ? 140 : 260, GAP0 = 4;
-      const startX = ADJ_W0 + GAP0;
-      track.style.transform = `translateY(-50%) translateX(${startX}px)`;
-
+      track.style.transform = `translateY(-50%) translateX(${ADJ_W0 + GAP0}px)`;
       window._currentStockIdx = 0;
       window._setStockActive(0);
-
-      // Dot clicks
       document.getElementById('stock-dots').addEventListener('click', e => {
         const dot = e.target.closest('.stock-dot');
         if (!dot) return;
@@ -1158,77 +1096,113 @@
       });
     }
 
-    // Canvas starts hidden
-    gsap.set('#bg-canvas',{opacity:0,scale:1.12});
-    cam.pz=13; cam.py=4.0; cam.fov=58; camera.fov=58; camera.updateProjectionMatrix();
-    pramModel.position.set(0,-4,0);
-    pramModel.scale.set(0.01, 0.01, 0.01);
+    /* ══ Loader sequence ══ */
+    gsap.set('#bg-canvas', { opacity: 0, scale: 1.12 });
+    // Start camera pulled way back
+    cam.pz = 14; cam.py = 4.0; cam.fov = 58;
+    camera.fov = 58; camera.updateProjectionMatrix();
+    mobileGroup.position.set(0.6, -5, 0);
+    mobileGroup.scale.set(0.01, 0.01, 0.01);
 
     initHero();
+
     window._hygraphPromise.then(hygraphItems => {
       window._buildStock(hygraphItems);
       setTimeout(() => { initStock(); }, 400);
     });
 
+    /* ══ Render loop ══ */
     const clk = new THREE.Clock();
-    (function tick(){
+
+    (function tick() {
       requestAnimationFrame(tick);
-      const t=clk.getElapsedTime();
+      const t = clk.getElapsedTime();
+
+      // Mouse parallax
       targetMX += (mouseX - targetMX) * 0.04;
       targetMY += (mouseY - targetMY) * 0.04;
-      pramModel.position.y = pramModel._baseY !== undefined
-        ? pramModel._baseY + Math.sin(t*1.1)*.055
-        : pramModel.position.y;
-      if(autoRotate) pramModel.rotation.y += .004;
-      pramModel.rotation.z = Math.sin(t*.7)*.018 + targetMY*.06;
-      if(pramModel._emerged) pramModel.position.x = targetMX * 0.22;
+
+      // Mobile gentle float
+      if (mobileGroup._emerged) {
+        mobileGroup.position.y = mobileGroup._baseY + Math.sin(t * 0.8) * 0.06;
+        mobileGroup.position.x = 0.6 + targetMX * 0.18;
+      }
+
+      // Slow auto-rotation of whole mobile
+      if (autoRotate) mobileGroup.rotation.y += 0.005;
+      mobileGroup.rotation.z = Math.sin(t * 0.5) * 0.018 + targetMY * 0.04;
+
+      // Individual dangle swinging — each on its own phase/speed
+      dangles.forEach(d => {
+        d.rotation.z = Math.sin(t * d._swingSpeed + d._swingPhase) * d._swingAmp;
+        d.rotation.x = Math.cos(t * d._swingSpeed * 0.7 + d._swingPhase) * d._swingAmp * 0.5;
+      });
+
+      // Ring spins
+      ring.rotation.y = t * 0.9;
+
+      // Particles drift
       particles.rotation.y = t * 0.04;
       particles.rotation.x = Math.sin(t * 0.18) * 0.05;
-      camera.position.set(cam.px,cam.py,cam.pz);
-      if(Math.abs(camera.fov-cam.fov)>.01){camera.fov=cam.fov;camera.updateProjectionMatrix();}
-      camera.lookAt(cam.tx,cam.ty,cam.tz);
-      renderer.render(scene,camera);
+
+      // Camera
+      camera.position.set(cam.px, cam.py, cam.pz);
+      if (Math.abs(camera.fov - cam.fov) > 0.01) {
+        camera.fov = cam.fov;
+        camera.updateProjectionMatrix();
+      }
+      camera.lookAt(cam.tx, cam.ty, cam.tz);
+
+      renderer.render(scene, camera);
     })();
 
-    window.addEventListener('resize',()=>{
-      camera.aspect=window.innerWidth/window.innerHeight;
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth,window.innerHeight);
+      renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // Loader logic
+    /* ══ Loader progress ══ */
     let pct = 0;
     const t2 = setInterval(() => {
-      pct = Math.min(pct + 7, 100);
+      pct = Math.min(pct + 6, 100);
       document.getElementById('loader-fill').style.width = pct + '%';
       document.getElementById('loader-pct').textContent = pct + '%';
 
       if (pct >= 100) {
         clearInterval(t2);
+
+        // Pop stroller emoji
         setTimeout(() => {
-          const strollerEl = document.getElementById('loader-stroller');
-          const glowEl = document.getElementById('loader-glow');
-          strollerEl.classList.add('emerge');
-          glowEl.classList.add('emerge');
+          document.getElementById('loader-stroller').classList.add('emerge');
+          document.getElementById('loader-glow').classList.add('emerge');
         }, 200);
 
+        // Fade out loader, bring in scene
         setTimeout(() => {
           document.getElementById('loader').classList.add('fade-out');
-          gsap.to('#bg-canvas', {opacity:1, scale:1, duration:2.4, ease:'power3.out', delay:.15});
-          gsap.to(cam, {pz:5.5, py:1.8, fov:45, duration:2.8, ease:'power3.inOut', delay:.1});
-          gsap.to(pramModel.position, {
-            y: 0, duration: 1.8, ease: 'back.out(1.4)', delay: 0.6,
-            onStart: () => { pramModel._baseY = 0; pramModel._emerged = true; }
+
+          gsap.to('#bg-canvas', { opacity: 1, scale: 1, duration: 2.4, ease: 'power3.out', delay: 0.15 });
+
+          // Camera swoops in
+          gsap.to(cam, { pz: 5.2, py: 1.6, fov: 44, duration: 2.8, ease: 'power3.inOut', delay: 0.1 });
+
+          // Mobile rises into frame
+          gsap.to(mobileGroup.position, {
+            y: 0.05, duration: 1.9, ease: 'back.out(1.3)', delay: 0.5,
+            onStart: () => { mobileGroup._baseY = 0.05; mobileGroup._emerged = true; }
           });
-          gsap.to(pramModel.scale, {
-            x: 1, y: 1, z: 1, duration: 1.6, ease: 'back.out(1.2)', delay: 0.5
+          gsap.to(mobileGroup.scale, {
+            x: 1, y: 1, z: 1, duration: 1.7, ease: 'back.out(1.15)', delay: 0.4
           });
-          // Hero text reveals ONCE after pram appears
-          setTimeout(() => { window._revealHero(); }, 900);
-          // Show baby corner illustrations
+
+          // Hero text slides in ONCE — only after mobile has appeared
+          setTimeout(() => { window._revealHero(); }, 880);
+
+          // Baby corner decorations
           setTimeout(() => {
             document.querySelectorAll('.baby-illus-wrap').forEach(el => el.classList.add('show'));
-          }, 1800);
+          }, 1900);
         }, 1400);
       }
     }, 50);
@@ -1240,214 +1214,127 @@
       const ctx = canvas.getContext('2d');
       const w = canvas.width, h = canvas.height;
       ctx.clearRect(0, 0, w, h);
-
-      // Decorative ribbon top-right (blue squiggle)
       ctx.strokeStyle = '#90C8E0';
-      ctx.lineWidth = 3;
-      ctx.lineCap = 'round';
+      ctx.lineWidth = 3; ctx.lineCap = 'round';
       ctx.beginPath();
-      ctx.moveTo(w * 0.7, 0);
-      ctx.bezierCurveTo(w * 0.85, h * 0.05, w * 0.95, h * 0.12, w * 0.88, h * 0.18);
-      ctx.bezierCurveTo(w * 0.82, h * 0.24, w * 0.72, h * 0.2, w * 0.78, h * 0.26);
+      ctx.moveTo(w*0.7, 0);
+      ctx.bezierCurveTo(w*0.85,h*0.05,w*0.95,h*0.12,w*0.88,h*0.18);
+      ctx.bezierCurveTo(w*0.82,h*0.24,w*0.72,h*0.2,w*0.78,h*0.26);
       ctx.stroke();
-
-      // Body — coral romper
-      ctx.fillStyle = '#F4917E';
-      ctx.beginPath();
-      ctx.ellipse(w * 0.5, h * 0.62, w * 0.34, h * 0.28, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Legs
-      ctx.fillStyle = '#FBBDA8';
-      ctx.beginPath();
-      ctx.ellipse(w * 0.38, h * 0.82, w * 0.1, h * 0.12, -0.2, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.ellipse(w * 0.62, h * 0.82, w * 0.1, h * 0.12, 0.2, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Stars on romper
-      ctx.fillStyle = '#F5D87A';
-      [[0.38, 0.6], [0.55, 0.65], [0.62, 0.58]].forEach(([x, y]) => {
-        ctx.beginPath();
-        ctx.arc(w * x, h * y, 5, 0, Math.PI * 2);
-        ctx.fill();
+      ctx.fillStyle='#F4917E';
+      ctx.beginPath();ctx.ellipse(w*0.5,h*0.62,w*0.34,h*0.28,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#FBBDA8';
+      ctx.beginPath();ctx.ellipse(w*0.38,h*0.82,w*0.1,h*0.12,-0.2,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.ellipse(w*0.62,h*0.82,w*0.1,h*0.12,0.2,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#F5D87A';
+      [[0.38,0.6],[0.55,0.65],[0.62,0.58]].forEach(([x,y])=>{
+        ctx.beginPath();ctx.arc(w*x,h*y,5,0,Math.PI*2);ctx.fill();
       });
-
-      // Arms
-      ctx.fillStyle = '#FBBDA8';
-      ctx.beginPath();
-      ctx.ellipse(w * 0.22, h * 0.52, w * 0.1, h * 0.16, -0.6, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.ellipse(w * 0.78, h * 0.5, w * 0.1, h * 0.16, 0.6, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Head
-      ctx.fillStyle = '#FBBDA8';
-      ctx.beginPath();
-      ctx.ellipse(w * 0.5, h * 0.3, w * 0.28, h * 0.26, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Hair — pink fluffy
-      ctx.fillStyle = '#F4917E';
-      ctx.beginPath();
-      ctx.ellipse(w * 0.5, h * 0.12, w * 0.26, h * 0.14, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Flower on head
-      ctx.fillStyle = '#F5D87A';
-      for (let i = 0; i < 6; i++) {
-        const angle = (i / 6) * Math.PI * 2;
-        ctx.beginPath();
-        ctx.ellipse(w * 0.52 + Math.cos(angle) * 10, h * 0.1 + Math.sin(angle) * 7, 7, 5, angle, 0, Math.PI * 2);
-        ctx.fill();
+      ctx.fillStyle='#FBBDA8';
+      ctx.beginPath();ctx.ellipse(w*0.22,h*0.52,w*0.1,h*0.16,-0.6,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.ellipse(w*0.78,h*0.5,w*0.1,h*0.16,0.6,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.ellipse(w*0.5,h*0.3,w*0.28,h*0.26,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#F4917E';
+      ctx.beginPath();ctx.ellipse(w*0.5,h*0.12,w*0.26,h*0.14,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#F5D87A';
+      for(let i=0;i<6;i++){
+        const angle=(i/6)*Math.PI*2;
+        ctx.beginPath();ctx.ellipse(w*0.52+Math.cos(angle)*10,h*0.1+Math.sin(angle)*7,7,5,angle,0,Math.PI*2);ctx.fill();
       }
-      ctx.fillStyle = '#fff';
-      ctx.beginPath();
-      ctx.arc(w * 0.52, h * 0.1, 4, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Face
-      ctx.fillStyle = '#5C3018';
-      ctx.beginPath(); ctx.ellipse(w*0.42, h*0.28, 3, 3.5, 0, 0, Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.ellipse(w*0.58, h*0.28, 3, 3.5, 0, 0, Math.PI*2); ctx.fill();
-
-      // Cheeks
-      ctx.fillStyle = 'rgba(240,130,100,0.4)';
-      ctx.beginPath(); ctx.ellipse(w*0.38, h*0.32, 7, 5, 0, 0, Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.ellipse(w*0.62, h*0.32, 7, 5, 0, 0, Math.PI*2); ctx.fill();
-
-      // Mouth
-      ctx.fillStyle = '#E8736A';
-      ctx.beginPath();
-      ctx.arc(w * 0.5, h * 0.34, 6, 0.1, Math.PI - 0.1);
-      ctx.fill();
+      ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(w*0.52,h*0.1,4,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#5C3018';
+      ctx.beginPath();ctx.ellipse(w*0.42,h*0.28,3,3.5,0,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.ellipse(w*0.58,h*0.28,3,3.5,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(240,130,100,0.4)';
+      ctx.beginPath();ctx.ellipse(w*0.38,h*0.32,7,5,0,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.ellipse(w*0.62,h*0.32,7,5,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#E8736A';
+      ctx.beginPath();ctx.arc(w*0.5,h*0.34,6,0.1,Math.PI-0.1);ctx.fill();
     }
 
     function drawBabySleeping(canvas) {
       const ctx = canvas.getContext('2d');
       const w = canvas.width, h = canvas.height;
       ctx.clearRect(0, 0, w, h);
-
-      // Star top-left
-      ctx.fillStyle = '#F5D87A';
+      ctx.fillStyle='#F5D87A';
       ctx.beginPath();
-      const sx = w * 0.15, sy = h * 0.08, sr = 10;
-      for (let i = 0; i < 10; i++) {
-        const angle = (i / 10) * Math.PI * 2 - Math.PI / 2;
-        const r2 = i % 2 === 0 ? sr : sr * 0.45;
-        const x = sx + Math.cos(angle) * r2;
-        const y = sy + Math.sin(angle) * r2;
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      const sx=w*0.15,sy=h*0.08,sr=10;
+      for(let i=0;i<10;i++){
+        const angle=(i/10)*Math.PI*2-Math.PI/2;
+        const r2=i%2===0?sr:sr*0.45;
+        const x=sx+Math.cos(angle)*r2,y=sy+Math.sin(angle)*r2;
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
       }
-      ctx.closePath(); ctx.fill();
-
-      // Pillow
-      ctx.fillStyle = 'rgba(230,230,235,0.9)';
-      ctx.beginPath();
-      ctx.ellipse(w * 0.72, h * 0.32, w * 0.28, h * 0.22, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Body — mint/yellow outfit
-      ctx.fillStyle = '#B8DDD0';
-      ctx.beginPath();
-      ctx.ellipse(w * 0.5, h * 0.72, w * 0.38, h * 0.22, -0.3, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Top — yellow
-      ctx.fillStyle = '#F5D87A';
-      ctx.beginPath();
-      ctx.ellipse(w * 0.46, h * 0.58, w * 0.28, h * 0.18, -0.2, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Little bears on outfit
-      ctx.fillStyle = 'rgba(255,255,255,0.6)';
-      [[0.38, 0.56], [0.52, 0.54]].forEach(([x, y]) => {
-        ctx.beginPath(); ctx.arc(w*x, h*y, 6, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(w*(x-0.04), h*(y-0.04), 3, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(w*(x+0.04), h*(y-0.04), 3, 0, Math.PI*2); ctx.fill();
+      ctx.closePath();ctx.fill();
+      ctx.fillStyle='rgba(230,230,235,0.9)';
+      ctx.beginPath();ctx.ellipse(w*0.72,h*0.32,w*0.28,h*0.22,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#B8DDD0';
+      ctx.beginPath();ctx.ellipse(w*0.5,h*0.72,w*0.38,h*0.22,-0.3,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#F5D87A';
+      ctx.beginPath();ctx.ellipse(w*0.46,h*0.58,w*0.28,h*0.18,-0.2,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,0.6)';
+      [[0.38,0.56],[0.52,0.54]].forEach(([x,y])=>{
+        ctx.beginPath();ctx.arc(w*x,h*y,6,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.arc(w*(x-0.04),h*(y-0.04),3,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.arc(w*(x+0.04),h*(y-0.04),3,0,Math.PI*2);ctx.fill();
       });
-
-      // Head — sleeping
-      ctx.fillStyle = '#FBBDA8';
-      ctx.beginPath();
-      ctx.ellipse(w * 0.35, h * 0.38, w * 0.3, h * 0.26, -0.2, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Rosy cheeks
-      ctx.fillStyle = 'rgba(240,100,80,0.35)';
-      ctx.beginPath(); ctx.ellipse(w*0.28, h*0.42, 11, 7, 0, 0, Math.PI*2); ctx.fill();
-
-      // Closed eye and smile
-      ctx.strokeStyle = '#8B4513';
-      ctx.lineWidth = 2; ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.arc(w*0.32, h*0.35, 6, 0.2, Math.PI-0.2); ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(w*0.26, h*0.44); ctx.quadraticCurveTo(w*0.31, h*0.47, w*0.36, h*0.44);
-      ctx.stroke();
-
-      // Fist
-      ctx.fillStyle = '#FBBDA8';
-      ctx.beginPath();
-      ctx.ellipse(w * 0.12, h * 0.48, w * 0.1, h * 0.09, -0.4, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = '#E09080'; ctx.lineWidth = 1.2;
-      for(let i=0;i<3;i++){
-        ctx.beginPath(); ctx.moveTo(w*0.08+i*8, h*0.44); ctx.lineTo(w*0.08+i*8, h*0.43); ctx.stroke();
-      }
+      ctx.fillStyle='#FBBDA8';
+      ctx.beginPath();ctx.ellipse(w*0.35,h*0.38,w*0.3,h*0.26,-0.2,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(240,100,80,0.35)';
+      ctx.beginPath();ctx.ellipse(w*0.28,h*0.42,11,7,0,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#8B4513';ctx.lineWidth=2;ctx.lineCap='round';
+      ctx.beginPath();ctx.arc(w*0.32,h*0.35,6,0.2,Math.PI-0.2);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(w*0.26,h*0.44);ctx.quadraticCurveTo(w*0.31,h*0.47,w*0.36,h*0.44);ctx.stroke();
+      ctx.fillStyle='#FBBDA8';
+      ctx.beginPath();ctx.ellipse(w*0.12,h*0.48,w*0.1,h*0.09,-0.4,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#E09080';ctx.lineWidth=1.2;
+      for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(w*0.08+i*8,h*0.44);ctx.lineTo(w*0.08+i*8,h*0.43);ctx.stroke();}
     }
 
     function drawBabySmall(canvas, variant) {
       const ctx = canvas.getContext('2d');
       const w = canvas.width, h = canvas.height;
       ctx.clearRect(0, 0, w, h);
-
       if (variant === 'bl') {
-        // Small cute bear toy
-        ctx.fillStyle = '#E8C48A';
-        ctx.beginPath(); ctx.ellipse(w*0.5, h*0.55, w*0.35, h*0.35, 0, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.ellipse(w*0.32, h*0.28, w*0.16, h*0.15, -0.3, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.ellipse(w*0.68, h*0.28, w*0.16, h*0.15, 0.3, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = '#D4A870';
-        ctx.beginPath(); ctx.ellipse(w*0.5, h*0.6, w*0.2, h*0.18, 0, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = '#5C3018';
-        ctx.beginPath(); ctx.arc(w*0.42, h*0.5, 4, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(w*0.58, h*0.5, 4, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = '#333';
-        ctx.beginPath(); ctx.arc(w*0.5, h*0.57, 5, 0, Math.PI*2); ctx.fill();
-        // little bow
-        ctx.fillStyle = '#E8736A';
-        ctx.beginPath(); ctx.moveTo(w*0.42, h*0.28); ctx.lineTo(w*0.5, h*0.32); ctx.lineTo(w*0.58, h*0.28); ctx.lineTo(w*0.5, h*0.24); ctx.closePath(); ctx.fill();
+        ctx.fillStyle='#E8C48A';
+        ctx.beginPath();ctx.ellipse(w*0.5,h*0.55,w*0.35,h*0.35,0,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.ellipse(w*0.32,h*0.28,w*0.16,h*0.15,-0.3,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.ellipse(w*0.68,h*0.28,w*0.16,h*0.15,0.3,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#D4A870';
+        ctx.beginPath();ctx.ellipse(w*0.5,h*0.6,w*0.2,h*0.18,0,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#5C3018';
+        ctx.beginPath();ctx.arc(w*0.42,h*0.5,4,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.arc(w*0.58,h*0.5,4,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#333';
+        ctx.beginPath();ctx.arc(w*0.5,h*0.57,5,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#E8736A';
+        ctx.beginPath();ctx.moveTo(w*0.42,h*0.28);ctx.lineTo(w*0.5,h*0.32);ctx.lineTo(w*0.58,h*0.28);ctx.lineTo(w*0.5,h*0.24);ctx.closePath();ctx.fill();
       } else {
-        // Small star + rattle
-        ctx.strokeStyle = '#A8D5C2';
-        ctx.lineWidth = 3; ctx.lineCap = 'round';
-        ctx.beginPath(); ctx.moveTo(w*0.5, h*0.08); ctx.lineTo(w*0.5, h*0.45); ctx.stroke();
-        ctx.fillStyle = '#F5D87A';
+        ctx.strokeStyle='#A8D5C2';ctx.lineWidth=3;ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(w*0.5,h*0.08);ctx.lineTo(w*0.5,h*0.45);ctx.stroke();
+        ctx.fillStyle='#F5D87A';
         ctx.beginPath();
-        for (let i=0;i<10;i++) {
+        for(let i=0;i<10;i++){
           const angle=(i/10)*Math.PI*2-Math.PI/2;
-          const r2 = i%2===0?w*0.22:w*0.1;
-          const x=w*0.5+Math.cos(angle)*r2, y=h*0.08+Math.sin(angle)*r2;
+          const r2=i%2===0?w*0.22:w*0.1;
+          const x=w*0.5+Math.cos(angle)*r2,y=h*0.08+Math.sin(angle)*r2;
           i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
         }
-        ctx.closePath(); ctx.fill();
-        ctx.fillStyle = '#E8736A';
-        ctx.beginPath(); ctx.arc(w*0.5, h*0.54, w*0.22, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = 'rgba(255,255,255,0.3)';
-        ctx.beginPath(); ctx.arc(w*0.42, h*0.48, w*0.07, 0, Math.PI*2); ctx.fill();
+        ctx.closePath();ctx.fill();
+        ctx.fillStyle='#E8736A';
+        ctx.beginPath();ctx.arc(w*0.5,h*0.54,w*0.22,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='rgba(255,255,255,0.3)';
+        ctx.beginPath();ctx.arc(w*0.42,h*0.48,w*0.07,0,Math.PI*2);ctx.fill();
       }
     }
 
-    // Draw all corner illustrations
     drawBabyGirl(document.getElementById('canvas-tl'));
     drawBabySleeping(document.getElementById('canvas-tr'));
     drawBabySmall(document.getElementById('canvas-bl'), 'bl');
     drawBabySmall(document.getElementById('canvas-br'), 'br');
 
     /* ══ Stock items ══ */
-    const stockItems=[
+    const stockItems = [
       {name:'Car Seats',qty:3,age:null,level:'good',imageUrl:'https://loremflickr.com/480/640/baby,car,seat?lock=11'},
       {name:'Clothes 0–6 months',qty:40,age:'0–6m',level:'good',imageUrl:'https://loremflickr.com/480/640/newborn,baby,clothes?lock=22'},
       {name:'Clothes 6–12 months',qty:28,age:'6–12m',level:'good',imageUrl:'https://loremflickr.com/480/640/baby,infant,clothes?lock=33'},
@@ -1463,45 +1350,44 @@
     ];
     window._stockItems = stockItems;
 
-    window._hygraphPromise = fetch('https://ap-south-1.cdn.hygraph.com/content/cmot17o9m00h807vx93664awc/master',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({query:'{ stocks { stockName stockImage { url } } }'})
-    }).then(r=>r.json()).then(d=>{
-      if(d?.errors) console.warn('[Hygraph errors]', JSON.stringify(d.errors));
+    window._hygraphPromise = fetch('https://ap-south-1.cdn.hygraph.com/content/cmot17o9m00h807vx93664awc/master', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: '{ stocks { stockName stockImage { url } } }' })
+    }).then(r => r.json()).then(d => {
+      if (d?.errors) console.warn('[Hygraph errors]', JSON.stringify(d.errors));
       return d?.data?.stocks || [];
-    }).catch(e=>{ console.error('[Hygraph fetch failed]', e); return []; });
+    }).catch(e => { console.error('[Hygraph fetch failed]', e); return []; });
 
-    window._buildStock = function(hygraphItems){
-      const track=document.getElementById('stock-track');
-      const dotsEl=document.getElementById('stock-dots');
-      if(!track)return;
-      const items=hygraphItems.length>0
-        ? hygraphItems.map(h=>({name:h.stockName||'Item',qty:null,age:null,level:'good',imageUrl:h.stockImage?.[0]?.url||''}))
+    window._buildStock = function(hygraphItems) {
+      const track = document.getElementById('stock-track');
+      const dotsEl = document.getElementById('stock-dots');
+      if (!track) return;
+      const items = hygraphItems.length > 0
+        ? hygraphItems.map(h => ({ name: h.stockName || 'Item', qty: null, age: null, level: 'good', imageUrl: h.stockImage?.[0]?.url || '' }))
         : stockItems;
-      window._stockItems=items;
-      track.innerHTML='';
-      items.forEach((item,i)=>{
-        const card=document.createElement('div');
-        card.className='stock-card';
-        if(i===0)card.classList.add('is-active');
-        else if(i===1)card.classList.add('is-adjacent');
-        const img=document.createElement('img');
-        img.className='stock-card-img';
-        img.src=item.imageUrl||'https://picsum.photos/seed/'+encodeURIComponent(item.name)+'/480/640';
-        img.alt=item.name;
-        const info=document.createElement('div');
-        info.className='stock-card-info';
-        info.innerHTML=`${item.age?`<span class="sci-age">${item.age}</span>`:''}
+      window._stockItems = items;
+      track.innerHTML = '';
+      items.forEach((item, i) => {
+        const card = document.createElement('div');
+        card.className = 'stock-card';
+        if (i === 0) card.classList.add('is-active');
+        else if (i === 1) card.classList.add('is-adjacent');
+        const img = document.createElement('img');
+        img.className = 'stock-card-img';
+        img.src = item.imageUrl || 'https://picsum.photos/seed/' + encodeURIComponent(item.name) + '/480/640';
+        img.alt = item.name;
+        const info = document.createElement('div');
+        info.className = 'stock-card-info';
+        info.innerHTML = `${item.age ? `<span class="sci-age">${item.age}</span>` : ''}
           <div class="sci-name">${item.name}</div>
           <div class="sci-row">
-            <div>${item.qty!=null?`<span class="sci-qty">${item.qty}</span><span class="sci-qty-label">in stock</span>`:''}</div>
-            <div class="sci-status"><span class="sci-dot ${item.level==='low'?'low':''}"></span>${item.level==='low'?'Low Stock':'Available'}</div>
+            <div>${item.qty != null ? `<span class="sci-qty">${item.qty}</span><span class="sci-qty-label">in stock</span>` : ''}</div>
+            <div class="sci-status"><span class="sci-dot ${item.level === 'low' ? 'low' : ''}"></span>${item.level === 'low' ? 'Low Stock' : 'Available'}</div>
           </div>`;
-        const mini=document.createElement('div');
-        mini.className='stock-card-mini-label';
-        mini.textContent=item.name;
-        card.appendChild(img);card.appendChild(info);card.appendChild(mini);
-        // clicking a non-active card navigates to it
+        const mini = document.createElement('div');
+        mini.className = 'stock-card-mini-label';
+        mini.textContent = item.name;
+        card.appendChild(img); card.appendChild(info); card.appendChild(mini);
         card.addEventListener('click', () => {
           const cards = [...track.querySelectorAll('.stock-card')];
           const idx = cards.indexOf(card);
@@ -1509,22 +1395,22 @@
         });
         track.appendChild(card);
       });
-      dotsEl.innerHTML=items.map((_,i)=>
-        `<div class="stock-dot${i===0?' active':''}" data-idx="${i}"></div>`
+      dotsEl.innerHTML = items.map((_, i) =>
+        `<div class="stock-dot${i === 0 ? ' active' : ''}" data-idx="${i}"></div>`
       ).join('');
-      document.getElementById('stock-total-num').textContent=String(items.length).padStart(2,'0');
+      document.getElementById('stock-total-num').textContent = String(items.length).padStart(2, '0');
     };
 
-    /* ══ Seed reviews with animation ══ */
+    /* ══ Reviews ══ */
     function addReviewCard(data, prepend, delay) {
       const grid = document.getElementById('reviews-grid');
-      const empty = grid.querySelector('.reviews-empty'); if(empty) empty.remove();
-      const initials = data.name === 'Anonymous' ? '✦' : data.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+      const empty = grid.querySelector('.reviews-empty'); if (empty) empty.remove();
+      const initials = data.name === 'Anonymous' ? '✦' : data.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
       const stars = '⭐'.repeat(data.stars || 5);
       const card = document.createElement('div');
       card.className = 'review-card';
       card.innerHTML = `
-        <div class="review-stars">${[...stars].map(s=>`<span class="review-star">${s}</span>`).join('')}</div>
+        <div class="review-stars">${[...stars].map(s => `<span class="review-star">${s}</span>`).join('')}</div>
         <p class="review-text">"${data.text}"</p>
         <div class="review-meta">
           <div class="review-avatar">${initials}</div>
@@ -1534,77 +1420,77 @@
           </div>
         </div>`;
       if (prepend) grid.prepend(card); else grid.appendChild(card);
-      setTimeout(() => {
-        card.style.animationDelay = '0ms';
-        card.classList.add('animate-in');
-      }, delay || 0);
+      setTimeout(() => { card.style.animationDelay = '0ms'; card.classList.add('animate-in'); }, delay || 0);
     }
 
-    // Seed the initial reviews with staggered slide-in
     const seedReviews = [
       { name: 'A Grateful Mum', role: 'Received an item · Nairobi', stars: 5, text: 'I had been looking for a good stroller for weeks and everything was so expensive. A friend told me about Baraka Box and I thought, let me try. And there it was. Waiting for us. It felt like it had been kept just for my baby.' },
       { name: 'A Donor', role: 'Donated an item · Emmanuel Baptist', stars: 5, text: 'I had so many things at home I wasn\'t using anymore — my baby had outgrown everything so fast. Donating through Baraka Box felt right. Knowing another family is using those things now… it gives them a second life.' },
     ];
     seedReviews.forEach((r, i) => addReviewCard(r, false, i * 200));
 
-    /* ══ Utility ══ */
-    function scrollToId(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}
-    function toggleNominate(){document.getElementById('toggle-track').classList.toggle('on');document.getElementById('nominee-fields').classList.toggle('open');}
-    function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),4000);}
+    /* ══ Utilities ══ */
+    function scrollToId(id) { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); }
+    function toggleNominate() { document.getElementById('toggle-track').classList.toggle('on'); document.getElementById('nominee-fields').classList.toggle('open'); }
+    function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 4000); }
 
-    function handleDonate(e){
+    function handleDonate(e) {
       e.preventDefault();
-      const f=e.target;
-      const inputs=f.querySelectorAll('input[type="text"],input[type="tel"]');
-      const name=inputs[0].value.trim()||'Anonymous';
-      const phone=inputs[1].value.trim()||'Not provided';
-      const item=f.querySelector('select').value||'Not specified';
-      const details=f.querySelector('textarea').value.trim()||'None';
-      const isNom=document.getElementById('toggle-track').classList.contains('on');
-      let msg=`*Baraka Box — Donation*\n\nFrom: ${name}\nPhone: ${phone}\nItem: ${item}\nDetails: ${details}`;
-      if(isNom){
-        const nomInputs=document.getElementById('nominee-fields').querySelectorAll('input');
-        const nomName=nomInputs[0]?.value.trim()||'';
-        const nomPhone=nomInputs[1]?.value.trim()||'';
-        const nomWhy=document.getElementById('nominee-fields').querySelector('textarea')?.value.trim()||'';
-        msg+=`\n\n*Nomination:*\nFor: ${nomName}\nPhone: ${nomPhone}\nReason: ${nomWhy}`;
+      const f = e.target;
+      const inputs = f.querySelectorAll('input[type="text"],input[type="tel"]');
+      const name = inputs[0].value.trim() || 'Anonymous';
+      const phone = inputs[1].value.trim() || 'Not provided';
+      const item = f.querySelector('select').value || 'Not specified';
+      const details = f.querySelector('textarea').value.trim() || 'None';
+      const isNom = document.getElementById('toggle-track').classList.contains('on');
+      let msg = `*Baraka Box — Donation*\n\nFrom: ${name}\nPhone: ${phone}\nItem: ${item}\nDetails: ${details}`;
+      if (isNom) {
+        const nomInputs = document.getElementById('nominee-fields').querySelectorAll('input');
+        const nomName = nomInputs[0]?.value.trim() || '';
+        const nomPhone = nomInputs[1]?.value.trim() || '';
+        const nomWhy = document.getElementById('nominee-fields').querySelector('textarea')?.value.trim() || '';
+        msg += `\n\n*Nomination:*\nFor: ${nomName}\nPhone: ${nomPhone}\nReason: ${nomWhy}`;
       }
-      window.open('https://wa.me/254726499182?text='+encodeURIComponent(msg),'_blank');
+      window.open('https://wa.me/254726499182?text=' + encodeURIComponent(msg), '_blank');
       showToast('✦ Opening WhatsApp to send your donation request to Muthoni…');
       e.target.reset();
       document.getElementById('toggle-track').classList.remove('on');
       document.getElementById('nominee-fields').classList.remove('open');
     }
 
-    function handleReturn(e){
+    function handleReturn(e) {
       e.preventDefault();
-      const f=e.target;
-      const inputs=f.querySelectorAll('input');
-      const name=inputs[0]?.value.trim()||'Anonymous';
-      const phone=inputs[1]?.value.trim()||'Not provided';
-      const selects=f.querySelectorAll('select');
-      const item=selects[0]?.value||'Not specified';
-      const condition=selects[1]?.value||'Not specified';
-      const notes=f.querySelector('textarea')?.value.trim()||'None';
-      const msg=`*Baraka Box — Return*\n\nFrom: ${name}\nPhone: ${phone}\nItem: ${item}\nCondition: ${condition}\nNotes: ${notes}`;
-      window.open('https://wa.me/254726499182?text='+encodeURIComponent(msg),'_blank');
+      const f = e.target;
+      const inputs = f.querySelectorAll('input');
+      const name = inputs[0]?.value.trim() || 'Anonymous';
+      const phone = inputs[1]?.value.trim() || 'Not provided';
+      const selects = f.querySelectorAll('select');
+      const item = selects[0]?.value || 'Not specified';
+      const condition = selects[1]?.value || 'Not specified';
+      const notes = f.querySelector('textarea')?.value.trim() || 'None';
+      const msg = `*Baraka Box — Return*\n\nFrom: ${name}\nPhone: ${phone}\nItem: ${item}\nCondition: ${condition}\nNotes: ${notes}`;
+      window.open('https://wa.me/254726499182?text=' + encodeURIComponent(msg), '_blank');
       showToast('✦ Opening WhatsApp to send your return to Muthoni… 🌿');
       e.target.reset();
     }
 
-    let selectedStars=0;
-    function setStars(n){selectedStars=n;document.getElementById('review-stars-val').value=n;document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('lit',i<n));}
+    let selectedStars = 0;
+    function setStars(n) {
+      selectedStars = n;
+      document.getElementById('review-stars-val').value = n;
+      document.querySelectorAll('.star-btn').forEach((b, i) => b.classList.toggle('lit', i < n));
+    }
 
-    function handleReview(e){
+    function handleReview(e) {
       e.preventDefault();
-      if(selectedStars===0){showToast('Please select a star rating first.');return;}
-      const name=document.getElementById('review-name').value.trim()||'Anonymous';
-      const role=document.getElementById('review-role').value||'Community member';
-      const text=document.getElementById('review-text').value.trim();
+      if (selectedStars === 0) { showToast('Please select a star rating first.'); return; }
+      const name = document.getElementById('review-name').value.trim() || 'Anonymous';
+      const role = document.getElementById('review-role').value || 'Community member';
+      const text = document.getElementById('review-text').value.trim();
       addReviewCard({ name, role, stars: selectedStars, text }, true, 0);
       e.target.reset(); setStars(0);
       showToast('✦ Thank you for sharing your experience!');
-      document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'});
+      document.getElementById('reviews-section').scrollIntoView({ behavior: 'smooth' });
     }
   </script>
 </body>
